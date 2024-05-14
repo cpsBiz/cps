@@ -1,0 +1,20 @@
+ext['tomcat.version'] = '10.1.20'
+
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}
+
+
+// 리소스 분리
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources/", "../src/main/resources-common/", "../src/main/resources/"
+        }
+    }
+}
+
+bootJar.enabled(false)
+jar.enabled(true)
