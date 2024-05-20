@@ -11,7 +11,7 @@ tasks {
 sourceSets {
     main {
         resources {
-            srcDirs "src/main/resources/", "../src/main/resources-common/", "../src/main/resources/"
+            srcDirs "src/main/resources/", "../src/main/resources/"
         }
     }
 }

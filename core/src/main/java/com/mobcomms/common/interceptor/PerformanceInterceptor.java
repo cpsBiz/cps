@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class PerformanceInterceptor implements HandlerInterceptor {
     private static final Marker MARKER_PERFORMANCE_TIME = MarkerFactory.getMarker("performanceTime");
-    private static final Marker MARKER_LAZY_TIME = MarkerFactory.getMarker("LazyTime");
+    private static final Marker MARKER_LATENCY_TIME = MarkerFactory.getMarker("latencyTime");
     private long startTime;
 
     @Override
@@ -30,7 +30,7 @@ public class PerformanceInterceptor implements HandlerInterceptor {
         long executeTimes = System.currentTimeMillis() - startTime;
 
         if(executeTimes > 1000) {
-            log.info(MARKER_LAZY_TIME, "[Call '{}'] execute times - {}ms", request.getRequestURI(), executeTimes);
+            log.info(MARKER_LATENCY_TIME, "[Call '{}'] execute times - {}ms", request.getRequestURI(), executeTimes);
         } else  {
             log.info(MARKER_PERFORMANCE_TIME, "[Call '{}'] execute times - {}ms", request.getRequestURI(), executeTimes);
         }

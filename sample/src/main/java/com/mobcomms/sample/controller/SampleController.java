@@ -1,16 +1,14 @@
 package com.mobcomms.sample.controller;
 
 import com.mobcomms.sample.dto.SampleDto;
-import com.mobcomms.sample.entity.SampleEntity;
 import com.mobcomms.sample.service.SampleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/1")
 public class SampleController {
 
     private final SampleService sampleService;
@@ -31,7 +29,7 @@ public class SampleController {
     }
 
     @PutMapping("/")
-    public ResponseEntity deleteInsertSample(@RequestBody SampleDto dto) {
+    public ResponseEntity deleteInsertSample(@RequestBody SampleDto dto) throws Exception {
         return ResponseEntity.ok("대체하기(전체내용수정)! \n" + sampleService.deleteInsertSample(SampleDto.toEntity(dto)));
     }
 
