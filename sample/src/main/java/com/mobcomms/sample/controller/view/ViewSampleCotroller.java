@@ -1,4 +1,4 @@
-package com.mobcomms.sample.controller;
+package com.mobcomms.sample.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

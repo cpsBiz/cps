@@ -4,16 +4,23 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mobcomms.sample.entity.Sample2Entity;
 import com.mobcomms.sample.entity.Sample2PK;
 import com.mobcomms.sample.entity.SampleEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
 public record Sample2Dto(
+        @Schema(description = "테스트 pk1")
         String testPk01,
+        @Schema(description = "테스트 pk2")
         String testPk02,
+        @Schema(description = "테스트 pk3")
         String testPk03,
+        @Schema(description = "테스트 컬럼1")
         String testColumn1,
+        @Schema(description = "테스트 등록일")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime testRegDttm,
+        @Schema(description = "테스트 수정일")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime testAltDttm
 ) {
