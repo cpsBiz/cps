@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
+@Schema(description = "샘플2 DTO")
 public record Sample2Dto(
         @Schema(description = "테스트 pk1")
         String testPk01,
