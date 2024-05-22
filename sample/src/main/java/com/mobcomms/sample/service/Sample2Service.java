@@ -25,22 +25,23 @@ public class Sample2Service {
         return sample2Repository.findAll().stream().map(entity -> Sample2Dto.of(entity)).collect(Collectors.toList());
     }
 
-    public Sample2Dto createSample(Sample2Entity entity) {
-        return Sample2Dto.of(sample2Repository.save(entity));
+    public Sample2Dto createSample(Sample2Dto dto) {
+        return Sample2Dto.of(sample2Repository.save(Sample2Dto.toEntity(dto)));
     }
-    public Sample2Dto updateSample(Sample2Entity entity) {
-        return Sample2Dto.of(sample2Repository.save(entity));
+    public Sample2Dto updateSample(Sample2Dto dto) {
+        return Sample2Dto.of(sample2Repository.save(Sample2Dto.toEntity(dto)));
     }
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public Sample2Dto deleteInsertSample(Sample2Entity entity) throws Exception {
+    public Sample2Dto deleteInsertSample(Sample2Dto dto) throws Exception {
         try {
+            Sample2Entity entity = Sample2Dto.toEntity(dto);
             sample2Repository.deleteBySample2PKTestPk01(entity.getTestColumn1());
             return Sample2Dto.of(sample2Repository.save(entity));
         } catch (Exception e) {
             throw e;
         }
     }
-    public void deleteSample(Sample2Entity entity) {
-        sample2Repository.deleteBySample2PKTestPk01(entity.getTestColumn1());
+    public void deleteSample(Sample2Dto dto) {
+        sample2Repository.deleteBySample2PKTestPk01(Sample2Dto.toEntity(dto).getTestColumn1());
     }
 }

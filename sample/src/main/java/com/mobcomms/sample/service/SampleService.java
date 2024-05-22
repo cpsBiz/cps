@@ -22,22 +22,23 @@ public class SampleService {
         return sampleRepository.findAll().stream().map(entity -> SampleDto.of(entity)).collect(Collectors.toList());
     }
 
-    public SampleDto createSample(SampleEntity entity) {
-        return SampleDto.of(sampleRepository.save(entity));
+    public SampleDto createSample(SampleDto dto) {
+        return SampleDto.of(sampleRepository.save(SampleDto.toEntity(dto)));
     }
-    public SampleDto updateSample(SampleEntity entity) {
-        return SampleDto.of(sampleRepository.save(entity));
+    public SampleDto updateSample(SampleDto dto) {
+        return SampleDto.of(sampleRepository.save(SampleDto.toEntity(dto)));
     }
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public SampleDto deleteInsertSample(SampleEntity entity) throws Exception {
+    public SampleDto deleteInsertSample(SampleDto dto) throws Exception {
         try {
+            SampleEntity entity = SampleDto.toEntity(dto);
             sampleRepository.deleteByTestColumn1(entity.getTestColumn1());
             return SampleDto.of(sampleRepository.save(entity));
         } catch (Exception e) {
             throw e;
         }
     }
-    public void deleteSample(SampleEntity entity) {
-        sampleRepository.deleteByTestColumn1(entity.getTestColumn1());
+    public void deleteSample(SampleDto dto) {
+        sampleRepository.deleteByTestColumn1(SampleDto.toEntity(dto).getTestColumn1());
     }
 }
