@@ -24,25 +24,25 @@ public class SampleController {
     @PostMapping("")
     @Operation(summary = "쓰기!", description = "insert!")
     public ResponseEntity<SampleDto> createSample(@RequestBody SampleDto dto) {
-        return ResponseEntity.ok(sampleService.createSample(SampleDto.toEntity(dto)));
+        return ResponseEntity.ok(sampleService.createSample(dto));
     }
 
     @PatchMapping("")
     @Operation(summary = "수정하기", description = "update!")
     public ResponseEntity<SampleDto> updateSample(@RequestBody SampleDto dto) {
-        return ResponseEntity.ok(sampleService.updateSample(SampleDto.toEntity(dto)));
+        return ResponseEntity.ok(sampleService.updateSample(dto));
     }
 
     @PutMapping("")
     @Operation(summary = "대체하기(전체내용수정)!", description = "delete & insert!")
     public ResponseEntity<SampleDto> deleteInsertSample(@RequestBody SampleDto dto) throws Exception {
-        return ResponseEntity.ok(sampleService.deleteInsertSample(SampleDto.toEntity(dto)));
+        return ResponseEntity.ok(sampleService.deleteInsertSample(dto));
     }
 
     @DeleteMapping("")
     @Operation(summary = "삭제하기!", description = "delete!")
     public ResponseEntity<SampleDto> deleteSample(@RequestBody SampleDto dto) {
-        sampleService.deleteSample(SampleDto.toEntity(dto));
+        sampleService.deleteSample(dto);
         return ResponseEntity.ok(dto);
     }
 }
