@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <title>Panel</title>
+
+    <script type="text/javascript" src="/static/js/lib/jquery-2.2.2.min.js"></script>
+
+
+    <link href="https://partners.coupangcdn.com/widget/carousel/default/09aab9e20807268b96f5.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+</head>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        alert("123");
+        var adPanelList = JSON.parse('${adPanelList}');
+        alert("456");
+        alert(adPanelList);
+        $("#adPanelList").val(adPanelList);
+    });
+
+</script>
+
+<input type="text" id="listSize" name="listSize" th:value="${listSize}">
+<input type="text" id="adPanelList" name="adPanelList" th:value="${adPanelList}">
+<body>
+    <div class="container main">
+        <iframe id="mobwith" class ="iframex300-250" src=""></iframe>
+    </div>
+    <p th:text="${adPanelList}">Hello, Spring Boot!</p>
+</body>
+</html>
