@@ -1,4 +1,4 @@
 rootProject.name = 'mobcoms'
 include 'core'
 include 'sample'
-
+include 'adPanel'
