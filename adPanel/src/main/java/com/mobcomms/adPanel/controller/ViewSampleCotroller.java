@@ -1,16 +1,9 @@
 package com.mobcomms.adPanel.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mobcomms.adPanel.dto.AdPanelDto;
 import com.mobcomms.adPanel.model.AdPanelModel;
 import com.mobcomms.adPanel.service.AdPanelService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.attoparser.util.TextUtil;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -19,14 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -45,11 +35,11 @@ public class ViewSampleCotroller {
         return "index";
     }
 
-    @GetMapping("/ad_Panel")
-    public String adPanel(@ModelAttribute AdPanelModel adPanelModel, Model model) throws Exception {
+    @GetMapping("/ad-panel")
+    public String adPanel(@ModelAttribute AdPanelModel adPanelModel) throws Exception {
         List<AdPanelDto> adPanelList = adPanelService.adPanelList();
         String returnUrl = "adPanel";
-        adPanelModel.setOs("aos");
+
         try {
             for(AdPanelDto adPanelDto : adPanelList.stream()
                                                    .filter(panel-> panel.osType().equals(adPanelModel.getOs()) && panel.useYn().equals("Y"))
@@ -59,20 +49,20 @@ public class ViewSampleCotroller {
                 String zoneId = adPanelDto.zoneId();
                 String width = adPanelDto.width();
                 String height = adPanelDto.height();
-                String uri = "/api/banner/app/mobicomms/v1/hanamoney?zone="+zoneId+"&count=1&w="+width+"&h="+height+"&adid="+adPanelModel.getAdId()+"&is_optout=0";
+                String uri = "/api/banner/app/mobicomms/v1/hanamoney?zone="+zoneId+"&count=1&w="+width+"&h="+height+"&adid="+adPanelModel.getAdId();
 
                 Mono<String> adPanelNoad = adPanelService.panelData(uri);
-System.out.println("uri : " + uri);
+
                 String src = adPanelNoad.block().toString();
 
                 if(src.isEmpty() == false){
-                    if(src.trim().toLowerCase().contains("value=\"noad\"")) {
+                    src = src.replaceAll(" ","");
+                    if(src.toLowerCase().contains("value=\"noad\"")) {
                         logger.warn(MARKER_PANNEL, "ZoonID : " + zoneId + " Is No AD!!!");
                     } else {
                         adPanelModel.setZoneId(zoneId);
                         adPanelModel.setWidth(width);
                         adPanelModel.setHeight(height);
-                        model.addAttribute("adPanelModel", adPanelModel);
                         returnUrl = urlChk(width);
                         break;
                     }
@@ -83,6 +73,7 @@ System.out.println("uri : " + uri);
         } catch (Exception e) {
             logger.warn(MARKER_PANNEL, "adPanel Exception : " + e.toString());
         }
+
         return returnUrl;
     }
 

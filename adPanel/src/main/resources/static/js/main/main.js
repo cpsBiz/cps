@@ -2,17 +2,15 @@ $(document).ready(function() {
     //TODO
     var zoneId = $("#zoneId").val();
     var adid = $("#adId").val();
-    var userkey = $("#userKey").val();
-    var type = $("#type").val();
     var os = $("#os").val().toLowerCase();
 
     var width = $("#width").val();
     var height = $("#height").val();
 
     //TODO width , heiht 추가.
-    console.log("call param - "+"adid:"+adid+", userkey:"+userkey+", type:"+type+", os:"+os+", width:"+width,"height:"+height);
+    console.log("call param - "+"adid:"+adid+", os:"+os+", width:"+width,"height:"+height);
 
-    var mobiwithSrc = "https://mobwithad.com/api/banner/app/mobicomms/v1/hanamoney?zone={zone}&adid={adid}";
+    var mobiwithSrc = "https://www.mobwithad.com/api/banner/app/mobicomms/v1/hanamoney?zone={zone}&adid={adid}";
 
     mobiwithSrc = mobiwithSrc.replace("{zone}",zoneId);
     mobiwithSrc = mobiwithSrc.replace("{adid}",adid);
