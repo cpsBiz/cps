@@ -1,11 +1,9 @@
 package com.mobcomms.adPanel.controller;
 
 import com.mobcomms.adPanel.dto.AdPanelDto;
-import com.mobcomms.adPanel.entity.AdPanelEntity;
 import com.mobcomms.adPanel.service.AdPanelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -14,7 +12,7 @@ import java.util.List;
 public class AdPanelController {
 
     private final AdPanelService adPanelService;
-
+//controller Dto로 받기
     @GetMapping("/adPanelList")
     public List<AdPanelDto>  adPanelList() {
         List<AdPanelDto> adPanelList = adPanelService.adPanelList();
@@ -22,13 +20,13 @@ public class AdPanelController {
     }
 
     @PostMapping("/adPanelInsert")
-    public void adPanelInsert(@RequestBody AdPanelEntity adPanelEntity) {
-        adPanelService.adPanelInsert(adPanelEntity);
+    public void adPanelInsert(@RequestBody AdPanelDto dto) {
+        adPanelService.adPanelInsert(dto);
     }
 
     @PostMapping("/adPanelDelete")
-    public void adPanelDelete(@RequestBody AdPanelEntity adPanelEntity) {
-        adPanelService.adPanelDelete(adPanelEntity);
+    public void adPanelDelete(@RequestBody AdPanelDto dto) {
+        adPanelService.adPanelDelete(dto);
     }
 
 }

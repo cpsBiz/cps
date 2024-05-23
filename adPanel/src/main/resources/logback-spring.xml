@@ -1,66 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="PATH" value="C:/logs/mobcoms"/>
+    <property name="PATH" value="/home/paybooc_api/logs" />
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] log - %msg%n</Pattern>
         </layout>
-    </appender>
-
-    <appender name="PERFORMANCE_TIME_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${PATH}/logback.performance.time.log</File>
-        <encoder>
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] time-log - %msg%n</Pattern>
-        </encoder>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>performanceTime</marker>
-            </evaluator>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${PATH}/bak/logback.performance.time.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
-    <appender name="LATENCY_TIME_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${PATH}/logback.latency.log</File>
-        <encoder>
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] latency-log - %msg%n</Pattern>
-        </encoder>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>latencyTime</marker>
-            </evaluator>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${PATH}/bak/logback.latency.time.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
-
-    <appender name="SAMPLE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${PATH}/logback.sample.log</File>
-        <encoder>
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] Sample-log - %msg%n</Pattern>
-        </encoder>
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>SAMPLE</marker>
-            </evaluator>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${PATH}/bak/logback.sample.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
     </appender>
 
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -95,12 +40,32 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="PANEL_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${PATH}/logback.panel.log</File>
+        <encoder>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] pannel - %msg%n</Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>PANEL</marker>
+            </evaluator>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/bak/logback.panel.log.%d{yyyyMMdd}.%i.log</fileNamePattern>
+            <maxFileSize>300MB</maxFileSize>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+    </appender>
+
     <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="ERROR"/>
         <appender-ref ref="INFO"/>
-        <appender-ref ref="SAMPLE_LOG"/>
-        <appender-ref ref="LATENCY_TIME_LOG"/>
-        <appender-ref ref="PERFORMANCE_TIME_LOG"/>
+    </root>
+
+    <root level="WARN">
+        <appender-ref ref="PANEL_LOG"/>
     </root>
 </configuration>

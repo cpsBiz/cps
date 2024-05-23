@@ -1,0 +1,12 @@
+[2024-05-23 12:59:24.320][http-nio-8080-exec-1] BC - adPanel uri : 123
+[2024-05-23 12:59:24.320][http-nio-8080-exec-1] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 12:59:24.838][http-nio-8080-exec-1] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 12:59:25.116][http-nio-8080-exec-4] BC - adPanel uri : 123
+[2024-05-23 12:59:25.116][http-nio-8080-exec-4] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 12:59:25.174][http-nio-8080-exec-4] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 13:38:26.985][http-nio-8080-exec-1] BC - adPanel uri : 123
+[2024-05-23 13:38:26.985][http-nio-8080-exec-1] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 13:38:27.481][http-nio-8080-exec-1] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 13:38:27.930][http-nio-8080-exec-4] BC - adPanel uri : 123
+[2024-05-23 13:38:27.931][http-nio-8080-exec-4] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0
+[2024-05-23 13:38:27.983][http-nio-8080-exec-4] BC - adPanel uri : /api/banner/app/vp/v1/paybooc?zone=10886105&count=1&w=300&h=250&adid=null&os_type=aos&is_optout=0

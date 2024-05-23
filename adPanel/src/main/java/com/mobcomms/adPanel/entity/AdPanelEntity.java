@@ -24,8 +24,8 @@ public class AdPanelEntity {
     @Id
     @Column(name = "os_type") private String osType;
     @Column(name = "use_yn") private String useYn;
-    @Column(name = "wsize") private String wSize;
-    @Column(name = "hsize") private String hSize;
+    @Column(name = "width") private String width;
+    @Column(name = "height") private String height;
     @Column(name = "view_index") private String viewIndex;
     @Column(name = "reg_date", updatable=false) private LocalDateTime regDttm;
     @Column(name = "mod_date") private LocalDateTime modDttm;
