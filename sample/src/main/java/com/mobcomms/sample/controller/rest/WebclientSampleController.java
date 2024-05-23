@@ -23,7 +23,7 @@ public class WebclientSampleController {
 
     @GetMapping("")
     @Operation(summary = "통신테스트!", description = "weblcient!")
-    public Mono<ResponseEntity<List<SampleDto>>> callWebclient() {
+    public Mono<ResponseEntity<String>> callWebclient() {
         return webClientSampleService.sampleData().map(data -> ResponseEntity.ok(data));
     }
 }
