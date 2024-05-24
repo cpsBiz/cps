@@ -54,7 +54,12 @@
 </head>
 
 <script type="text/javascript">
+$(function(){
+  if($("#zoneId").val() == ""){
+      console.log("no ad !!!!");
+  }
 
+})
 </script>
 
 <input type="hidden" id="adId" name="adId" th:value="${adPanelModel.adId}">

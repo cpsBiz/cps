@@ -37,6 +37,7 @@ public class ViewSampleCotroller {
 
     @GetMapping("/ad-panel")
     public String adPanel(@ModelAttribute AdPanelModel adPanelModel) throws Exception {
+        logger.warn(MARKER_PANNEL, "Start");
         List<AdPanelDto> adPanelList = adPanelService.adPanelList();
         String returnUrl = "adPanel";
 

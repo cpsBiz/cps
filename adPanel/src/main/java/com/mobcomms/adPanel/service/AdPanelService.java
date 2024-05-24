@@ -25,7 +25,7 @@ public class AdPanelService {
 
     private final WebClient webClient;
     private final AdPanelRepository adPanelRepository;
-    private final String url = "https://www.mobwithad.com";
+    private final String url = "https://dev.mobwithad.com";
 
     public AdPanelService(WebClient.Builder webClientBuilder, AdPanelRepository adPanelRepository) {
         this.webClient = webClientBuilder.baseUrl(url).build();
