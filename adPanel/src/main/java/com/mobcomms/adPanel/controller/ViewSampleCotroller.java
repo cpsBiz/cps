@@ -61,6 +61,7 @@ public class ViewSampleCotroller {
                     if(src.toLowerCase().contains("value=\"noad\"")) {
                         logger.warn(MARKER_PANNEL, "ZoonID : " + zoneId + " Is No AD!!!");
                     } else {
+                        logger.warn(MARKER_PANNEL, "ZoonID : " + zoneId + " Is SUCCESS !!!");
                         adPanelModel.setZoneId(zoneId);
                         adPanelModel.setWidth(width);
                         adPanelModel.setHeight(height);

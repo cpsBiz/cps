@@ -10,7 +10,7 @@ $(document).ready(function() {
     //TODO width , heiht 추가.
     console.log("call param - "+"adid:"+adid+", os:"+os+", width:"+width,"height:"+height);
 
-    var mobiwithSrc = "https://dev.mobwithad.com/api/banner/app/mobicomms/v1/hanamoney?zone={zone}&adid={adid}";
+    var mobiwithSrc = "https://www.mobwithad.com/api/banner/app/mobicomms/v1/hanamoney?zone={zone}&adid={adid}";
 
     mobiwithSrc = mobiwithSrc.replace("{zone}",zoneId);
     mobiwithSrc = mobiwithSrc.replace("{adid}",adid);
@@ -27,6 +27,7 @@ $(document).ready(function() {
 
 function setMobiwithIframeSrc(src,width,height){
     $("#mobwith").attr("src", src);
+
     var param = { "zoneid" : zoneId , "w" : width,"h": height };
     console.log("param : " + param);
     reqNative("ad_info", param); // 앱 함수 호출
