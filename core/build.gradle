@@ -10,6 +10,11 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-webflux'
     api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
     api 'org.json:json:20230618'
+    api 'com.fasterxml.jackson.core:jackson-databind'
+    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    api 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 }
 
 // 리소스 분리
