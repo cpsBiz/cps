@@ -268,6 +268,35 @@ public abstract class BaseHttpService {
                 });
     }
 
+    //patch 요청
+    public <T>Mono<T> PatchAsync(String endPoint,Object requestData, Class<T> responseType) throws Exception{
+        return this.webClient.patch()
+                .uri(endPoint)
+                .bodyValue(BodyInserters.fromValue(requestData))
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(errorMessage -> {
+                                    //log.error("API ClientError 4xx :" +  errorMessage);
+                                    return Mono.error(new RuntimeException("ClientError 4xx :" + errorMessage));
+                                })
+                ).onStatus(HttpStatusCode::is5xxServerError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(errorMessage -> {
+                                    //log.error("API ClientError 5xx : " + errorMessage);
+                                    return Mono.error(new RuntimeException("ClientError 5xx : " + errorMessage));
+                                })
+                ).bodyToMono(responseType)
+                .onErrorResume(WebClientResponseException.class, ex -> {
+                    log.error("API WebClientResponseException" + System.lineSeparator() + ex);
+                    return Mono.error(new RuntimeException("API WebClientResponseException", ex));
+                })
+                .onErrorResume(Exception.class, ex -> {
+                    log.error("API Exception " + System.lineSeparator() + ex);
+                    return Mono.error(new RuntimeException("API Exception : " + ex.getMessage()));
+                });
+    }
+
     private void LogRequestData(Object requestData){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
