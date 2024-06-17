@@ -8,5 +8,5 @@ import org.springframework.context.annotation.FilterType;
 @ComponentScan(
         basePackages = {"com.mobcomms.common"},
         excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.mobcomms.common.aop.*"))
-public class ScanConfig {
+public class AppConfig {
 }

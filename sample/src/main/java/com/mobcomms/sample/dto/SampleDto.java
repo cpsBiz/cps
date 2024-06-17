@@ -1,7 +1,6 @@
 package com.mobcomms.sample.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.mobcomms.common.utils.MobDateUtils;
 import com.mobcomms.sample.entity.SampleEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 
