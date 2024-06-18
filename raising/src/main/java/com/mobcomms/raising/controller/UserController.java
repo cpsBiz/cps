@@ -1,13 +1,31 @@
 package com.mobcomms.raising.controller;
 
 import com.mobcomms.common.api.ApiResponse;
+import com.mobcomms.raising.dto.UserResDto;
+import io.swagger.v3.oas.annotations.Operation;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@Tag(name = "사용자 정보 API", description = "사용자 정보 관련 API")
+@RequestMapping("/api")
 public class UserController {
     // 로그인
-    public ResponseEntity<ApiResponse> signIn() {
+    @GetMapping("/sign-in")
+    @Operation(summary = "로그인", description = "로그인시도")
+    public ResponseEntity<ApiResponse<UserResDto>> signIn(
+            @RequestParam String mediaUserKey,
+            @RequestParam String companyCode,
+            @RequestParam String adid,
+            @RequestParam String platform
+    ) {
         return ResponseEntity.ok(ApiResponse.ok());
     }
+
     // 로그아웃
     public ResponseEntity<ApiResponse> signOut() {
         return ResponseEntity.ok(ApiResponse.ok());
