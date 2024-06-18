@@ -4,6 +4,8 @@ import com.mobcomms.common.api.ApiResponse;
 import com.mobcomms.raising.dto.UserResDto;
 import io.swagger.v3.oas.annotations.Operation;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
@@ -23,6 +25,7 @@ public class UserController {
             @RequestParam String adid,
             @RequestParam String platform
     ) {
+
         return ResponseEntity.ok(ApiResponse.ok());
     }
 

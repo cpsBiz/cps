@@ -1,9 +1,12 @@
 package com.mobcomms.common.api;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Builder
 public class ApiResponse<T> {
     @Schema(description = "결과코드")
