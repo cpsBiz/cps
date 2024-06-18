@@ -1,9 +1,11 @@
 package com.mobcomms.raising.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.Instant;
 
+@Data
 @Entity
 @Table(name = "user")
 public class UserEntity {
@@ -29,60 +31,4 @@ public class UserEntity {
 
     @Column(name = "reg_date", nullable = false)
     private Instant regDate;
-
-    public Instant getRegDate() {
-        return regDate;
-    }
-
-    public void setRegDate(Instant regDate) {
-        this.regDate = regDate;
-    }
-
-    public Instant getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(Instant lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-
-    public String getRecommandCode() {
-        return recommandCode;
-    }
-
-    public void setRecommandCode(String recommandCode) {
-        this.recommandCode = recommandCode;
-    }
-
-    public Boolean getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(Boolean platform) {
-        this.platform = platform;
-    }
-
-    public String getAdid() {
-        return adid;
-    }
-
-    public void setAdid(String adid) {
-        this.adid = adid;
-    }
-
-    public String getMediaUserKey() {
-        return mediaUserKey;
-    }
-
-    public void setMediaUserKey(String mediaUserKey) {
-        this.mediaUserKey = mediaUserKey;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
