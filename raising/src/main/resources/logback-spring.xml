@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="PATH" value="C:/logs/mobcoms"/>
+    <property name="PATH" value="C:/logs/raising"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -48,17 +48,17 @@
     <appender name="RAISING_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <File>${PATH}/logback.sample.log</File>
         <encoder>
-            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] Sample-log - %msg%n</Pattern>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] raising-log - %msg%n</Pattern>
         </encoder>
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
-                <marker>CGV</marker>
+                <marker>RAISING</marker>
             </evaluator>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${PATH}/bak/logback.cgv.log.%d{yyyyMMdd}</fileNamePattern>
+            <fileNamePattern>${PATH}/bak/logback.raising.log.%d{yyyyMMdd}</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
     </appender>
@@ -66,7 +66,7 @@
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${PATH}/logback.info.log</file>
         <encoder>
-            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] cgv-info-log API - %msg%n
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] raising-info-log API - %msg%n
             </pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -82,7 +82,7 @@
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${PATH}/logback.error.log</file>
         <encoder>
-            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] cgv-error-log - %msg%n
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] raising-error-log - %msg%n
             </pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
