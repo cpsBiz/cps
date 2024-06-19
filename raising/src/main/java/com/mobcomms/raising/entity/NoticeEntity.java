@@ -32,7 +32,7 @@ public class NoticeEntity {
     @Column(name = "start_date", length = 20)
     private String startDate;
 
-    @Column(name = "END_date", length = 20)
+    @Column(name = "end_date", length = 20)
     private String endDate;
 
     @Column(name = "reg_date", nullable = false)
