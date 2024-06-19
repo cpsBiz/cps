@@ -5,7 +5,7 @@ import com.mobcomms.common.api.ApiResponseList;
 import com.mobcomms.raising.dto.LoginResDto;
 import com.mobcomms.raising.dto.UserCharacterDto;
 import com.mobcomms.raising.dto.UserCharacterRegDto;
-import com.mobcomms.raising.model.UserPacket;
+import com.mobcomms.raising.dto.packet.UserPacket;
 import com.mobcomms.raising.service.UserCharacterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -2,6 +2,7 @@ package com.mobcomms.raising.service;
 
 import com.mobcomms.raising.dto.CharacterDto;
 import com.mobcomms.raising.dto.CharacterRegDto;
+import com.mobcomms.raising.dto.mapper.CharacterMapper;
 import com.mobcomms.raising.entity.CharacterEntity;
 import com.mobcomms.raising.repository.CharacterRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ public class CharacterService {
     private final CharacterRepository characterRepository;
 
     public List<CharacterDto> readCharacter() {
-        return selectCharacter().stream().map(entity -> CharacterDto.of(entity)).collect(Collectors.toList());
+
+        return CharacterMapper.INSTANCE.toDtoList(selectCharacter());
      }
 
     public CharacterDto createCharacter(CharacterRegDto dto) {
@@ -28,7 +30,8 @@ public class CharacterService {
         // 임시
         entity.setRegUser("system");
         entity.setModUser("system");
-        return CharacterDto.of(insertCharacter(entity));
+
+        return CharacterMapper.INSTANCE.toDto(insertCharacter(entity));
     }
 
     protected CharacterEntity insertCharacter(CharacterEntity entity) {

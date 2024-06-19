@@ -1,13 +1,11 @@
-package com.mobcomms.raising.model;
+package com.mobcomms.raising.dto;
 
-import com.mobcomms.raising.entity.UserGameEntity;
 import lombok.Data;
-import org.joda.time.DateTime;
 
 import java.time.LocalDateTime;
 
 @Data
-public class GameModel {
+public class GameDto {
     private long gameSeq;
     private long userSeq;
     private long characterSeq;

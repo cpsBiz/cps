@@ -1,8 +1,8 @@
-package com.mobcomms.raising.model.mapper;
+package com.mobcomms.raising.dto.mapper;
 
 
 import com.mobcomms.raising.entity.UserGameEntity;
-import com.mobcomms.raising.model.GameModel;
+import com.mobcomms.raising.dto.GameDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -13,8 +13,8 @@ public interface GameMapper {
     GameMapper INSTANCE = Mappers.getMapper(GameMapper.class);
 
     @Mapping(source = "gameSeq", target = "id")
-    UserGameEntity toEntity(GameModel model);
+    UserGameEntity toEntity(GameDto model);
 
     @Mapping(source = "id", target = "gameSeq")
-    GameModel toModel(UserGameEntity entity);
+    GameDto toModel(UserGameEntity entity);
 }

@@ -1,10 +1,12 @@
-package com.mobcomms.raising.model;
+package com.mobcomms.raising.dto.packet;
 
 import com.mobcomms.common.model.BaseRequset;
 import com.mobcomms.common.model.GenericBaseResponse;
+import com.mobcomms.raising.dto.CharacterDto;
 import com.mobcomms.raising.dto.UserCharacterDto;
 import com.mobcomms.raising.dto.UserCharacterRegDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /*
  * Created by enliple
@@ -21,18 +23,20 @@ public class UserPacket {
         }
 
         public static class Response{
-            private CharacterModel characterModel;
+            private CharacterDto characterDto;
         }
     }
 
 
     public static class CreateUserCharacter {
         @Data
+        @EqualsAndHashCode(callSuper = false)
         public static class Request extends BaseRequset {
             private long userSeq;
             private UserCharacterRegDto userCharacterRegDto;
         }
         @Data
+        @EqualsAndHashCode(callSuper = false)
         public static class Response extends GenericBaseResponse<UserCharacterDto> {
 
         }

@@ -1,8 +1,6 @@
-package com.mobcomms.raising.model.mapper;
+package com.mobcomms.raising.dto.mapper;
 import com.mobcomms.raising.entity.GoodsEntity;
-import com.mobcomms.raising.entity.UserGameEntity;
-import com.mobcomms.raising.model.GoodsModel;
-import org.mapstruct.Mapper;
+import com.mobcomms.raising.dto.GoodsDto;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
@@ -10,8 +8,8 @@ public interface GoodsMapper {
     GoodsMapper INSTANCE = Mappers.getMapper(GoodsMapper.class);
 
     @Mapping(source = "goodsSeq", target = "id")
-    GoodsEntity toEntity(GoodsModel model);
+    GoodsEntity toEntity(GoodsDto model);
 
     @Mapping(source = "id", target = "goodsSeq")
-    GoodsModel toModel(GoodsEntity entity);
+    GoodsDto toModel(GoodsEntity entity);
 }

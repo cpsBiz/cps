@@ -1,9 +1,9 @@
-package com.mobcomms.raising.model;
+package com.mobcomms.raising.dto;
 
 import lombok.Data;
 
 @Data
-public class GoodsModel {
+public class GoodsDto {
     private long goodsSeq;
     private int price;
     private String goodsName;
