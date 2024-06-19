@@ -109,7 +109,7 @@ public class GameService {
     //게임 케릭터 정보 가져오기
     public GenericBaseResponse<CharacterModel> getGameCharacter(GameModel model){
         GenericBaseResponse<CharacterModel> response = new GenericBaseResponse<>();
-        var entity = userCharacterRepository.findByUserSeqAndCharacterSeq(model.getUserSeq(),model.getCharacterSeq());
+        var entity = userCharacterRepository.findByIdUserSeqAndIdCharacterSeq(model.getUserSeq(),model.getCharacterSeq());
 
         if(entity != null){
             var character = characterRepository.findById(entity.getId().getCharacterSeq()).orElse(null);

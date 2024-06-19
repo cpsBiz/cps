@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface UserCharacterRepository extends JpaRepository<UserCharacterEntity, UserCharacterPK> {
     List<UserCharacterEntity> findAllByIdUserSeq(Long id);
-    UserCharacterEntity findByUserSeqAndCharacterSeq(long userSeq, long characterSeq);
+    UserCharacterEntity findByIdUserSeqAndIdCharacterSeq(long userSeq, long characterSeq);
 }

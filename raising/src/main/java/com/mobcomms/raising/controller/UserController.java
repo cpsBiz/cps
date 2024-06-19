@@ -2,23 +2,18 @@ package com.mobcomms.raising.controller;
 
 import com.mobcomms.common.api.ApiResponse;
 import com.mobcomms.common.api.ApiResponseList;
-import com.mobcomms.raising.dto.CharacterRegDto;
 import com.mobcomms.raising.dto.LoginResDto;
-
 import com.mobcomms.raising.dto.UserCharacterDto;
 import com.mobcomms.raising.dto.UserCharacterRegDto;
+import com.mobcomms.raising.model.UserPacket;
 import com.mobcomms.raising.service.UserCharacterService;
 import io.swagger.v3.oas.annotations.Operation;
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -52,8 +47,8 @@ public class UserController {
     }
     // 탈퇴
     public ResponseEntity<ApiResponse> withdrawal() {
-         return ResponseEntity.ok(ApiResponse.ok());
-     }
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
     // 사용자캐릭터 변경 api
     public ResponseEntity<ApiResponse> updateUserCharacter() {
         return ResponseEntity.ok(ApiResponse.ok());
@@ -73,10 +68,10 @@ public class UserController {
             @RequestParam long companyCode
     ) {
         try {
-          return ResponseEntity.ok(ApiResponseList.ok(userCharacterService.readUserCharacter(userSeq)));
+            return ResponseEntity.ok(ApiResponseList.ok(userCharacterService.readUserCharacter(userSeq)));
         } catch (Exception e) {
-          e.printStackTrace();
-          return new ResponseEntity<>(ApiResponseList.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return new ResponseEntity<>(ApiResponseList.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -99,5 +94,28 @@ public class UserController {
             return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    // 사용자캐릭터 등록하기
+    @PostMapping("/character2")
+    @Operation(summary = "유저 캐릭터 등록", description = "유저캐릭터정보 api")
+    public ResponseEntity<UserPacket.CreateUserCharacter.Response> createUserCharacter(
+            @RequestBody UserPacket.CreateUserCharacter.Request request
+    ){
+        var result = new UserPacket.CreateUserCharacter.Response();
+        try {
+            result.setSuccess();
+            result.setData(userCharacterService.createUserCharacter(request.getUserSeq(), request.getUserCharacterRegDto()));
+            return new ResponseEntity<>(
+                    result,
+                    HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setError(e.getMessage());
+
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }
