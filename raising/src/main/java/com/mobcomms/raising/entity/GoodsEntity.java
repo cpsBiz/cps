@@ -24,7 +24,7 @@ public class GoodsEntity {
     private Integer requiredPoint;
 
     @Column(name = "difficulty", nullable = false)
-    private Character difficulty;
+    private String difficulty;
 
     @Column(name = "total_count", nullable = false)
     private Integer totalCount;

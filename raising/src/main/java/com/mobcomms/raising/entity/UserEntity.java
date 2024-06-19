@@ -25,10 +25,10 @@ public class UserEntity {
     private String adid;
 
     @Column(name = "platform")
-    private Boolean platform;
+    private Short platform;
 
     @Column(name = "recommand_code", nullable = false, length = 8)
-    private String recommandCode;
+    private String recommendCode;
 
     @Column(name = "last_login_date")
     private Instant lastLoginDate;
