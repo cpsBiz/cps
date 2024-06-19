@@ -4,11 +4,11 @@ import com.mobcomms.common.model.BaseResponse;
 import com.mobcomms.common.model.GenericBaseResponse;
 import com.mobcomms.common.utils.StringUtils;
 import com.mobcomms.raising.entity.UserGameEntity;
-import com.mobcomms.raising.model.CharacterModel;
-import com.mobcomms.raising.model.GameModel;
-import com.mobcomms.raising.model.GoodsModel;
-import com.mobcomms.raising.model.mapper.GameMapper;
-import com.mobcomms.raising.model.mapper.GoodsMapper;
+import com.mobcomms.raising.dto.CharacterDto;
+import com.mobcomms.raising.dto.GameDto;
+import com.mobcomms.raising.dto.GoodsDto;
+import com.mobcomms.raising.dto.mapper.GameMapper;
+import com.mobcomms.raising.dto.mapper.GoodsMapper;
 import com.mobcomms.raising.repository.CharacterRepository;
 import com.mobcomms.raising.repository.GoodsRepository;
 import com.mobcomms.raising.repository.UserCharacterRepository;
@@ -43,7 +43,7 @@ public class GameService {
     }
 
     //게임 업데이트
-    public BaseResponse updateGame(GameModel model) throws Exception{
+    public BaseResponse updateGame(GameDto model) throws Exception{
         if(model.getGameSeq() == 0)
             throw new IllegalArgumentException("GameSeq is worng");
 
@@ -81,11 +81,11 @@ public class GameService {
     }
 
     //최근 게임 정보 가져 오기
-    public GenericBaseResponse<GameModel> getGame(GameModel model){
+    public GenericBaseResponse<GameDto> getGame(GameDto model){
         if(model.getUserSeq() == 0)
             throw new IllegalArgumentException("UserSeq is worng");
 
-        GenericBaseResponse<GameModel> response = new GenericBaseResponse<>();
+        GenericBaseResponse<GameDto> response = new GenericBaseResponse<>();
         var entity = userGameRepository.findTopByUserSeqOrderByPlayDateDesc(model.getUserSeq());
         if(entity != null){
             var data = GameMapper.INSTANCE.toModel(entity);
@@ -107,28 +107,30 @@ public class GameService {
     }
 
     //게임 케릭터 정보 가져오기
-    public GenericBaseResponse<CharacterModel> getGameCharacter(GameModel model){
-        GenericBaseResponse<CharacterModel> response = new GenericBaseResponse<>();
+    public GenericBaseResponse<CharacterDto> getGameCharacter(GameDto model){
+        GenericBaseResponse<CharacterDto> response = new GenericBaseResponse<>();
+        response.setSuccess();
         var entity = userCharacterRepository.findByIdUserSeqAndIdCharacterSeq(model.getUserSeq(),model.getCharacterSeq());
 
         if(entity != null){
             var character = characterRepository.findById(entity.getId().getCharacterSeq()).orElse(null);
 
-            response.setData(new CharacterModel(){{
+            response.setData(new CharacterDto(){{
                 setCharacterSeq(entity.getId().getCharacterSeq());
                 setCharacterImage(character.getCharacterImg());
                 setCharacterName(entity.getCharacterNickName());
             }});
         }
+
         return response;
     }
 
     //게임 상품 정보 가져오기
-    public GenericBaseResponse<GoodsModel> getGameGoods(GameModel model){
+    public GenericBaseResponse<GoodsDto> getGameGoods(GameDto model){
         if(model.getGoodsSeq() == 0)
             throw new IllegalArgumentException("GoodsSeq is worng");
 
-        GenericBaseResponse<GoodsModel> response = new GenericBaseResponse<>();
+        GenericBaseResponse<GoodsDto> response = new GenericBaseResponse<>();
         //상품 정보 가져오기
         var entity = goodsRepository.findById(model.getGoodsSeq()).orElse(null);
 
