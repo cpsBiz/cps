@@ -9,4 +9,5 @@ package com.mobcomms.raising.service;
  */
 //TODO : 룰렛 게임 정보 조회, 게임 결과 반환
 public class RouletteService {
+
 }

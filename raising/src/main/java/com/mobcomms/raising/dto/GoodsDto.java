@@ -8,4 +8,10 @@ public class GoodsDto {
     private int price;
     private String goodsName;
     private String goodsImage;
+    private int consumerPrice;
+    private int requiredPoint;
+    private String difficulty;
+    private int totalCount;
+    private int count;
+    private String useYn;
 }

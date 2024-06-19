@@ -3,6 +3,7 @@ import com.mobcomms.raising.entity.GoodsEntity;
 import com.mobcomms.raising.dto.GoodsDto;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import java.util.List;
 
 public interface GoodsMapper {
     GoodsMapper INSTANCE = Mappers.getMapper(GoodsMapper.class);
@@ -11,5 +12,7 @@ public interface GoodsMapper {
     GoodsEntity toEntity(GoodsDto model);
 
     @Mapping(source = "id", target = "goodsSeq")
-    GoodsDto toModel(GoodsEntity entity);
+    GoodsDto toDto(GoodsEntity entity);
+
+    List<GoodsDto> toDtoList(List<GoodsEntity> entityList);
 }

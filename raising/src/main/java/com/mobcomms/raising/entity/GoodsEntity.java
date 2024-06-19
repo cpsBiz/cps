@@ -41,8 +41,9 @@ public class GoodsEntity {
     @Column(name = "description", nullable = false, length = 2000)
     private String description;
 
+    //TODO : Character 형 유지 결정
     @Column(name = "use_yn")
-    private Character useYn;
+    private String useYn;
 
     @Column(name = "reg_date", nullable = false)
     private Instant regDate;

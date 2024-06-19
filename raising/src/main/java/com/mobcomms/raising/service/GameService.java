@@ -134,7 +134,7 @@ public class GameService {
         //상품 정보 가져오기
         var entity = goodsRepository.findById(model.getGoodsSeq()).orElse(null);
 
-        var data =  GoodsMapper.INSTANCE.toModel(entity);
+        var data =  GoodsMapper.INSTANCE.toDto(entity);
         response.setData(data);
 
         return response;
