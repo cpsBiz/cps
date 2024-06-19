@@ -2,14 +2,17 @@ package com.mobcomms.raising.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-@Data
+@Getter
 @Embeddable
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class UserCharacterPK implements Serializable {
     private static final long serialVersionUID = 2776434041103366947L;
     @Column(name = "user_seq", nullable = false)

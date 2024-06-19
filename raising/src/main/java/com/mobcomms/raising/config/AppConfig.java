@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 
 @Configuration
-@ComponentScan(
-        basePackages = {"com.mobcomms.common"},
-        excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.mobcomms.common.aop.*"))
+@ComponentScan(basePackages = {"com.mobcomms.common"})
 public class AppConfig {
 }

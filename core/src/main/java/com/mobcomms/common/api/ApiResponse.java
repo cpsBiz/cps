@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ApiResponse<T> {
     @Schema(description = "결과코드")
@@ -31,7 +33,10 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse ok(T result) {
-        return ApiResponse.builder().resultCode(ResultCode.SUCCESS.getResultCode()).data(result).build();
+        return ApiResponse.builder()
+                .resultCode(ResultCode.SUCCESS.getResultCode())
+                .resultMessage(ResultCode.SUCCESS.getResultCode())
+                .data(result).build();
     }
 
     public static <T> ApiResponse ok() {
