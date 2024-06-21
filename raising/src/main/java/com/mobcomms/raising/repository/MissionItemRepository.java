@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface MissionItemRepository extends JpaRepository<MissionItemEntity, Long> {
     List<MissionItemEntity> findByUseYn(String useYn);
+    List<MissionItemEntity> findByIdAndUseYn(Long missionItemSeq, String useYn);
 }

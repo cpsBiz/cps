@@ -23,8 +23,9 @@ public class MissionItemEntity {
     @Column(name = "landing_url", nullable = false)
     private String landingUrl;
 
+    @Lob
     @Column(name = "use_yn")
-    private Character useYn;
+    private String useYn;
 
     @Column(name = "reg_date", nullable = false)
     private Instant regDate;

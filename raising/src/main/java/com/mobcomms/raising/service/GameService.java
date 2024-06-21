@@ -13,6 +13,8 @@ import com.mobcomms.raising.repository.CharacterRepository;
 import com.mobcomms.raising.repository.GoodsRepository;
 import com.mobcomms.raising.repository.UserCharacterRepository;
 import com.mobcomms.raising.repository.UserGameRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 
 /*
@@ -21,12 +23,14 @@ import com.mobcomms.raising.repository.UserGameRepository;
  * 게임 생성, 업데이트, 최근 게임 정보 가져오기, 게임 케릭터 정보 가져오기, 게임 상품 정보 가져오기
  * UpdateDate : 2024-06-19, mapper 적용 및 코드 정리
  */
+@RequiredArgsConstructor
+@Service
 public class GameService {
 
-    private UserGameRepository userGameRepository;
-    private UserCharacterRepository userCharacterRepository;
-    private GoodsRepository goodsRepository;
-    private CharacterRepository characterRepository;
+    private final UserGameRepository userGameRepository;
+    private final UserCharacterRepository userCharacterRepository;
+    private final GoodsRepository goodsRepository;
+    private final CharacterRepository characterRepository;
 
     //게임 생성
     public BaseResponse createGame(long userSeq){
@@ -140,5 +144,9 @@ public class GameService {
         return response;
     }
 
+    // 게임번호 가져오기
+    protected Long selectGameSeq(Long userSeq, Long characterSeq) {
+        return userGameRepository.findTopByUserSeqAndCharacterSeqOrderByPlayDateDesc(userSeq, characterSeq).getId();
+    }
 
 }

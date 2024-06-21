@@ -18,7 +18,7 @@ public class MissionEntity {
     private String missionName;
 
     @Column(name = "mission_type", nullable = false)
-    private Character missionType;
+    private String missionType;
 
     @Column(name = "mission_interval", nullable = false)
     private Integer missionInterval;
@@ -29,8 +29,8 @@ public class MissionEntity {
     @Column(name = "gain_point", nullable = false)
     private Integer gainPoint;
 
-    @Column(name = "dailly_limit_count", nullable = false)
-    private Integer daillyLimitCount;
+    @Column(name = "daily_limit_count", nullable = false)
+    private Integer dailyLimitCount;
 
     @Column(name = "reg_date", nullable = false)
     private Instant regDate;
@@ -43,5 +43,4 @@ public class MissionEntity {
 
     @Column(name = "mod_user", nullable = false)
     private Long modUser;
-
 }

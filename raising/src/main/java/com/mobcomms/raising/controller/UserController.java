@@ -6,6 +6,7 @@ import com.mobcomms.raising.dto.LoginResDto;
 import com.mobcomms.raising.dto.UserCharacterDto;
 import com.mobcomms.raising.dto.UserCharacterRegDto;
 import com.mobcomms.raising.dto.packet.UserPacket;
+import com.mobcomms.raising.service.SaveService;
 import com.mobcomms.raising.service.UserCharacterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserCharacterService userCharacterService;
+    private final SaveService saveService;
 
     // 로그인
     @GetMapping("/sign-in")
@@ -117,5 +119,25 @@ public class UserController {
         }
     }
 
+    @PostMapping("/save")
+    @Operation(summary = "포인트 및 경험치 적립", description = "먹이주기 api")
+    public ResponseEntity save(
+            @Parameter(description = "유저고유번호", required = true)
+            @RequestParam long userSeq,
+            @Parameter(description = "고객사코드", required = true)
+            @RequestParam String companyCode,
+            @Parameter(description = "미션고유번호", required = true)
+            @RequestParam long missionSeq,
+            @Parameter(description = "캐릭터고유번호", required = true)
+            @RequestParam long characterSeq
+    ) {
+        try {
+            saveService.save(userSeq, characterSeq);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
 }

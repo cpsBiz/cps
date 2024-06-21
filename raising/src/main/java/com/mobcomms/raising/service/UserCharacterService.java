@@ -47,6 +47,10 @@ public class UserCharacterService {
         return UserCharacterDto.of(userCharacterEntity, characterEntity);
     }
 
+    protected UserCharacterEntity selectUserCharacter(Long userSeq, Long characterSeq) {
+        return userCharacterRepository.findByIdUserSeqAndIdCharacterSeq(userSeq, characterSeq);
+    }
+
     protected UserCharacterEntity insertUserCharacter(UserCharacterEntity entity) {
         return userCharacterRepository.saveAndFlush(entity);
     }

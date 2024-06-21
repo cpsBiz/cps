@@ -1,12 +1,20 @@
 package com.mobcomms.raising.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "mission_user_history")
 public class MissionUserHistoryEntity {
     @Id
@@ -17,7 +25,7 @@ public class MissionUserHistoryEntity {
     @Column(name = "mission_seq", nullable = false)
     private Long missionSeq;
 
-    @Column(name = "mission_item_seq", nullable = false)
+    @Column(name = "mission_item_seq")
     private Long missionItemSeq;
 
     @Column(name = "user_seq", nullable = false)
@@ -26,15 +34,18 @@ public class MissionUserHistoryEntity {
     @Column(name = "game_seq", nullable = false)
     private Long gameSeq;
 
-    @Column(name = "complated_yn")
-    private Character complatedYn;
+    @Lob
+    @Column(name = "completed_yn")
+    private String completedYn;
 
+    @CreatedDate
     @Column(name = "reg_date", nullable = false)
     private Instant regDate;
 
     @Column(name = "reg_user", nullable = false)
     private Long regUser;
 
+    @LastModifiedDate
     @Column(name = "mod_date", nullable = false)
     private Instant modDate;
 
