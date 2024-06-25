@@ -3,7 +3,7 @@ package com.mobcomms.raising.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,7 +24,7 @@ public class CharacterHistoryEntity {
     private Integer maxLevel;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
     @Column(name = "reg_user", nullable = false)
     private Long regUser;

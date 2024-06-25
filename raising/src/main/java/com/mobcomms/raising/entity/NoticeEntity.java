@@ -3,7 +3,7 @@ package com.mobcomms.raising.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -36,13 +36,13 @@ public class NoticeEntity {
     private String endDate;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
     @Column(name = "reg_user", nullable = false, length = 20)
     private String regUser;
 
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    private LocalDateTime modDate;
 
     @Column(name = "mod_user", nullable = false, length = 20)
     private String modUser;

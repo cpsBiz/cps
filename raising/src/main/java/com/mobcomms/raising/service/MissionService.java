@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 /*
@@ -41,6 +44,10 @@ public class MissionService {
         return missionRepository.findAll(Sort.by("missionType").ascending());
     }
 
+    protected MissionEntity selectMission(Long missionSeq) {
+        return missionRepository.findById(missionSeq).get();
+    }
+
     private MissionDto mergeMissionDtoByType( List<MissionEntity> missionEntities) {
         MissionA missionA =
                 missionEntities.stream()
@@ -66,4 +73,17 @@ public class MissionService {
     //미션 등록
 
     //미션 수정
+
+
+    // 남은 미션 정보.
+    protected int getRemainingMissionCount(Long userSeq, Long missionSeq) {
+        MissionEntity missionEntity = this.selectMission(missionSeq);
+        // 오늘 미션을 몇번 수행했는지
+        List<MissionUserHistoryEntity> missionUserHistoryEntityList =
+                missionUserHistoryService.selectMissionUserHistory(
+                        userSeq, missionSeq, LocalDate.now().atStartOfDay(ZoneId.of("Asia/Seoul")).toLocalDateTime());
+
+        return missionEntity.getDailyLimitCount() - missionUserHistoryEntityList.size();
+    }
+
 }

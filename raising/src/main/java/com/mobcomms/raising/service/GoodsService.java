@@ -11,12 +11,17 @@ import com.mobcomms.common.model.BaseResponse;
 import com.mobcomms.common.model.GenericBaseResponse;
 import com.mobcomms.raising.dto.GoodsDto;
 import com.mobcomms.raising.dto.mapper.GoodsMapper;
+import com.mobcomms.raising.entity.GoodsEntity;
 import com.mobcomms.raising.repository.GoodsRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 //TODO : 상품 핀 등록, 상품 핀 수정
+@RequiredArgsConstructor
+@Service
 public class GoodsService {
 
-    private GoodsRepository goodsRepository;
+    private final GoodsRepository goodsRepository;
 
     //선택 가능한 상품 목록 조회
     public GenericBaseResponse<GoodsDto> getGoodsList(){
@@ -66,5 +71,9 @@ public class GoodsService {
         } else {
             return BaseResponse.error("Update Goods Error");
         }
+    }
+
+    protected GoodsEntity selectGoods(Long goodsSeq) {
+        return goodsRepository.findById(goodsSeq).get();
     }
 }

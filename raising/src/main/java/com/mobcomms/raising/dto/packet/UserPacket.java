@@ -3,6 +3,7 @@ package com.mobcomms.raising.dto.packet;
 import com.mobcomms.common.model.BaseRequset;
 import com.mobcomms.common.model.GenericBaseResponse;
 import com.mobcomms.raising.dto.CharacterDto;
+import com.mobcomms.raising.dto.SaveResDto;
 import com.mobcomms.raising.dto.UserCharacterDto;
 import com.mobcomms.raising.dto.UserCharacterRegDto;
 import lombok.Data;
@@ -39,6 +40,18 @@ public class UserPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class Response extends GenericBaseResponse<UserCharacterDto> {
 
+        }
+    }
+
+    public static class Save {
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class Request extends BaseRequset {
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class Response extends GenericBaseResponse<SaveResDto> {
         }
     }
 }

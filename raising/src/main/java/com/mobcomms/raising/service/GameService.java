@@ -145,8 +145,12 @@ public class GameService {
     }
 
     // 게임번호 가져오기
-    protected Long selectGameSeq(Long userSeq, Long characterSeq) {
-        return userGameRepository.findTopByUserSeqAndCharacterSeqOrderByPlayDateDesc(userSeq, characterSeq).getId();
+    protected UserGameEntity selectGameSeq(Long userSeq, Long characterSeq) {
+        return userGameRepository.findTopByUserSeqAndCharacterSeqOrderByPlayDateDesc(userSeq, characterSeq);
+    }
+
+    protected UserGameEntity insertUserGame(UserGameEntity entity) {
+        return userGameRepository.save(entity);
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -38,14 +38,14 @@ public class CharacterEntity {
 
     @CreatedDate
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
     @Column(name = "reg_user", nullable = false)
     private String regUser;
 
     @LastModifiedDate
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    private LocalDateTime modDate;
 
     @Column(name = "mod_user", nullable = false)
     private String modUser;

@@ -2,7 +2,6 @@ package com.mobcomms.adPanel.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mobcomms.adPanel.entity.AdPanelEntity;
-import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 

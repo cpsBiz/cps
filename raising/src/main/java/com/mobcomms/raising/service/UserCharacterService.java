@@ -8,8 +8,11 @@ import com.mobcomms.raising.entity.UserCharacterPK;
 import com.mobcomms.raising.repository.UserCharacterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.stream.Collectors;
 
 
@@ -47,6 +50,34 @@ public class UserCharacterService {
         return UserCharacterDto.of(userCharacterEntity, characterEntity);
     }
 
+    public UserCharacterDto updateUserCharacter(Long userSeq, Long oldCharacterSeq, Long newCharacterSeq) {
+        UserCharacterEntity userCharacterEntity =
+                userCharacterRepository.findByIdUserSeqAndIdCharacterSeq(userSeq, oldCharacterSeq);
+
+        UserCharacterEntity changedUserCharacterEntity = null;
+        if(newCharacterSeq != oldCharacterSeq) {
+            this.deleteUserCharacter(userCharacterEntity);
+
+            changedUserCharacterEntity = new UserCharacterEntity();
+            changedUserCharacterEntity.setId(new UserCharacterPK(userSeq, newCharacterSeq));
+            changedUserCharacterEntity.setExp(userCharacterEntity.getExp());
+            changedUserCharacterEntity.setLevel(userCharacterEntity.getLevel());
+            changedUserCharacterEntity.setCharacterNickName(userCharacterEntity.getCharacterNickName());
+            changedUserCharacterEntity.setRegUser(userSeq.toString());
+            changedUserCharacterEntity.setModUser(userSeq.toString());
+
+            changedUserCharacterEntity = this.insertUserCharacter(changedUserCharacterEntity);
+        }
+
+        CharacterEntity characterEntity = characterService.selectCharacter(newCharacterSeq);
+        return UserCharacterDto.of(changedUserCharacterEntity, characterEntity);
+    }
+
+
+    public void deleteUserCharacter(UserCharacterEntity entity) {
+        userCharacterRepository.delete(entity);
+    }
+
     protected UserCharacterEntity selectUserCharacter(Long userSeq, Long characterSeq) {
         return userCharacterRepository.findByIdUserSeqAndIdCharacterSeq(userSeq, characterSeq);
     }
@@ -54,5 +85,7 @@ public class UserCharacterService {
     protected UserCharacterEntity insertUserCharacter(UserCharacterEntity entity) {
         return userCharacterRepository.saveAndFlush(entity);
     }
+
+
 
 }

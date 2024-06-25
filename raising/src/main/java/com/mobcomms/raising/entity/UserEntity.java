@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -31,8 +31,8 @@ public class UserEntity {
     private String recommendCode;
 
     @Column(name = "last_login_date")
-    private Instant lastLoginDate;
+    private LocalDateTime lastLoginDate;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 }

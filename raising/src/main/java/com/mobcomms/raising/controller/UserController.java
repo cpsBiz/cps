@@ -4,8 +4,9 @@ import com.mobcomms.common.api.ApiResponse;
 import com.mobcomms.common.api.ApiResponseList;
 import com.mobcomms.raising.dto.LoginResDto;
 import com.mobcomms.raising.dto.UserCharacterDto;
+import com.mobcomms.raising.dto.UserCharacterModDto;
 import com.mobcomms.raising.dto.UserCharacterRegDto;
-import com.mobcomms.raising.dto.packet.UserPacket;
+import com.mobcomms.raising.dto.packet.UserPacket.Save;
 import com.mobcomms.raising.service.SaveService;
 import com.mobcomms.raising.service.UserCharacterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,6 +98,28 @@ public class UserController {
         }
     }
 
+    // 사용자 캐릭터 변경
+    @PutMapping("/character")
+    @Operation(summary = "유저 캐릭터 변경", description = "유저캐릭터변경 api")
+    public ResponseEntity<ApiResponse<UserCharacterDto>> updateUserCharacter(
+            @Parameter(description = "유저고유번호", required = true)
+            @RequestParam long userSeq,
+            @Parameter(description = "고객사코드", required = true)
+            @RequestParam String companyCode,
+            @RequestBody UserCharacterModDto userCharacterModDto
+    ){
+        try {
+            return new ResponseEntity<>(
+                    ApiResponse.ok(userCharacterService.updateUserCharacter(
+                            userSeq, userCharacterModDto.oldCharacterSeq(), userCharacterModDto.newCharacterSeq())),
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(ApiResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /*
     // 사용자캐릭터 등록하기
     @PostMapping("/character2")
     @Operation(summary = "유저 캐릭터 등록", description = "유저캐릭터정보 api")
@@ -118,10 +141,10 @@ public class UserController {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+*/
     @PostMapping("/save")
-    @Operation(summary = "포인트 및 경험치 적립", description = "먹이주기 api")
-    public ResponseEntity save(
+    @Operation(summary = "적립", description = "경험치 및 포인트 적립")
+    public ResponseEntity<Save.Response> createMissionExecute(
             @Parameter(description = "유저고유번호", required = true)
             @RequestParam long userSeq,
             @Parameter(description = "고객사코드", required = true)
@@ -129,15 +152,18 @@ public class UserController {
             @Parameter(description = "미션고유번호", required = true)
             @RequestParam long missionSeq,
             @Parameter(description = "캐릭터고유번호", required = true)
-            @RequestParam long characterSeq
-    ) {
+            @RequestParam long characterSeq)
+    {
+        Save.Response response = new Save.Response();
         try {
-            saveService.save(userSeq, characterSeq);
-        } catch(Exception e) {
+            response.setSuccess();
+            response.setData(saveService.save(userSeq, characterSeq, missionSeq));
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
             e.printStackTrace();
+            response.setError(e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return null;
     }
 
 }

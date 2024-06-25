@@ -3,7 +3,7 @@ package com.mobcomms.raising.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 
 @Data
@@ -35,9 +35,9 @@ public class UserGameEntity {
     private LocalDateTime playDate;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    private LocalDateTime modDate;
 
 }
