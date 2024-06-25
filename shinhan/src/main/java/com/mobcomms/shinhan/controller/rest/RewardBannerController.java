@@ -24,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class RewardBannerController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    /*private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private WebFluxService webFluxService;
@@ -115,5 +115,5 @@ public class RewardBannerController {
         }
 
         return resultJson;
-    }
+    }*/
 }
