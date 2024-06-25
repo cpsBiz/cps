@@ -26,6 +26,13 @@ public class UserGameEntity {
     @Column(name = "point", nullable = false)
     private Integer point;
 
+    @Lob
+    @Column(name = "end_yn")
+    private String endYn;
+
+    @Column(name = "play_date", nullable = false)
+    private Instant playDate;
+
     @Column(name = "reg_date", nullable = false)
     private Instant regDate;
 
