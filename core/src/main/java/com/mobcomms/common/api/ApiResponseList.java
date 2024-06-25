@@ -34,6 +34,7 @@ public class ApiResponseList<T> {
     public static <T> ApiResponseList<T> ok(List<T> result) {
         return ApiResponseList.<T>builder()
                 .resultCode(ResultCode.SUCCESS.getResultCode())
+                .resultMessage(ResultCode.SUCCESS.getResultMessage())
                 .datas(Optional.ofNullable(result).orElse(List.of()))
                 .build();
     }

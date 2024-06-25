@@ -2,11 +2,15 @@ package com.mobcomms.raising.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "mission_user_character_growth_history")
 public class MissionUserCharacterGrowthHistoryEntity {
     @Id
@@ -23,10 +27,12 @@ public class MissionUserCharacterGrowthHistoryEntity {
     @Column(name = "point", nullable = false)
     private Integer point;
 
+    @CreatedDate
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
+    @LastModifiedDate
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    private LocalDateTime modDate;
 
 }

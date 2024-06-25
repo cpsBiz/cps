@@ -1,16 +1,21 @@
 package com.mobcomms.raising.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_character")
+@EntityListeners(AuditingEntityListener.class)
 public class UserCharacterEntity {
     @EmbeddedId
     private UserCharacterPK id;
@@ -25,15 +30,17 @@ public class UserCharacterEntity {
     private Integer exp;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    @CreatedDate
+    private LocalDateTime regDate;
 
-    @Column(name = "reg_user", nullable = false)
-    private Long regUser;
+    @Column(name = "reg_user", nullable = false, updatable = false)
+    private String regUser;
 
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    @LastModifiedDate
+    private LocalDateTime modDate;
 
     @Column(name = "mod_user", nullable = false)
-    private Long modUser;
+    private String modUser;
 
 }
