@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.mobcomms.sample.repository",
+@EnableJpaRepositories(basePackages = "com.mobcomms.shinhan.repository",
         entityManagerFactoryRef = "entityManagerFactory",
         transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
@@ -25,7 +25,7 @@ public class JPAConfiguration {
             @Qualifier("mariaDataSource") DataSource dataSource) {
 
         return builder.dataSource(dataSource)
-                .packages("com.mobcomms.sample.entity")
+                .packages("com.mobcomms.shinhan.entity")
                 .persistenceUnit("mobcomms")
                 .build();
     }
