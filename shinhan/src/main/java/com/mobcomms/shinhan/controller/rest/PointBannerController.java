@@ -7,6 +7,7 @@ package com.mobcomms.shinhan.controller.rest;
  * UpdateDate : 2024-06-25, 업데이트 내용
  */
 
+import com.mobcomms.common.utils.StringUtils;
 import com.mobcomms.shinhan.dto.PointBannerInfoDto;
 import com.mobcomms.shinhan.dto.PointBannerPacket;
 import com.mobcomms.shinhan.dto.PointDto;
@@ -34,6 +35,8 @@ public class PointBannerController {
     //포인트 배너 정보 조회
     @GetMapping("/info")
     public ResponseEntity<PointBannerPacket.PointBannerInfo.Response> pointBannerInfo(PointBannerPacket.PointBannerInfo.Request request) {
+
+
         var pointBannerInfo =  pointService.getPointBannerInfo(new PointBannerInfoDto(){{
             setUserKey(request.getUserKey());
         }});
@@ -47,6 +50,14 @@ public class PointBannerController {
     //회원 insert or update
     @PostMapping("userinfo")
     public PointBannerPacket.UserInfo.Response userInfo(PointBannerPacket.UserInfo.Request request) {
+        if(StringUtils.isNullOrEmpty(request.getUserKey())){
+            return new PointBannerPacket.UserInfo.Response(){{
+                setError("userKey is null");
+            }};
+        }
+
+
+
         memberService.joinOrEdit(new UserDto(){{
             setUserKey(request.getUserKey());
             setUserAppOs(request.getOs());

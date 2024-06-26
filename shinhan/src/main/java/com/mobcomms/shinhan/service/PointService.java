@@ -46,7 +46,8 @@ public class PointService {
         var responseResult = new GenericBaseResponse<PointBannerInfoDto>();
         responseResult.setSuccess();
 
-        int finalUserFrequency = userFrequency;
+        //int finalUserFrequency = userFrequency;
+        int finalUserFrequency = 1;
         responseResult.setData(new PointBannerInfoDto(){{
             setUserKey(model.getUserKey());
             setBadgeImageUrl(setting.getImg());
@@ -67,6 +68,10 @@ public class PointService {
         new PointBannerInfoDto.AdInfo(){{
             setAdUrl("https://ads-partners.coupang.com/image2/ZzPyDv_u7JUbzBtHZ-tEX28sWkqDRNWh384lV1rMW5MlLOv8F6maHH9j7Btg0lw2CdXIjTzAu3OpLxfycynzJ2U-0GITzvG0fkjNCIhrBhHkvgxmpro5Ydh0wNV7At12LCbCRNOde88XXcL_Cnh3R7_5QXPXT9810U6jQDsCFcORYtBLSfUsEW1TakV35oS5nnTgE5Re14BXkkM-i-S6rAMzQq9D3HPMLx-58Mf_5isBLJAbxEOzPQnfw4qz3DBYa2PYVAvzw9Ob18GE7KntJuLbX6GVMzM3dOksa0ZsXRYadxeR7ra3A-RsjhmkEHvxVZhr4aOOhieESkxPG2Y=");
             setAdImageUrl("https://link.coupang.com/re/AFFSDPWAC2?lptag=AF6181865&subid=payboocADAPIios&pageKey=5341861665&itemId=7833102480&vendorItemId=3968863972&traceid=V0-193-13ac92bf58ff9a1e&sourceType=brandstore_affiliate_omp_ads&requestid=20240624142700857153120533&vendorId=A00045273&store=true&storeId=1");
+        }},
+        new PointBannerInfoDto.AdInfo(){{
+            setAdUrl("https://ads-partners.coupang.com/image2/ZzPyDv_u7JUbzBtHZ-tEX28sWkqDRNWh384lV1rMW5MlLOv8F6maHH9j7Btg0lw2CdXIjTzAu3OpLxfycynzJ2U-0GITzvG0fkjNCIhrBhHkvgxmpro5Ydh0wNV7At12LCbCRNOde88XXcL_Cnh3R7_5QXPXT9810U6jQDsCFcORYtBLSfUsEW1TakV35oS5nnTgE5Re14BXkkM-i-S6rAMzQq9D3HPMLx-58Mf_5isBLJAbxEOzPQnfw4qz3DBYa2PYVAvzw9Ob18GE7KntJuLbX6GVMzM3dOksa0ZsXRYadxeR7ra3A-RsjhmkEHvxVZhr4aOOhieESkxPG2Y=");
+            setAdImageUrl("https://thumbnail5.coupangcdn.com/thumbnails/remote/300x100ex/image/vendor_inventory/3842/97566b98f782bac0ab0485913a48e118434a10cd16df3d580cca1f051de7.jpg");
         }});
 
         //TODO : 쿠팡 API 호출
