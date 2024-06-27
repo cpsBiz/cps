@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/point-banner")
+@RequestMapping("/api/v1/banner")
 public class PointBannerController {
 
     private final MemberService memberService;
