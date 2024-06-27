@@ -20,13 +20,4 @@ public class InterceptorConfig implements WebMvcConfigurer  {
 	public void addInterceptors (InterceptorRegistry registry) {
 		registry.addInterceptor(performanceInterceptor).addPathPatterns("/api/**");
 	}
-
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**")
-				.allowedOrigins("*") // 허용할 Origin 설정
-				.allowedMethods(ALLOWED_METHOD_NAMES.split(",")) // 허용할 HTTP 메서드 설정
-				.allowedHeaders("*") // 허용할 헤더 설정
-				.maxAge(3600); // Preflight 요청 결과를 캐싱할 시간 설정
-	}
 }
