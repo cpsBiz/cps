@@ -13,7 +13,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-				.allowedOrigins("https://api.commsad.com/") // 허용할 Origin 설정
+				.allowedOrigins("https://api.commsad.com") // 허용할 Origin 설정
 				.allowedMethods(ALLOWED_METHOD_NAMES.split(",")) // 허용할 HTTP 메서드 설정
 				.allowedHeaders("*") // 허용할 헤더 설정
 				.allowCredentials(true) // 쿠키 인증 정보 허용 여부 설정
