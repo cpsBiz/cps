@@ -9,7 +9,7 @@ package com.mobcomms.shinhan.controller.rest;
 
 import com.mobcomms.common.utils.StringUtils;
 import com.mobcomms.shinhan.dto.PointBannerInfoDto;
-import com.mobcomms.shinhan.dto.PointBannerPacket;
+import com.mobcomms.shinhan.dto.packet.PointBannerPacket;
 import com.mobcomms.shinhan.dto.PointDto;
 import com.mobcomms.shinhan.dto.UserDto;
 import com.mobcomms.shinhan.service.MemberService;
@@ -35,16 +35,25 @@ public class PointBannerController {
     //포인트 배너 정보 조회
     @GetMapping("/info")
     public ResponseEntity<PointBannerPacket.PointBannerInfo.Response> pointBannerInfo(PointBannerPacket.PointBannerInfo.Request request) {
+        //TODO : controller 오류 발생시 500 으로 처리 -> Service 에서 오류 발생시, 어떻게 반환
+        PointBannerPacket.PointBannerInfo.Response result = new PointBannerPacket.PointBannerInfo.Response();
+        //Reqest Data Check
+        if(StringUtils.isNullOrEmpty(request.getUserKey())){
+            result.setRequestError("userKey is null");
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
 
-
-        var pointBannerInfo =  pointService.getPointBannerInfo(new PointBannerInfoDto(){{
-            setUserKey(request.getUserKey());
-        }});
-        var result =  new PointBannerPacket.PointBannerInfo.Response();
-        result.setSuccess();
-        result.setData(pointBannerInfo.getData());
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            var pointBannerInfo =  pointService.getPointBannerInfo(new PointBannerInfoDto(){{
+                setUserKey(request.getUserKey());
+            }});
+            result.setSuccess();
+            result.setData(pointBannerInfo.getData());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError(e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //회원 insert or update

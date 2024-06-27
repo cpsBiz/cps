@@ -22,6 +22,12 @@ public class BaseResponse implements IBaseResponse{
         this.resultMessage = errorMsg;
     }
 
+    public void setRequestError(String errorMsg){
+        this.resultCode = ResultCode.REQUEST_DATA_ERROR.getResultCode();
+        this.resultMessage = errorMsg;
+    }
+
+
     public static BaseResponse ok() {
         return new BaseResponse(){{
             setResultMessage(ResultCode.SUCCESS.getResultCode());

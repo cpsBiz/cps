@@ -1,8 +1,9 @@
-package com.mobcomms.shinhan.dto;
+package com.mobcomms.shinhan.dto.packet;
 
 import com.mobcomms.common.model.BaseRequset;
 import com.mobcomms.common.model.BaseResponse;
 import com.mobcomms.common.model.GenericBaseResponse;
+import com.mobcomms.shinhan.dto.PointBannerInfoDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
