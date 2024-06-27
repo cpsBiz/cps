@@ -17,4 +17,12 @@ public class MariaDatabaseProperties implements DatabaseProperties {
     private int maxIdle;
     private int minIdle;
     private int maxWait;
+    private int maxAge;
+    private boolean testOnBorrow;
+    private boolean testWhileIdle;
+    private int timeBetweenEvictionRunsMillis;
+    private int minEvictableIdleTimeMillis;
+    private int removeAbandonedTimeout;
+    private boolean logAbandoned;
+    private String validationQuery;
 }

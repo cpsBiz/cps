@@ -13,16 +13,24 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 public abstract class DatabaseConfig {
     protected void configureDataSource(DataSource dataSource, DatabaseProperties databaseProperties) {
-    	dataSource.setDriverClassName(databaseProperties.getDriverClassName());
+		dataSource.setDriverClassName(databaseProperties.getDriverClassName());
 		dataSource.setUrl(databaseProperties.getUrl());
-    	dataSource.setUsername(databaseProperties.getUsername());
-    	dataSource.setPassword(databaseProperties.getPassword());
-        dataSource.setMaxActive(databaseProperties.getMaxActive());
-        dataSource.setMaxIdle(databaseProperties.getMaxIdle());
-        dataSource.setMinIdle(databaseProperties.getMinIdle());
-        dataSource.setMaxWait(databaseProperties.getMaxWait());
-        dataSource.setTestOnBorrow(false);
-        dataSource.setTestOnReturn(false);
+		dataSource.setUsername(databaseProperties.getUsername());
+		dataSource.setPassword(databaseProperties.getPassword());
+		dataSource.setMaxActive(databaseProperties.getMaxActive());
+		dataSource.setMaxIdle(databaseProperties.getMaxIdle());
+		dataSource.setMinIdle(databaseProperties.getMinIdle());
+		dataSource.setMaxWait(databaseProperties.getMaxWait());
+		dataSource.setMaxAge(databaseProperties.getMaxAge());
+		dataSource.setTestOnBorrow(databaseProperties.isTestOnBorrow());
+		dataSource.setTestWhileIdle(databaseProperties.isTestWhileIdle());
+		dataSource.setTimeBetweenEvictionRunsMillis(databaseProperties.getTimeBetweenEvictionRunsMillis());
+		dataSource.setMinEvictableIdleTimeMillis(databaseProperties.getMinEvictableIdleTimeMillis());
+		dataSource.setValidationQuery(databaseProperties.getValidationQuery());
+		dataSource.setTestOnBorrow(false);
+		dataSource.setTestOnReturn(false);
+		dataSource.setRemoveAbandonedTimeout(databaseProperties.getRemoveAbandonedTimeout());
+		dataSource.setLogAbandoned(databaseProperties.isLogAbandoned());
     }
 }
 
