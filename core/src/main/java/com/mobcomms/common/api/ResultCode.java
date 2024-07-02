@@ -11,10 +11,10 @@ import lombok.Getter;
 
 @Getter
 public enum ResultCode {
-    SUCCESS("1000", "SUCCESS"),
+    SUCCESS("0000", "SUCCESS"),
     ERROR("9999", "ERROR"),
     REQUEST_DATA_ERROR("2000", "REQUEST DATA ERROR"),
-    NO_DATA("0000", "데이터가 없습니다.");
+    NO_DATA("1000", "데이터가 없습니다.");
 
     String resultCode;
     String resultMessage;

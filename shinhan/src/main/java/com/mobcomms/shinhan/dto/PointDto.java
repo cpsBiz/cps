@@ -15,8 +15,8 @@ public class PointDto {
     private Long pointSeq;
     private String userKey;
     private String status;
-    private String adType;
     private String zoneId;
+    private String adUrl;
     private String os;
     private String transactionId;
     private LocalDateTime regDate;

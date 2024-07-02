@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class MobwithHttpService  extends BaseHttpService {
 
     public static final String DOMAIN = "https://dev.mobwithad.com";
-
+    public static final String GET_MOBWITH_AD_INFO_ENDPOINT = "/api/banner/app/mobicomms/v1/shcard?output=json&zone=";
     public MobwithHttpService() {
         super(DOMAIN);
     }
@@ -41,6 +41,17 @@ public class MobwithHttpService  extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
-
+    public MobwithPacket.GetMobwithAdInfo.Response GetMobwithAdInfo(String zoneId){
+        try{
+            var endPoint = GET_MOBWITH_AD_INFO_ENDPOINT + zoneId;
+            var result = this.GetAsync(endPoint,null,MobwithPacket.GetMobwithAdInfo.Response.class);
+            return result.block();
+        } catch (Exception ex){
+            var error = new MobwithPacket.GetMobwithAdInfo.Response();
+            error.setCode("-9999");
+            error.setMessage(ex.getMessage());
+            return error;
+        }
+    }
 
 }

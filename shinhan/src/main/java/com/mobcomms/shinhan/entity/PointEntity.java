@@ -26,9 +26,6 @@ public class PointEntity {
     @Column(name = "status", nullable = false, length = 45)
     private String status;
 
-    @Column(name = "ad_type", nullable = false, length = 45)
-    private String adType;
-
     @Column(name = "zone_id", nullable = false, length = 45)
     private String zoneId;
 
@@ -38,6 +35,16 @@ public class PointEntity {
     @Column(name = "transaction_id", nullable = false, length = 200)
     private String transactionId;
 
+    @Column(name = "ad_url", nullable = false, length = 500)
+    private String adUrl;
+
     @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
+
+    @Column(name = "stats_dttm", nullable = false)
+    private int statsDttm;
+
+    @Column(name = "point", nullable = false)
+    private int point;
+
 }

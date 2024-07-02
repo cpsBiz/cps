@@ -40,6 +40,7 @@ public class PointBannerPacket {
             private String userKey;
             private String os;
             private String zoneId;
+            private String adid;
         }
 
         @Data

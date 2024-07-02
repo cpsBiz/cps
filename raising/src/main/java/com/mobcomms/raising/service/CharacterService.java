@@ -6,6 +6,7 @@ import com.mobcomms.raising.dto.mapper.CharacterMapper;
 import com.mobcomms.raising.entity.CharacterEntity;
 import com.mobcomms.raising.repository.CharacterRepository;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,9 @@ public class CharacterService {
 
     public List<CharacterDto> readCharacter() {
 
-        return CharacterMapper.INSTANCE.toDtoList(selectCharacter());
+        CharacterMapper mapper = Mappers.getMapper(CharacterMapper.class);
+
+        return mapper.toDtoList(selectCharacter());
      }
 
     public CharacterDto createCharacter(CharacterRegDto dto) {

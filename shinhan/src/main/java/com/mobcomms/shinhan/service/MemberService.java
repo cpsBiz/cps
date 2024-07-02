@@ -9,6 +9,9 @@ import com.mobcomms.shinhan.repository.UserInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /*
  * Created by enliple
  * Create Date : 2024-06-25
@@ -24,18 +27,23 @@ public class MemberService {
     //회원 가입 or 업데이트
     public void joinOrEdit(UserDto model) {
         //회원 가입 or 업데이트 로직
-
         try {
             var result = userInfoRepository.findByUserKey(model.getUserKey());
             if(result == null){
                 var entity = new UserInfoEntity();
                 entity.setUserKey(model.getUserKey());
                 entity.setUserAppOs(model.getUserAppOs());
+                entity.setRegDate(LocalDateTime.now());
+                entity.setEditDate(LocalDateTime.now());
+                entity.setAdid(model.getAdid());
                 userInfoRepository.save(entity);
+            } else {
+                result.setAdid(model.getAdid());
+                result.setEditDate(LocalDateTime.now());
+                userInfoRepository.save(result);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //TODO userKey가 있으면 업데이트
     }
 }

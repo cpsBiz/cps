@@ -7,6 +7,7 @@ package com.mobcomms.shinhan.controller.rest;
  * UpdateDate : 2024-06-25, 업데이트 내용
  */
 
+import com.mobcomms.common.api.ResultCode;
 import com.mobcomms.common.utils.StringUtils;
 import com.mobcomms.shinhan.dto.PointBannerInfoDto;
 import com.mobcomms.shinhan.dto.packet.PointBannerPacket;
@@ -17,11 +18,7 @@ import com.mobcomms.shinhan.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -46,6 +43,8 @@ public class PointBannerController {
         try {
             var pointBannerInfo =  pointService.getPointBannerInfo(new PointBannerInfoDto(){{
                 setUserKey(request.getUserKey());
+                setOs(request.getOs());
+                setAdid(request.getAdid());
             }});
             result.setSuccess();
             result.setData(pointBannerInfo.getData());
@@ -58,14 +57,13 @@ public class PointBannerController {
 
     //회원 insert or update
     @PostMapping("userinfo")
-    public PointBannerPacket.UserInfo.Response userInfo(PointBannerPacket.UserInfo.Request request) {
+    public ResponseEntity<PointBannerPacket.UserInfo.Response> userInfo(@RequestBody PointBannerPacket.UserInfo.Request request) {
+        var result = new PointBannerPacket.UserInfo.Response();
+        //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey())){
-            return new PointBannerPacket.UserInfo.Response(){{
-                setError("userKey is null");
-            }};
+            result.setRequestError("userKey is null");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
-
-
 
         memberService.joinOrEdit(new UserDto(){{
             setUserKey(request.getUserKey());
@@ -73,21 +71,32 @@ public class PointBannerController {
             setAdid(request.getAdid());
         }});
 
-        var result = new PointBannerPacket.UserInfo.Response();
         result.setSuccess();
 
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     //포인트 적립 요청
     @PostMapping("/save")
-    public PointBannerPacket.Point.Response point(PointBannerPacket.Point.Request request) {
-        pointService.callAPIPoint(new PointDto(){{
+    public ResponseEntity<PointBannerPacket.Point.Response> point(@RequestBody PointBannerPacket.Point.Request request) {
+        var result = new PointBannerPacket.Point.Response();
+        //Reqest Data Check
+        if(StringUtils.isNullOrEmpty(request.getUserKey()) ||
+                StringUtils.isNullOrEmpty(request.getZoneId())){
+            result.setRequestError("requset data is wrong");
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+
+        var saveResult = pointService.callAPIPoint(new PointDto(){{
             setUserKey(request.getUserKey());
             setZoneId(request.getZoneId());
             setOs(request.getOs());
+            setAdUrl(request.getAdUrl());
         }});
 
-        return new PointBannerPacket.Point.Response();
+        result.setResultCode(saveResult.getResultCode());
+        result.setResultMessage(saveResult.getResultMessage());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

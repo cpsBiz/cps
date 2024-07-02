@@ -41,5 +41,8 @@ public class UserInfoEntity {
     @Column(name = "alt_dttm", nullable = false)
     private LocalDateTime editDate;
 
+    @Column(name = "adid", nullable = false, length = 45)
+    private String adid;
+
 
 }

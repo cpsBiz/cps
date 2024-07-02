@@ -12,7 +12,9 @@ import java.util.List;
 @Data
 public class PointBannerInfoDto {
     @Schema(description = "유저 키")
+    private String adid;
     private String userKey;
+    private String os;
     private String badgeImageUrl;
     private String pointUnit;
     private Integer bannerPoint;
@@ -20,6 +22,7 @@ public class PointBannerInfoDto {
     private Integer userFrequency;
     private String adType;
     private String zoonId;
+    private int point;
     private List<AdInfo> AdInfos;
 
     @Data
