@@ -2,6 +2,7 @@ package com.mobcomms.cgvSupport.controller;
 
 import com.mobcomms.cgvSupport.dto.AccumulationUserCountDto;
 import com.mobcomms.cgvSupport.service.PoinstService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ public class PointController {
     private final PoinstService poinstService;
 
     @GetMapping("/point/user/cnt")
+    @Operation(summary = "읽기!", description = "select!")
     public ResponseEntity<List<AccumulationUserCountDto>> readAccumulationUserCount(
             @RequestParam String startDate,
             @RequestParam String endDate

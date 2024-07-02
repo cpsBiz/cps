@@ -114,11 +114,55 @@ public abstract class BaseHttpService {
         });
     }
 
+    public WebClient getWebClient() {
+        return this.webClient;
+    }
+
     //Get 요청
     public <T>Mono<T> GetAsync(String endPoint, Object requestData, Class<T> responseType) throws Exception {
-        String endPointWithQuery = endPoint + "?" + CommonUtil.objectToQueryString(requestData);
+        String endPointWithQuery = endPoint;
+
+        if(requestData != null){
+             endPointWithQuery = endPoint + "?" + CommonUtil.objectToQueryString(requestData);
+        }
+
         return this.webClient.get()
                 .uri(endPointWithQuery)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(errorMessage -> {
+                                    //log.error("API ClientError 4xx :" +  errorMessage);
+                                    return Mono.error(new RuntimeException("ClientError 4xx :" + errorMessage));
+                                })
+                ).onStatus(HttpStatusCode::is5xxServerError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(errorMessage -> {
+                                    //log.error("API ClientError 5xx : " + errorMessage);
+                                    return Mono.error(new RuntimeException("ClientError 5xx : " + errorMessage));
+                                })
+                ).bodyToMono(responseType)
+                .onErrorResume(WebClientResponseException.class, ex -> {
+                    log.error("API WebClientResponseException" + System.lineSeparator() + ex);
+                    return Mono.error(new RuntimeException("API WebClientResponseException", ex));
+                })
+                .onErrorResume(Exception.class, ex -> {
+                    log.error("API Exception " + System.lineSeparator() + ex);
+                    return Mono.error(new RuntimeException("API Exception : " + ex.getMessage()));
+                });
+    }
+
+    //Get 요청
+    public <T>Mono<T> GetAsync(String endPoint, Object requestData, Class<T> responseType,Consumer<HttpHeaders> headersConsumer) throws Exception {
+        String endPointWithQuery = endPoint;
+
+        if(requestData != null){
+            endPointWithQuery = endPoint + "?" + CommonUtil.objectToQueryString(requestData);
+        }
+
+        return this.webClient.get()
+                .uri(endPointWithQuery)
+                .headers(headersConsumer)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
                         response.bodyToMono(String.class)

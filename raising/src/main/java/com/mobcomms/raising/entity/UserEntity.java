@@ -1,12 +1,16 @@
 package com.mobcomms.raising.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user")
 public class UserEntity {
     @Id
@@ -21,14 +25,14 @@ public class UserEntity {
     private String adid;
 
     @Column(name = "platform")
-    private Boolean platform;
+    private Short platform;
 
     @Column(name = "recommand_code", nullable = false, length = 8)
-    private String recommandCode;
+    private String recommendCode;
 
     @Column(name = "last_login_date")
-    private Instant lastLoginDate;
+    private LocalDateTime lastLoginDate;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 }

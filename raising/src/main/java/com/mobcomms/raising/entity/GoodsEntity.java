@@ -3,7 +3,7 @@ package com.mobcomms.raising.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,7 +24,7 @@ public class GoodsEntity {
     private Integer requiredPoint;
 
     @Column(name = "difficulty", nullable = false)
-    private Character difficulty;
+    private String difficulty;
 
     @Column(name = "total_count", nullable = false)
     private Integer totalCount;
@@ -41,17 +41,18 @@ public class GoodsEntity {
     @Column(name = "description", nullable = false, length = 2000)
     private String description;
 
+    //TODO : Character 형 유지 결정
     @Column(name = "use_yn")
-    private Character useYn;
+    private String useYn;
 
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
     @Column(name = "reg_user", nullable = false)
     private Long regUser;
 
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    private LocalDateTime modDate;
 
     @Column(name = "mod_user", nullable = false)
     private Long modUser;

@@ -1,12 +1,21 @@
 package com.mobcomms.raising.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "`character`")
 public class CharacterEntity {
     @Id
@@ -23,19 +32,22 @@ public class CharacterEntity {
     @Column(name = "max_level", nullable = false)
     private Integer maxLevel;
 
+    @Lob
     @Column(name = "first_view_yn")
-    private Character firstViewYn;
+    private String firstViewYn;
 
+    @CreatedDate
     @Column(name = "reg_date", nullable = false)
-    private Instant regDate;
+    private LocalDateTime regDate;
 
     @Column(name = "reg_user", nullable = false)
-    private Long regUser;
+    private String regUser;
 
+    @LastModifiedDate
     @Column(name = "mod_date", nullable = false)
-    private Instant modDate;
+    private LocalDateTime modDate;
 
     @Column(name = "mod_user", nullable = false)
-    private Long modUser;
+    private String modUser;
 
 }
