@@ -15,6 +15,24 @@ import lombok.EqualsAndHashCode;
  */
 public class PointBannerPacket {
 
+    public static class getGamezoneAdInfo {
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class Request extends BaseRequset {
+            private String userKey;
+            private String os;
+            private String zoneId;
+            private String adid;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class Response extends GenericBaseResponse<PointBannerInfoDto> {
+
+        }
+
+    }
+
     public static class UserInfo {
 
         @Data

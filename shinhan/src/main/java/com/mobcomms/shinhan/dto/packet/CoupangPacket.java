@@ -1,6 +1,7 @@
 package com.mobcomms.shinhan.dto.packet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 /*
@@ -15,7 +16,6 @@ public class CoupangPacket {
         @Data
         @EqualsAndHashCode(callSuper=false)
         public  static class Request{
-
             private String deviceId;
             private String subId;
             private String imageSize;

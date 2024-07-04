@@ -5,6 +5,8 @@ import com.mobcomms.shinhan.entity.PointEntity;
 import com.mobcomms.shinhan.entity.UserInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -16,6 +18,7 @@ import java.util.Optional;
 public interface PointRepository extends JpaRepository<PointEntity, Long> {
     //해당 유저의 가장 최근 적립 내역 1개 가져오기
     PointEntity findFirstByUserKeyOrderByRegDateDesc(String userKey);
+    List<PointEntity> findByUserKeyAndStatsDttm(String userKey, int statsDttm);
 }
 
 

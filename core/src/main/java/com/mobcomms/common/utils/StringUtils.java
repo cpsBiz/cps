@@ -9,7 +9,7 @@ public class StringUtils {
         return str == null || str.isEmpty();
     }
 
-    public static String GetDateyyyyMMdd(){
+    public static String getDateyyyyMMdd(){
         LocalDate today = LocalDate.now();
 
         // 날짜 형식을 지정하기

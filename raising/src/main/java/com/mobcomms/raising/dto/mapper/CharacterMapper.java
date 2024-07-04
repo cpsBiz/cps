@@ -19,6 +19,7 @@ public interface CharacterMapper {
     CharacterMapper INSTANCE = Mappers.getMapper(CharacterMapper.class);
 
     @Mapping(source = "characterSeq", target = "id")
+    @Mapping(source = "characterImage", target = "characterImg")
     CharacterEntity toEntity(CharacterDto model);
 
     @Mapping(source = "id", target = "characterSeq")

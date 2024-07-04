@@ -29,6 +29,8 @@ public class PointBannerController {
     private final MemberService memberService;
     private final PointService pointService;
 
+
+
     //포인트 배너 정보 조회
     @GetMapping("/info")
     public ResponseEntity<PointBannerPacket.PointBannerInfo.Response> pointBannerInfo(PointBannerPacket.PointBannerInfo.Request request) {
@@ -54,6 +56,35 @@ public class PointBannerController {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    @GetMapping("/gamezone/sadari/info")
+    public ResponseEntity<PointBannerPacket.getGamezoneAdInfo.Response> sadariAdInfo(PointBannerPacket.getGamezoneAdInfo.Request request) {
+
+        var result = new PointBannerPacket.getGamezoneAdInfo.Response();
+        //Reqest Data Check
+        if(StringUtils.isNullOrEmpty(request.getUserKey())){
+            result.setRequestError("userKey is null");
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+
+        try {
+            var pointBannerInfo =  pointService.getGameZoneAdInfo(new PointBannerInfoDto(){{
+                setUserKey(request.getUserKey());
+                setOs(request.getOs());
+                setAdid(request.getAdid());
+            }});
+            result.setSuccess();
+            result.setData(pointBannerInfo.getData());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError(e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
 
     //회원 insert or update
     @PostMapping("userinfo")

@@ -3,6 +3,7 @@ package com.mobcomms.shinhan.service;
 import com.mobcomms.common.servcies.BaseHttpService;
 import com.mobcomms.shinhan.dto.packet.MobwithPacket;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,11 @@ import java.util.function.Consumer;
  * UpdateDate : 2024-06-27, 업데이트 내용
  */
 
-
+@Slf4j
 @Service
 public class MobwithHttpService  extends BaseHttpService {
 
-    public static final String DOMAIN = "https://dev.mobwithad.com";
+    public static final String DOMAIN = "https://www.mobwithad.com";
     public static final String GET_MOBWITH_AD_INFO_ENDPOINT = "/api/banner/app/mobicomms/v1/shcard?output=json&zone=";
     public MobwithHttpService() {
         super(DOMAIN);
@@ -41,9 +42,12 @@ public class MobwithHttpService  extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
-    public MobwithPacket.GetMobwithAdInfo.Response GetMobwithAdInfo(String zoneId){
+    public MobwithPacket.GetMobwithAdInfo.Response GetMobwithAdInfo(String zoneId,String adid){
         try{
-            var endPoint = GET_MOBWITH_AD_INFO_ENDPOINT + zoneId;
+
+            var endPoint = GET_MOBWITH_AD_INFO_ENDPOINT + zoneId + "&adid=" + adid;
+            log.info("[GetMobwithAdInfo] endPoint : " + endPoint);
+
             var result = this.GetAsync(endPoint,null,MobwithPacket.GetMobwithAdInfo.Response.class);
             return result.block();
         } catch (Exception ex){
