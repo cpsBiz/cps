@@ -38,7 +38,6 @@ public class CoupangHttpService extends BaseHttpService {
     private static final String REQUEST_METHOD = "GET";
 
     private static final String ACCESS_KEY = "37a19127-d99d-4415-b059-937ecaad7a85";
-
     private static final String SECRET_KEY = "eac2c8e2ccc7962f736b31b5f8a3f1c009e5212c";
 
     public CoupangHttpService() {
