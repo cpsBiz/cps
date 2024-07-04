@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 public class PointBannerPacket {
 
-    public static class getGamezoneAdInfo {
+    public static class GetPointBannerInfo {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class Request extends BaseRequset {
@@ -33,7 +33,7 @@ public class PointBannerPacket {
 
     }
 
-    public static class UserInfo {
+    public static class GetSadariAdInfo {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
@@ -50,7 +50,7 @@ public class PointBannerPacket {
         }
     }
 
-    public static class PointBannerInfo {
+    public static class PostUserInfo {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
@@ -68,7 +68,7 @@ public class PointBannerPacket {
         }
     }
 
-    public static class Point {
+    public static class PostPoint {
 
         @Data
         @EqualsAndHashCode(callSuper = false)

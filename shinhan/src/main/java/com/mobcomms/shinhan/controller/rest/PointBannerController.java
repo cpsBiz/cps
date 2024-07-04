@@ -7,7 +7,6 @@ package com.mobcomms.shinhan.controller.rest;
  * UpdateDate : 2024-06-25, 업데이트 내용
  */
 
-import com.mobcomms.common.api.ResultCode;
 import com.mobcomms.common.utils.StringUtils;
 import com.mobcomms.shinhan.dto.PointBannerInfoDto;
 import com.mobcomms.shinhan.dto.packet.PointBannerPacket;
@@ -29,13 +28,11 @@ public class PointBannerController {
     private final MemberService memberService;
     private final PointService pointService;
 
-
-
     //포인트 배너 정보 조회
     @GetMapping("/info")
-    public ResponseEntity<PointBannerPacket.PointBannerInfo.Response> pointBannerInfo(PointBannerPacket.PointBannerInfo.Request request) {
+    public ResponseEntity<PointBannerPacket.PostUserInfo.Response> getPointBannerInfo(PointBannerPacket.PostUserInfo.Request request) {
         //TODO : controller 오류 발생시 500 으로 처리 -> Service 에서 오류 발생시, 어떻게 반환
-        PointBannerPacket.PointBannerInfo.Response result = new PointBannerPacket.PointBannerInfo.Response();
+        PointBannerPacket.PostUserInfo.Response result = new PointBannerPacket.PostUserInfo.Response();
         //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey())){
             result.setRequestError("userKey is null");
@@ -52,16 +49,16 @@ public class PointBannerController {
             result.setData(pointBannerInfo.getData());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
+
             result.setError(e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
     @GetMapping("/gamezone/sadari/info")
-    public ResponseEntity<PointBannerPacket.getGamezoneAdInfo.Response> sadariAdInfo(PointBannerPacket.getGamezoneAdInfo.Request request) {
+    public ResponseEntity<PointBannerPacket.GetPointBannerInfo.Response> getSadariAdInfo(PointBannerPacket.GetPointBannerInfo.Request request) {
 
-        var result = new PointBannerPacket.getGamezoneAdInfo.Response();
+        var result = new PointBannerPacket.GetPointBannerInfo.Response();
         //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey())){
             result.setRequestError("userKey is null");
@@ -83,13 +80,10 @@ public class PointBannerController {
         }
     }
 
-
-
-
     //회원 insert or update
     @PostMapping("userinfo")
-    public ResponseEntity<PointBannerPacket.UserInfo.Response> userInfo(@RequestBody PointBannerPacket.UserInfo.Request request) {
-        var result = new PointBannerPacket.UserInfo.Response();
+    public ResponseEntity<PointBannerPacket.GetSadariAdInfo.Response> postUserInfo(@RequestBody PointBannerPacket.GetSadariAdInfo.Request request) {
+        var result = new PointBannerPacket.GetSadariAdInfo.Response();
         //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey())){
             result.setRequestError("userKey is null");
@@ -109,8 +103,8 @@ public class PointBannerController {
 
     //포인트 적립 요청
     @PostMapping("/save")
-    public ResponseEntity<PointBannerPacket.Point.Response> point(@RequestBody PointBannerPacket.Point.Request request) {
-        var result = new PointBannerPacket.Point.Response();
+    public ResponseEntity<PointBannerPacket.PostPoint.Response> postPoint(@RequestBody PointBannerPacket.PostPoint.Request request) {
+        var result = new PointBannerPacket.PostPoint.Response();
         //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey()) ||
                 StringUtils.isNullOrEmpty(request.getZoneId())){

@@ -1,16 +1,11 @@
 package com.mobcomms.shinhan.service;
 
 import com.mobcomms.common.servcies.BaseHttpService;
-import com.mobcomms.common.utils.CommonUtil;
 import com.mobcomms.shinhan.dto.packet.CoupangPacket;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -52,7 +47,7 @@ public class CoupangHttpService extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
-    public CoupangPacket.GetCoupangAdInfo.Response GetCoupangAdInfo(CoupangPacket.GetCoupangAdInfo.Request request){
+    public CoupangPacket.GetCoupangAdInfo.Response getCoupangAdInfo(CoupangPacket.GetCoupangAdInfo.Request request){
         try{
             var generateUri = GET_AD_ENDPOINT+ String.format("?deviceId=%s&subId=%s&imageSize=%s",request.getDeviceId(),request.getSubId(),request.getImageSize());
             var authorization = generate(REQUEST_METHOD,generateUri,SECRET_KEY,ACCESS_KEY);

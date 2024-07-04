@@ -13,6 +13,7 @@ import com.mobcomms.shinhan.repository.AdClickRepository;
 import com.mobcomms.shinhan.repository.PointBannerSettingRepository;
 import com.mobcomms.shinhan.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class PointService {
 
     private final PointRepository pointRepository;
@@ -57,87 +59,93 @@ public class PointService {
 
     public GenericBaseResponse<PointBannerInfoDto> getPointBannerInfo(PointBannerInfoDto model){
         var responseResult = new GenericBaseResponse<PointBannerInfoDto>();
+        try{
+            //point setting 정보 조회
+            var pointBannerSettingResult =  pointBannerSettingRepository.findFirstByUseYnOrderByRegDateDesc("Y");
 
-        //point setting 정보 조회
-        var pointBannerSettingResult =  pointBannerSettingRepository.findFirstByUseYnOrderByRegDateDesc("Y");
+            //유저의 마지막 적립 내역 조회
+            var userPointResult = pointRepository.findFirstByUserKeyOrderByRegDateDesc(model.getUserKey());
 
-        //유저의 마지막 적립 내역 조회
-        var userPointResult = pointRepository.findFirstByUserKeyOrderByRegDateDesc(model.getUserKey());
+            //유저의 오늘 적립 내역 list 조회
+            int today = Integer.parseInt(StringUtils.getDateyyyyMMdd()) ;
+            var userPointTodayResult = pointRepository.findByUserKeyAndStatsDttm(model.getUserKey(),today);
+            int userTodaySavePointCount =  userPointTodayResult.size();
 
-        //유저의 오늘 적립 내역 list 조회
-        int today = Integer.parseInt(StringUtils.getDateyyyyMMdd()) ;
-        var userPointTodayResult = pointRepository.findByUserKeyAndStatsDttm(model.getUserKey(),today);
-        int userTodaySavePointCount =  userPointTodayResult.size();
-
-        String userSaveFlag = "Y";
-        if(userTodaySavePointCount >= pointBannerSettingResult.getMaxPoint()){
-            userSaveFlag = "N";
-        }
-        //적립 가능 여부 flag
-        String finalUserSaveFlag = userSaveFlag;
-
-        //유저의 Frequency
-        int userFrequency = 0;
-        if(userPointResult != null){
-            //마지막 적립 내역일시 에서 frequency를 더한 시간이 현재 시간이 보다 크면 남은 시간을 계산
-            var lastPointSaveDate = userPointResult.getRegDate();
-            var now = LocalDateTime.now();
-
-            if(lastPointSaveDate.plusMinutes(pointBannerSettingResult.getFrequency()).isAfter(now)){
-                userFrequency = (int) (Duration.between(now,lastPointSaveDate.plusMinutes(pointBannerSettingResult.getFrequency()))).toMinutes() + 1;
+            String userSaveFlag = "Y";
+            if(userTodaySavePointCount >= pointBannerSettingResult.getMaxPoint()){
+                userSaveFlag = "N";
             }
+            //적립 가능 여부 flag
+            String finalUserSaveFlag = userSaveFlag;
+
+            //유저의 Frequency
+            int userFrequency = 0;
+            if(userPointResult != null){
+                //마지막 적립 내역일시 에서 frequency를 더한 시간이 현재 시간이 보다 크면 남은 시간을 계산
+                var lastPointSaveDate = userPointResult.getRegDate();
+                var now = LocalDateTime.now();
+
+                if(lastPointSaveDate.plusMinutes(pointBannerSettingResult.getFrequency()).isAfter(now)){
+                    userFrequency = (int) (Duration.between(now,lastPointSaveDate.plusMinutes(pointBannerSettingResult.getFrequency()))).toMinutes() + 1;
+                }
+            }
+
+            responseResult.setSuccess();
+            int finalUserFrequency = userFrequency;
+
+            //TODO mapper 적용
+            responseResult.setData(new PointBannerInfoDto(){{
+                setUserKey(model.getUserKey());
+                setBadgeImageUrl(pointBannerSettingResult.getImg());
+                setPointUnit(pointBannerSettingResult.getUnit());
+                setBannerPoint(pointBannerSettingResult.getPoint());
+                setBannerFrequency(pointBannerSettingResult.getFrequency());
+                setUserFrequency(finalUserFrequency);
+                setUserPointFlag(finalUserSaveFlag);
+            }});
+
+            final List<PointBannerInfoDto.AdInfo> adInfos = new ArrayList<>();
+
+            //TODO : 모비위드 API 호출
+            var mobiwithZoneId = model.getOs().equals("A")?zonePointAos:zonePointIos;
+            var getMobwithAdInfoResult =  mobwithHttpService.getMobwithAdInfo(mobiwithZoneId,model.getAdid());
+
+            if(getMobwithAdInfoResult.getCode().equals("0000")){
+                responseResult.getData().setAdType("M");
+                responseResult.getData().setZoonId(mobiwithZoneId);
+                getMobwithAdInfoResult.getData().getData().forEach(item->{
+                    var data = new PointBannerInfoDto.AdInfo(){{
+                        setAdImageUrl(item.getPImg());
+                        setAdUrl(item.getPUrl());
+                    }};
+                    adInfos.add(data);
+                });
+            } else {
+                //TODO : 쿠팡 API 호출
+                responseResult.getData().setAdType("C");
+                var coupangZoneId = model.getOs().equals("A")?coupangPointAos:coupangPointIos;
+                responseResult.getData().setZoonId(coupangZoneId);
+                var request = new CoupangPacket.GetCoupangAdInfo.Request();
+                request.setDeviceId(model.getAdid());
+                request.setSubId(coupangZoneId);
+                request.setImageSize("100x100");
+                var getCoupangAdInfoResult =   coupangHttpService.getCoupangAdInfo(request);
+                getCoupangAdInfoResult.getData().forEach(item->{
+                    var data = new PointBannerInfoDto.AdInfo(){{
+                        setAdImageUrl(item.getProductImage());
+                        setAdUrl(item.getProductUrl());
+                    }};
+                    adInfos.add(data);
+                });
+            }
+
+            responseResult.getData().setAdInfos(adInfos);
+        }catch (Exception e) {
+            log.error("");
+            throw  e;
         }
 
-        responseResult.setSuccess();
-        int finalUserFrequency = userFrequency;
 
-        //TODO mapper 적용
-        responseResult.setData(new PointBannerInfoDto(){{
-            setUserKey(model.getUserKey());
-            setBadgeImageUrl(pointBannerSettingResult.getImg());
-            setPointUnit(pointBannerSettingResult.getUnit());
-            setBannerPoint(pointBannerSettingResult.getPoint());
-            setBannerFrequency(pointBannerSettingResult.getFrequency());
-            setUserFrequency(finalUserFrequency);
-            setUserPointFlag(finalUserSaveFlag);
-        }});
-
-        final List<PointBannerInfoDto.AdInfo> adInfos = new ArrayList<>();
-
-        //TODO : 모비위드 API 호출
-        var mobiwithZoneId = model.getOs().equals("A")?zonePointAos:zonePointIos;
-        var getMobwithAdInfoResult =  mobwithHttpService.GetMobwithAdInfo(mobiwithZoneId,model.getAdid());
-
-        if(getMobwithAdInfoResult.getCode().equals("0000")){
-            responseResult.getData().setAdType("M");
-            responseResult.getData().setZoonId(mobiwithZoneId);
-            getMobwithAdInfoResult.getData().getData().forEach(item->{
-                var data = new PointBannerInfoDto.AdInfo(){{
-                    setAdImageUrl(item.getPImg());
-                    setAdUrl(item.getPUrl());
-                }};
-                adInfos.add(data);
-            });
-        } else {
-            //TODO : 쿠팡 API 호출
-            responseResult.getData().setAdType("C");
-            var coupangZoneId = model.getOs().equals("A")?coupangPointAos:coupangPointIos;
-            responseResult.getData().setZoonId(coupangZoneId);
-            var request = new CoupangPacket.GetCoupangAdInfo.Request();
-            request.setDeviceId(model.getAdid());
-            request.setSubId(coupangZoneId);
-            request.setImageSize("100x100");
-            var getCoupangAdInfoResult =   coupangHttpService.GetCoupangAdInfo(request);
-            getCoupangAdInfoResult.getData().forEach(item->{
-                var data = new PointBannerInfoDto.AdInfo(){{
-                    setAdImageUrl(item.getProductImage());
-                    setAdUrl(item.getProductUrl());
-                }};
-                adInfos.add(data);
-            });
-        }
-
-        responseResult.getData().setAdInfos(adInfos);
         return responseResult;
     }
 
@@ -147,7 +155,7 @@ public class PointService {
         final List<PointBannerInfoDto.AdInfo> adInfos = new ArrayList<>();
         var mobiwithZoneId = model.getOs().equals("A")?zoneGameAos:zoneGameIos;
         resultData.setZoonId(mobiwithZoneId);
-        var getMobwithAdInfoResult =  mobwithHttpService.GetMobwithAdInfo(mobiwithZoneId,model.getAdid());
+        var getMobwithAdInfoResult =  mobwithHttpService.getMobwithAdInfo(mobiwithZoneId,model.getAdid());
 
         if(getMobwithAdInfoResult.getCode().equals("0000")){
             resultData.setAdType("M");
@@ -167,7 +175,7 @@ public class PointService {
             request.setDeviceId(model.getAdid());
             request.setSubId(coupangZoneId);
             request.setImageSize("300x250");
-            var getCoupangAdInfoResult =   coupangHttpService.GetCoupangAdInfo(request);
+            var getCoupangAdInfoResult =   coupangHttpService.getCoupangAdInfo(request);
             getCoupangAdInfoResult.getData().forEach(item->{
                 var data = new PointBannerInfoDto.AdInfo(){{
                     setAdImageUrl(item.getProductImage());
@@ -215,6 +223,8 @@ public class PointService {
                 isAvailableCondition = true;
             }
         }
+        //TODO 오늘 적립 내역의 max point 에 대한 vaild 처리
+
         //적립이 가능하면,
         if(isAvailableCondition){
             //TODO 적립 API 호출
@@ -228,6 +238,7 @@ public class PointService {
             pointEntity.setPoint(savePoint);
             pointEntity.setAdUrl(model.getAdUrl());
             pointRepository.save(pointEntity);
+            //TODO 적립 실패
             return new BaseResponse(){{setSuccess();}};
         }
         else {

@@ -2,12 +2,9 @@ package com.mobcomms.shinhan.service;
 
 import com.mobcomms.common.servcies.BaseHttpService;
 import com.mobcomms.shinhan.dto.packet.MobwithPacket;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
 import java.util.List;
@@ -42,7 +39,7 @@ public class MobwithHttpService  extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
-    public MobwithPacket.GetMobwithAdInfo.Response GetMobwithAdInfo(String zoneId,String adid){
+    public MobwithPacket.GetMobwithAdInfo.Response getMobwithAdInfo(String zoneId, String adid){
         try{
 
             var endPoint = GET_MOBWITH_AD_INFO_ENDPOINT + zoneId + "&adid=" + adid;

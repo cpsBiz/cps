@@ -43,7 +43,7 @@ public class MemberService {
                 userInfoRepository.save(result);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 }
