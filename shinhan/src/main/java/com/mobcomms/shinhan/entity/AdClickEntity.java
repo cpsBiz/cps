@@ -35,6 +35,6 @@ public class AdClickEntity {
     @Column(name = "stats_dttm", nullable = false)
     private int statsDttm;
 
-    @Column(name = "reg_date", nullable = false)
+    @Column(name = "regdate", nullable = false)
     private LocalDateTime regDate;
 }
