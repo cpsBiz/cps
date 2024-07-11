@@ -79,6 +79,23 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="HTTP_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logback.httpLog.log</file>
+        <encoder>
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] HTTP LOG - %msg%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/logback.httpLog.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${PATH}/logback.error.log</file>
         <encoder>
@@ -125,10 +142,12 @@
         <appender-ref ref="SQL_FILE"/>
     </logger>
 
-    <logger name="com.mobcomms.common.servcies.BaseHttpService" level="debug" additivity="false">
+    <logger name="com.mobcomms.common.servcies.BaseHttpService" level="DEBUG" additivity="false">
         <appender-ref ref="API_FILE"/>
     </logger>
-
+    <logger name="com.mobcomms.common.filter.HttpLoggingFilter" level="INFO" additivity="false">
+        <appender-ref ref="HTTP_LOG"/>
+    </logger>
 
     <root level="INFO">
         <appender-ref ref="console"/>

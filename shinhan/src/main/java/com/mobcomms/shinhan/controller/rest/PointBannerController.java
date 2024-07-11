@@ -14,6 +14,7 @@ import com.mobcomms.shinhan.dto.PointDto;
 import com.mobcomms.shinhan.dto.UserDto;
 import com.mobcomms.shinhan.service.MemberService;
 import com.mobcomms.shinhan.service.PointService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,15 +31,8 @@ public class PointBannerController {
 
     //포인트 배너 정보 조회
     @GetMapping("/info")
-    public ResponseEntity<PointBannerPacket.PostUserInfo.Response> getPointBannerInfo(PointBannerPacket.PostUserInfo.Request request) {
-        //TODO : controller 오류 발생시 500 으로 처리 -> Service 에서 오류 발생시, 어떻게 반환
-        PointBannerPacket.PostUserInfo.Response result = new PointBannerPacket.PostUserInfo.Response();
-        //Reqest Data Check
-        if(StringUtils.isNullOrEmpty(request.getUserKey())){
-            result.setRequestError("userKey is null");
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-
+    public ResponseEntity<PointBannerPacket.GetPointBannerInfo.Response> getPointBannerInfo(@Valid PointBannerPacket.GetPointBannerInfo.Request request) {
+        PointBannerPacket.GetPointBannerInfo.Response result = new PointBannerPacket.GetPointBannerInfo.Response();
         try {
             var pointBannerInfo =  pointService.getPointBannerInfo(new PointBannerInfoDto(){{
                 setUserKey(request.getUserKey());
@@ -56,9 +50,9 @@ public class PointBannerController {
     }
 
     @GetMapping("/gamezone/sadari/info")
-    public ResponseEntity<PointBannerPacket.GetPointBannerInfo.Response> getSadariAdInfo(PointBannerPacket.GetPointBannerInfo.Request request) {
+    public ResponseEntity<PointBannerPacket.GetSadariAdInfo.Response> getSadariAdInfo(PointBannerPacket.GetSadariAdInfo.Request request) {
 
-        var result = new PointBannerPacket.GetPointBannerInfo.Response();
+        var result = new PointBannerPacket.GetSadariAdInfo.Response();
         //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey())){
             result.setRequestError("userKey is null");
@@ -82,8 +76,8 @@ public class PointBannerController {
 
     //회원 insert or update
     @PostMapping("userinfo")
-    public ResponseEntity<PointBannerPacket.GetSadariAdInfo.Response> postUserInfo(@RequestBody PointBannerPacket.GetSadariAdInfo.Request request) {
-        var result = new PointBannerPacket.GetSadariAdInfo.Response();
+    public ResponseEntity<PointBannerPacket.PostUserInfo.Response> postUserInfo(@RequestBody PointBannerPacket.PostUserInfo.Request request) {
+        var result = new PointBannerPacket.PostUserInfo.Response();
         //Reqest Data Check
         if(StringUtils.isNullOrEmpty(request.getUserKey())){
             result.setRequestError("userKey is null");

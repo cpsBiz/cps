@@ -1,9 +1,15 @@
 package com.mobcomms.shinhan.config.interceptor;
 
+import com.mobcomms.common.filter.HttpLoggingFilter;
+import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /*
  * Created by enliple
@@ -20,5 +26,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //registry.addInterceptor(domainInterceptor);
+    }
+
+    @Bean
+    public FilterRegistrationBean<HttpLoggingFilter> onceFilter(){
+        FilterRegistrationBean<HttpLoggingFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setUrlPatterns(List.of("/api/v1/*"));
+        registrationBean.setFilter(new HttpLoggingFilter());
+        registrationBean.setOrder(3);
+        registrationBean.setDispatcherTypes(DispatcherType.REQUEST,DispatcherType.FORWARD,DispatcherType.ERROR);
+        return registrationBean;
     }
 }
