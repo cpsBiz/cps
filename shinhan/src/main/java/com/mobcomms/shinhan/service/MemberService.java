@@ -21,8 +21,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-    //TODO : try catch 으로 BaseResponse return
-
     private final UserInfoRepository userInfoRepository;
     //회원 가입 or 업데이트
     public void joinOrEdit(UserDto model) {
@@ -43,7 +41,7 @@ public class MemberService {
                 userInfoRepository.save(result);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 }

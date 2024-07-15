@@ -1,16 +1,11 @@
 package com.mobcomms.shinhan.service;
 
 import com.mobcomms.common.servcies.BaseHttpService;
-import com.mobcomms.common.utils.CommonUtil;
 import com.mobcomms.shinhan.dto.packet.CoupangPacket;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,7 +33,6 @@ public class CoupangHttpService extends BaseHttpService {
     private static final String REQUEST_METHOD = "GET";
 
     private static final String ACCESS_KEY = "37a19127-d99d-4415-b059-937ecaad7a85";
-
     private static final String SECRET_KEY = "eac2c8e2ccc7962f736b31b5f8a3f1c009e5212c";
 
     public CoupangHttpService() {
@@ -53,7 +47,7 @@ public class CoupangHttpService extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
-    public CoupangPacket.GetCoupangAdInfo.Response GetCoupangAdInfo(CoupangPacket.GetCoupangAdInfo.Request request){
+    public CoupangPacket.GetCoupangAdInfo.Response getCoupangAdInfo(CoupangPacket.GetCoupangAdInfo.Request request){
         try{
             var generateUri = GET_AD_ENDPOINT+ String.format("?deviceId=%s&subId=%s&imageSize=%s",request.getDeviceId(),request.getSubId(),request.getImageSize());
             var authorization = generate(REQUEST_METHOD,generateUri,SECRET_KEY,ACCESS_KEY);
@@ -69,7 +63,6 @@ public class CoupangHttpService extends BaseHttpService {
             return error;
         }
     }
-
 
     private String generate(String method, String url, String secret_key, String access_key) {
 

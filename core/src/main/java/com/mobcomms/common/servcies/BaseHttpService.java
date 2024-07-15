@@ -16,9 +16,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
+import reactor.util.context.Context;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -75,42 +77,51 @@ public abstract class BaseHttpService {
 
     private static Consumer<List<ExchangeFilterFunction>> defaultFiltersConsumer() {
         return filters -> {
+            filters.add(addProcessId());
             filters.add(logRequest());
             filters.add(logResponse());
         };
     }
 
+    private static ExchangeFilterFunction addProcessId() {
+        return (request, next) -> {
+            String processId = UUID.randomUUID().toString();
+            return next.exchange(request)
+                    .contextWrite(Context.of("processId", processId));
+        };
+    }
+
+
     // 요청 로깅 필터
     private static ExchangeFilterFunction logRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
-            final StringBuilder sb = new StringBuilder();
-            sb.append("Requset INFO").append(System.lineSeparator());
-            sb.append("Method : ").append(clientRequest.method()).append(System.lineSeparator());
-            sb.append("Url : ").append(clientRequest.url()).append(System.lineSeparator());
-            sb.append("HeaderInfo").append(System.lineSeparator());
-            clientRequest.headers().forEach((name, values) -> values.forEach(value -> sb.append(name + ": " + value).append(System.lineSeparator())));
-            //TODO clientRequest.body() 을 읽어 logging 처리,
-            // body를 읽을때 stream을 순차적으로 읽고 cursor 가 맨뒤로 이동해있거나, close 가 되버리기 때문에
-            // 실제 request, response 에서 body 를 다시 읽을 수 있는 처리가 필요.
-
-            log.info(sb.toString());
-            return Mono.just(clientRequest);
+            return Mono.deferContextual(contextView->{
+                String processId = contextView.getOrDefault("processId", "N/A");
+                final StringBuilder sb = new StringBuilder();
+                sb.append("Requset INFO[").append(processId).append("]").append(System.lineSeparator());
+                sb.append("Method : ").append(clientRequest.method()).append(System.lineSeparator());
+                sb.append("Url : ").append(clientRequest.url()).append(System.lineSeparator());
+                sb.append("HeaderInfo").append(System.lineSeparator());
+                clientRequest.headers().forEach((name, values) -> values.forEach(value -> sb.append(name + ": " + value).append(System.lineSeparator())));
+                log.info(sb.toString());
+                return Mono.just(clientRequest);
+            });
         });
     }
 
     // 응답 로깅 필터
     private static ExchangeFilterFunction logResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-            final StringBuilder sb = new StringBuilder();
-            sb.append("Response INFO").append(System.lineSeparator());
-            sb.append("StatusCode : ").append(clientResponse.statusCode()).append(System.lineSeparator());
-            sb.append("HeaderInfo").append(System.lineSeparator());
-            clientResponse.headers().asHttpHeaders().forEach((name, values) -> values.forEach(value -> sb.append(name + ": " + value).append(System.lineSeparator())));
-            //TODO clientResponse.body() 을 읽어 logging 추가,
-            // body 읽을 때 stream을 순차적으로 읽고 cursor 가 맨뒤로 이동해있거나, close 가 되버리기 때문에
-            // 실제 request, response 에서 body 를 다시 읽을 수 있는 처리가 필요.
-            log.info(sb.toString());
-            return Mono.just(clientResponse);
+            return Mono.deferContextual(contextView-> {
+                String processId = contextView.getOrDefault("processId", "N/A");
+                final StringBuilder sb = new StringBuilder();
+                sb.append("Response INFO[").append(processId).append("]").append(System.lineSeparator());
+                sb.append("StatusCode : ").append(clientResponse.statusCode()).append(System.lineSeparator());
+                sb.append("HeaderInfo").append(System.lineSeparator());
+                clientResponse.headers().asHttpHeaders().forEach((name, values) -> values.forEach(value -> sb.append(name + ": " + value).append(System.lineSeparator())));
+                log.info(sb.toString());
+                return Mono.just(clientResponse);
+            });
         });
     }
 

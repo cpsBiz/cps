@@ -1,5 +1,6 @@
 package com.mobcomms.shinhan.dto.packet;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,6 @@ import java.util.List;
  * UpdateDate : 2024-06-27, 업데이트 내용
  */
 public class MobwithPacket {
-
 
     public static class GetMobwithAdInfo{
 
@@ -45,7 +45,9 @@ public class MobwithPacket {
     public static class MobwithAdInfoItem{
         private String pCode;
         private String pNm;
+        @JsonProperty("pImg")
         private String pImg;
+        @JsonProperty("pUrl")
         private String pUrl;
         private String aLogoDefault;
         private String aLogoSub;
@@ -58,7 +60,7 @@ public class MobwithPacket {
         private String aDesc3;
         private String pImgBkg;
         private String pPrice;
-        private List<MobwithAdInfoItemMobile> mobile;
+        private MobwithAdInfoItemMobile mobile;
         private String custom01;
         private String custom02;
         private String custom03;
@@ -69,6 +71,8 @@ public class MobwithPacket {
         private String custom08;
         private String custom09;
         private String custom10;
+
+
     }
 
     @Data
