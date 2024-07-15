@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 @Slf4j
 @Service
 public class MobwithHttpService  extends BaseHttpService {
-
+    //TODO 운영 배포시 도메인 변경
     public static final String DOMAIN = "https://www.mobwithad.com";
     public static final String GET_MOBWITH_AD_INFO_ENDPOINT = "/api/banner/app/mobicomms/v1/shcard?output=json&zone=";
     public MobwithHttpService() {

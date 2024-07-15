@@ -32,7 +32,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class PointService {
-
     private final PointRepository pointRepository;
     private final PointBannerSettingRepository pointBannerSettingRepository;
     private final AdClickRepository adClickRepository;
@@ -40,6 +39,7 @@ public class PointService {
     private final MobwithHttpService mobwithHttpService;
     private final CoupangHttpService coupangHttpService;
 
+    //TODO 운영 배포시 지면 코드 변경
     @Value("${zone.gamezone.aos.300_250}")
     private String zoneGameAos;
     @Value("${zone.gamezone.ios.300_250}")
@@ -56,7 +56,7 @@ public class PointService {
     private String coupangPointAos = "shinhanpointaos";
     private String coupangPointIos = "shinhanpointios";
 
-
+    // 포인트 배너 정보 조회
     public GenericBaseResponse<PointBannerInfoDto> getPointBannerInfo(PointBannerInfoDto model){
         var responseResult = new GenericBaseResponse<PointBannerInfoDto>();
         try{
@@ -138,111 +138,122 @@ public class PointService {
                     adInfos.add(data);
                 });
             }
-
             responseResult.getData().setAdInfos(adInfos);
-        }catch (Exception e) {
-            log.error("");
+        } catch (Exception e) {
             throw  e;
         }
-
 
         return responseResult;
     }
 
+    // 사다리타기 배너 정보 조회
     public GenericBaseResponse<PointBannerInfoDto> getGameZoneAdInfo(PointBannerInfoDto model){
         var responseResult = new GenericBaseResponse<PointBannerInfoDto>();
-        var resultData = new PointBannerInfoDto();
-        final List<PointBannerInfoDto.AdInfo> adInfos = new ArrayList<>();
-        var mobiwithZoneId = model.getOs().equals("A")?zoneGameAos:zoneGameIos;
-        resultData.setZoonId(mobiwithZoneId);
-        var getMobwithAdInfoResult =  mobwithHttpService.getMobwithAdInfo(mobiwithZoneId,model.getAdid());
+        try{
+            var resultData = new PointBannerInfoDto();
+            final List<PointBannerInfoDto.AdInfo> adInfos = new ArrayList<>();
+            var mobiwithZoneId = model.getOs().equals("A")?zoneGameAos:zoneGameIos;
+            resultData.setZoonId(mobiwithZoneId);
+            var getMobwithAdInfoResult =  mobwithHttpService.getMobwithAdInfo(mobiwithZoneId,model.getAdid());
 
-        if(getMobwithAdInfoResult.getCode().equals("0000")){
-            resultData.setAdType("M");
-            getMobwithAdInfoResult.getData().getData().forEach(item->{
-                var data = new PointBannerInfoDto.AdInfo(){{
-                    setAdImageUrl(item.getPImg());
-                    setAdUrl(item.getPUrl());
-                }};
-                adInfos.add(data);
-            });
-        } else {
-            //TODO : 쿠팡 API 호출
-            resultData.setAdType("C");
-            var coupangZoneId = model.getOs().equals("A")?coupangGameAos:coupangGameIos;
-            resultData.setZoonId(coupangZoneId);
-            var request = new CoupangPacket.GetCoupangAdInfo.Request();
-            request.setDeviceId(model.getAdid());
-            request.setSubId(coupangZoneId);
-            request.setImageSize("300x250");
-            var getCoupangAdInfoResult =   coupangHttpService.getCoupangAdInfo(request);
-            getCoupangAdInfoResult.getData().forEach(item->{
-                var data = new PointBannerInfoDto.AdInfo(){{
-                    setAdImageUrl(item.getProductImage());
-                    setAdUrl(item.getProductUrl());
-                }};
-                adInfos.add(data);
-            });
+            if(getMobwithAdInfoResult.getCode().equals("0000")){
+                resultData.setAdType("M");
+                getMobwithAdInfoResult.getData().getData().forEach(item->{
+                    var data = new PointBannerInfoDto.AdInfo(){{
+                        setAdImageUrl(item.getPImg());
+                        setAdUrl(item.getPUrl());
+                    }};
+                    adInfos.add(data);
+                });
+            } else {
+                //TODO : 쿠팡 API 호출
+                resultData.setAdType("C");
+                var coupangZoneId = model.getOs().equals("A")?coupangGameAos:coupangGameIos;
+                resultData.setZoonId(coupangZoneId);
+                var request = new CoupangPacket.GetCoupangAdInfo.Request();
+                request.setDeviceId(model.getAdid());
+                request.setSubId(coupangZoneId);
+                request.setImageSize("300x250");
+                var getCoupangAdInfoResult =   coupangHttpService.getCoupangAdInfo(request);
+                getCoupangAdInfoResult.getData().forEach(item->{
+                    var data = new PointBannerInfoDto.AdInfo(){{
+                        setAdImageUrl(item.getProductImage());
+                        setAdUrl(item.getProductUrl());
+                    }};
+                    adInfos.add(data);
+                });
+            }
+
+            resultData.setAdInfos(adInfos);
+            responseResult.setSuccess();
+            responseResult.setData(resultData);
+        }catch (Exception e) {
+            throw e;
         }
 
-        resultData.setAdInfos(adInfos);
-        responseResult.setSuccess();
-        responseResult.setData(resultData);
         return responseResult;
     }
 
     // point 적립 api 호출 및 적립 내역 저장
-    //TODO 적립 table 인덱스 설정
     public BaseResponse callAPIPoint(PointDto model){
-        int today = Integer.parseInt(StringUtils.getDateyyyyMMdd()) ;
-        //클릭 정보 저장.
-        var adClickEntity =  new AdClickEntity();
-        adClickEntity.setUserKey(model.getUserKey());
-        adClickEntity.setAdUrl(model.getAdUrl());
-        adClickEntity.setType(ShinhanConstant.AD_TYPE_POINT_BANNER);
-        adClickEntity.setZoneId(model.getZoneId());
-        adClickEntity.setStatsDttm(today);
-        adClickEntity.setRegDate(LocalDateTime.now());
-        adClickRepository.save(adClickEntity);
+        try {
+            int today = Integer.parseInt(StringUtils.getDateyyyyMMdd()) ;
+            //클릭 정보 저장.
+            var adClickEntity =  new AdClickEntity();
+            adClickEntity.setUserKey(model.getUserKey());
+            adClickEntity.setAdUrl(model.getAdUrl());
+            adClickEntity.setType(ShinhanConstant.AD_TYPE_POINT_BANNER);
+            adClickEntity.setZoneId(model.getZoneId());
+            adClickEntity.setStatsDttm(today);
+            adClickEntity.setRegDate(LocalDateTime.now());
+            adClickRepository.save(adClickEntity);
 
-        var result = pointRepository.findFirstByUserKeyOrderByRegDateDesc(model.getUserKey());
-        //point setting 정보 조회
-        var pointBannerSettingResult =  pointBannerSettingRepository.findFirstByUseYnOrderByRegDateDesc("Y");
-        int savePoint = pointBannerSettingResult.getPoint();
-        //적립 가능한 condition
-        boolean isAvailableCondition = false;
+            var result = pointRepository.findFirstByUserKeyOrderByRegDateDesc(model.getUserKey());
+            //point setting 정보 조회
+            var pointBannerSettingResult =  pointBannerSettingRepository.findFirstByUseYnOrderByRegDateDesc("Y");
+            int savePoint = pointBannerSettingResult.getPoint();
 
-        if(result == null){
-            isAvailableCondition = true;
-        } else {
-            var setting =  pointBannerSettingRepository.findFirstByUseYnOrderByRegDateDesc("Y");
-            int frequency  = setting.getFrequency();
-            //마지막 적립 내역일시 에서 frequency를 더한 시간이 현재 시간이 보다 작으면 적립 가능
-            // 12:30 + 60 분 = 13:30,  13:30 < now
-            if(result.getRegDate().plusMinutes(frequency).isBefore(LocalDateTime.now())){
-                isAvailableCondition = true;
+            //오늘 적립 내역의 max point 에 대한 적립 vaild 처리
+            var userPointTodayResult = pointRepository.findByUserKeyAndStatsDttm(model.getUserKey(),today);
+            int userTodaySavePointCount =  userPointTodayResult.size();
+            if(userTodaySavePointCount >= pointBannerSettingResult.getMaxPoint()){
+                return new BaseResponse(){{setError("Saved point to today's limit");}};
             }
-        }
-        //TODO 오늘 적립 내역의 max point 에 대한 vaild 처리
 
-        //적립이 가능하면,
-        if(isAvailableCondition){
-            //TODO 적립 API 호출
-            PointEntity pointEntity = new PointEntity();
-            pointEntity.setUserKey(model.getUserKey());
-            pointEntity.setStatus("Success");
-            pointEntity.setOs(model.getOs());
-            pointEntity.setRegDate(LocalDateTime.now());
-            pointEntity.setStatsDttm(today);
-            pointEntity.setZoneId(model.getZoneId());
-            pointEntity.setPoint(savePoint);
-            pointEntity.setAdUrl(model.getAdUrl());
-            pointRepository.save(pointEntity);
-            //TODO 적립 실패
-            return new BaseResponse(){{setSuccess();}};
-        }
-        else {
-            return new BaseResponse(){{setError("BannerFrequency Time");}};
+            //Frequency 에 대한 적립 vaild 처리
+            boolean isAvailableCondition = false;
+            if(result == null){
+                isAvailableCondition = true;
+            } else {
+                var setting =  pointBannerSettingRepository.findFirstByUseYnOrderByRegDateDesc("Y");
+                int frequency  = setting.getFrequency();
+                //마지막 적립 내역일시 에서 frequency를 더한 시간이 현재 시간이 보다 작으면 적립 가능
+                // 12:30 + 60 분 = 13:30,  13:30 < now
+                if(result.getRegDate().plusMinutes(frequency).isBefore(LocalDateTime.now())){
+                    isAvailableCondition = true;
+                }
+            }
+
+            if(isAvailableCondition){
+                PointEntity pointEntity = new PointEntity();
+                pointEntity.setUserKey(model.getUserKey());
+                pointEntity.setStatus("Success");
+                pointEntity.setOs(model.getOs());
+                pointEntity.setRegDate(LocalDateTime.now());
+                pointEntity.setStatsDttm(today);
+                pointEntity.setZoneId(model.getZoneId());
+                pointEntity.setPoint(savePoint);
+                pointEntity.setAdUrl(model.getAdUrl());
+                pointRepository.save(pointEntity);
+                //TODO 적립 API 호출 에 따른 결과 반환
+                return new BaseResponse(){{setSuccess();}};
+            }
+            else {
+                return new BaseResponse(){{setError("BannerFrequency Time");}};
+            }
+
+        } catch (Exception e) {
+            throw e;
         }
     }
 }

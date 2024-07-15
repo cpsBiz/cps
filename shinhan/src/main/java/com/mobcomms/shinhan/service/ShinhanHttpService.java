@@ -14,6 +14,7 @@ import java.util.function.Consumer;
  * UpdateDate : 2024-07-04, 업데이트 내용
  */
 public class ShinhanHttpService extends BaseHttpService {
+    //TODO 운영 배포시 도메인 변경
     public static final String DOMAIN = "https://api-gateway.coupang.com";
     public ShinhanHttpService() {
         super(DOMAIN);

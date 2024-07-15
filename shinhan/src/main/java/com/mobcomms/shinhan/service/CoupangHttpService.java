@@ -64,7 +64,6 @@ public class CoupangHttpService extends BaseHttpService {
         }
     }
 
-
     private String generate(String method, String url, String secret_key, String access_key) {
 
         String[] parts = url.split("\\?");
