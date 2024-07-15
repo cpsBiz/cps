@@ -83,7 +83,7 @@ public class PointBannerPacket {
         public static class Request extends BaseRequset{
             @NotBlank(message = "userKey params is wrong")
             private String userKey;
-            @NotBlank(message = "userKey params is wrong")
+            @NotBlank(message = "zoneId params is wrong")
             private String zoneId;
             private String adUrl;
             private String os;

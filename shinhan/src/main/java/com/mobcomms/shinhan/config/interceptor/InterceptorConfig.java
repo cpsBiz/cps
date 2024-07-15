@@ -23,7 +23,11 @@ public class InterceptorConfig implements WebMvcConfigurer  {
 	public void addCorsMappings(CorsRegistry registry) {
 		//"http://localhost:3000","http://127.0.0.1:3000","http://192.168.150.33:3000"
 		registry.addMapping("/**")
-				.allowedOrigins("http://localhost:3000",
+				.allowedOrigins(
+						"http://tst-pay.shinhancard.com",
+						"https://tst-pay.shinhancard.com",
+						"https://pay.shinhancard.com",
+						"http://localhost:3000",
 						"http://127.0.0.1:3000",
 						"http://192.168.150.33:3000",
 						"http://localhost:8080",

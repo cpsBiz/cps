@@ -112,7 +112,7 @@
         </rollingPolicy>
     </appender>
 
-    <appender name="API_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="API_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${PATH}/logback.api.log</file>0000
         <encoder>
             <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] HttpService Info - %msg%n
@@ -143,7 +143,7 @@
     </logger>
 
     <logger name="com.mobcomms.common.servcies.BaseHttpService" level="DEBUG" additivity="false">
-        <appender-ref ref="API_FILE"/>
+        <appender-ref ref="API_LOG"/>
     </logger>
     <logger name="com.mobcomms.common.filter.HttpLoggingFilter" level="INFO" additivity="false">
         <appender-ref ref="HTTP_LOG"/>
@@ -153,7 +153,6 @@
         <appender-ref ref="console"/>
         <appender-ref ref="ERROR"/>
         <appender-ref ref="INFO"/>
-        <appender-ref ref="SAMPLE_LOG"/>
         <appender-ref ref="LATENCY_TIME_LOG"/>
         <appender-ref ref="PERFORMANCE_TIME_LOG"/>
     </root>
