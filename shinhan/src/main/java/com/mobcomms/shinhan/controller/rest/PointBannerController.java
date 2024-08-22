@@ -96,7 +96,7 @@ public class PointBannerController {
     public ResponseEntity<PointBannerPacket.PostPoint.Response> postPoint(@Valid @RequestBody PointBannerPacket.PostPoint.Request request) {
         var result = new PointBannerPacket.PostPoint.Response();
         try {
-            var saveResult = pointService.callAPIPoint(new PointDto(){{
+            var saveResult = pointService.callAPIPoint(new PointDto() {{
                 setUserKey(request.getUserKey());
                 setZoneId(request.getZoneId());
                 setOs(request.getOs());
@@ -104,6 +104,7 @@ public class PointBannerController {
             }});
 
             result.setResultCode(saveResult.getResultCode());
+            result.setResultMessage(saveResult.getResultMessage());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             log.error("ERROR", e);

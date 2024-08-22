@@ -2,6 +2,9 @@ package com.mobcomms.shinhan.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "ckd_ad_click")
 public class AdClickEntity {
     @Id
@@ -20,21 +24,22 @@ public class AdClickEntity {
     @Column(name = "ad_click_seq", nullable = false)
     private Long adClickSeq;
 
-    @Column(name = "user_key", nullable = false, length = 200)
+    @Column(name = "stats_dttm", nullable = false)
+    private int statsDttm;
+
+    @Column(name = "user_key", nullable = false, length = 45)
     private String userKey;
-
-    @Column(name = "ad_url", nullable = false, length = 500)
-    private String adUrl;
-
-    @Column(name = "type", nullable = false, length = 45)
-    private String type;
 
     @Column(name = "zone_id", nullable = false, length = 45)
     private String zoneId;
 
-    @Column(name = "stats_dttm", nullable = false)
-    private int statsDttm;
+    @Column(name = "ad_url", nullable = false, length = 500)
+    private String adUrl;
 
-    @Column(name = "regdate", nullable = false)
+    @Column(name = "ip_address", nullable = false, length = 30)
+    private String ipAddress;
+
+    @CreatedDate
+    @Column(name = "reg_date", nullable = false)
     private LocalDateTime regDate;
 }

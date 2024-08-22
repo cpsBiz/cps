@@ -22,6 +22,11 @@ public class BaseResponse implements IBaseResponse{
         this.resultMessage = errorMsg;
     }
 
+    public void setApiMessage(String code, String errorMsg){
+        this.resultCode = code;
+        this.resultMessage = errorMsg;
+    }
+
     public void setRequestError(String errorMsg){
         this.resultCode = ResultCode.REQUEST_DATA_ERROR.getResultCode();
         this.resultMessage = errorMsg;

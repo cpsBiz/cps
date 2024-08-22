@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+
+    <title>ad</title>
+    <script type="text/javascript" th:src="@{/js/lib/jquery-2.2.2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/main/coupang.js}"></script>
+    <link href="https://partners.coupangcdn.com/widget/carousel/default/09aab9e20807268b96f5.css" rel="stylesheet">
+    <!--<script src="https://partners.coupangcdn.com/widget/carousel/default/main-aaae046692f764a193c6.js"></script>-->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <style>
+        html {
+            width:300px;
+            height:250px;
+            overflow: hidden;
+        }
+
+        body {
+           margin: 0;
+        }
+
+        .coupang .coupang-inner {
+            transform: translate(-50%, -50%) !important;
+        }
+
+        .bordered {
+            border: 1px solid #dbdbdb;
+            border-radius: 20px;
+        }
+    </style>
+
+      <script type="text/javascript" th:inline="javascript">
+
+          try {
+              /*<![CDATA[*/
+              var resData = /*[[${coupang_data}]]*/ 'default';
+
+              // Example of using the variable directly in the script
+              var log_params = {
+                  coupang_data: /*[[${coupang_data}]]*/ 'default'
+              };
+              /*]]>*/
+
+              resData = JSON.parse(resData);
+
+              if (resData === undefined || resData === "default" || resData === null) {
+                  // Log 기록
+                  $.ajax({
+                      url: "/hana/hanapay/api/v1/coupang_error_log",
+                      type: "POST",
+                      contentType: "application/json",
+                      data: JSON.stringify(log_params),
+                      dataType: "json",
+                      success: function (obj) {
+                          console.log("Log_api Success" + obj);
+                      },
+                      error: function (XMLHttpRequest, textStatus, errorThrown) {
+                          console.log("Log_api Error");
+                          console.log("Log_api Request Data: " + JSON.stringify(log_params));
+                      }
+                  });
+              }
+          } catch (error) {
+              console.log("Error : " + error);
+              $.ajax({
+                  url: "/hana/hanapay/api/v1/coupang_error_log",
+                  type: "POST",
+                  contentType: "application/json",
+                  data: JSON.stringify(log_params),
+                  dataType: "json",
+                  success: function (obj) {
+                      console.log("Log_api Success" + obj);
+                  },
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      console.log("Log_api Error");
+                      console.log("Log_api Request Data: " + JSON.stringify(log_params));
+                  }
+              });
+          }
+      </script>
+  </head>
+
+   <input type="hidden" id="adId" name="adId" th:value="${adId}">
+   <input type="hidden" id="userKey" name="userKey" th:value="${userKey}">
+   <input type="hidden" id="type" name="type" th:value="${type}">
+   <input type="hidden" id="mobon" name="mobon" th:value="${mobon}">
+   <input type="hidden" id="os" name="os" th:value="${os}">
+   <input type="hidden" id="coupangPoint" name="coupangPoint" th:value="${coupangPoint}">
+
+
+  <body>
+    <div id="container" class="bordered container" coupang="vertical" mode="slide" carousel="vertical" style="border-color: rgb(219, 219, 219);">
+         <div class="coupang swiper-ct">
+            <div class="coupang-inner swiper-wrapper">
+                <span id="coupang-content" class="clickable coupang-content swiper-slide">
+                    <img class="logo" src="https://static.coupangcdn.com/image/coupang/common/logo_coupang_w350.png">
+                    <span class="slogan">로켓배송 상품, 오늘주문! 내일도착!</span>
+                    <!--<span class="go">
+                        <span><span>주문하기</span><i><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></i></span>
+                    </span> -->
+                </span>
+            </div>
+        </div>
+        <div class="carousel swiper-container" view-count="20">
+            <div class="track swiper-wrapper">
+
+            </div>
+            <div class="arrow prev" style="display: none;"><i class="prev"></i></div>
+            <div class="arrow next" style="display: none;"><i class="next"></i></div>
+        </div>
+    </div>
+  </body>
+</html>

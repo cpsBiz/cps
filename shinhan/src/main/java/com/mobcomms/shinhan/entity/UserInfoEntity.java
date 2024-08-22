@@ -29,10 +29,10 @@ public class UserInfoEntity {
     @Column(name = "user_app_os", nullable = false, length = 45)
     private String userAppOs;
 
-    @Column(name = "user_app_type", nullable = false, length = 45)
+    @Column(name = "user_app_type", nullable = true, length = 45)
     private String userAppType;
 
-    @Column(name = "user_agree_terms", nullable = false, length = 45)
+    @Column(name = "user_agree_terms", nullable = true, length = 45)
     private String userAgreeTerms;
 
     @Column(name = "reg_dttm", nullable = false)
@@ -43,6 +43,7 @@ public class UserInfoEntity {
 
     @Column(name = "adid", nullable = false, length = 45)
     private String adid;
+
 
 
 }

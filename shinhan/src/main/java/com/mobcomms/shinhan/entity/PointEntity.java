@@ -2,6 +2,9 @@ package com.mobcomms.shinhan.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,38 +16,50 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "ckd_api_point")
 public class PointEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "point_seq", nullable = false)
     private Long pointSeq;
 
-    @Column(name = "user_key", nullable = false, length = 200)
-    private String userKey;
-
-    @Column(name = "status", nullable = false, length = 45)
-    private String status;
-
-    @Column(name = "zone_id", nullable = false, length = 45)
-    private String zoneId;
-
-    @Column(name = "os", nullable = false, length = 45)
-    private String os;
-
-    @Column(name = "transaction_id", nullable = false, length = 200)
-    private String transactionId;
-
-    @Column(name = "ad_url", nullable = false, length = 500)
-    private String adUrl;
-
-    @Column(name = "reg_date", nullable = false)
-    private LocalDateTime regDate;
-
     @Column(name = "stats_dttm", nullable = false)
     private int statsDttm;
+
+    @Column(name = "user_key", nullable = false, length = 45)
+    private String userKey;
+
+    @Column(name = "code", nullable = false, length = 6)
+    private String code;
+
+    @Column(name = "shinhan_code", nullable = false, length = 50)
+    private String shinhanCode;
 
     @Column(name = "point", nullable = false)
     private int point;
 
+    @Column(name = "zone_id", nullable = false, length = 50)
+    private String zoneId;
+
+    @Column(name = "os", nullable = false, length = 3)
+    private String os;
+
+    @Column(name = "ad_url", nullable = false, length = 500)
+    private String adUrl;
+
+    @Column(name = "ip_address", nullable = false, length = 30)
+    private String ipAddress;
+
+    @Column(name = "transaction_id", nullable = false)
+    private String transactionId;
+
+    @CreatedDate
+    @Column(name = "reg_date", nullable = false)
+    private LocalDateTime regDate;
+
+    @LastModifiedDate
+    @Column(name = "mod_date", nullable = false)
+    private LocalDateTime modDate;
 }

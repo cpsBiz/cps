@@ -36,7 +36,10 @@ public class InterceptorConfig implements WebMvcConfigurer  {
 						"http://localhost",
 						"http://127.0.0.1",
 						"http://localhost:8001",
-						"https://shinhancard-api.commsad.com")
+						"https://shinhancard-api.commsad.com",
+						"http://10.251.1.161:8084",
+						"http://10.251.1.162:8084",
+						"https://api.commsad.com")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 				.allowedHeaders("*")
 				.allowCredentials(true)

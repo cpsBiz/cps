@@ -3,6 +3,8 @@ package com.mobcomms.shinhan.service;
 import com.mobcomms.common.servcies.BaseHttpService;
 import com.mobcomms.shinhan.dto.packet.MobwithPacket;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
@@ -21,10 +23,18 @@ import java.util.function.Consumer;
 @Service
 public class MobwithHttpService  extends BaseHttpService {
     //TODO 운영 배포시 도메인 변경
-    public static final String DOMAIN = "https://www.mobwithad.com";
-    public static final String GET_MOBWITH_AD_INFO_ENDPOINT = "/api/banner/app/mobicomms/v1/shcard?output=json&zone=";
-    public MobwithHttpService() {
-        super(DOMAIN);
+    /*public static final String DOMAIN = "https://www.mobwithad.com";
+    public static final String GET_MOBWITH_AD_INFO_ENDPOINT = "/api/banner/app/mobicomms/v1/shcard?output=json&zone=";*/
+
+    private static String DOMAIN;
+    private static String GET_MOBWITH_AD_INFO_ENDPOINT;
+
+    @Autowired
+    public MobwithHttpService(@Value("${mobwithad.domain.url}") String domain,
+                              @Value("${mobwithad.reco.url}") String getMobwithAdInfoEndpoint) {
+        super(domain);
+        MobwithHttpService.DOMAIN = domain;
+        MobwithHttpService.GET_MOBWITH_AD_INFO_ENDPOINT = getMobwithAdInfoEndpoint;
     }
 
     public MobwithHttpService(String domain) {

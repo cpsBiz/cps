@@ -21,7 +21,7 @@ public class PointBannerInfoDto {
     private Integer bannerFrequency;
     private Integer userFrequency;
     private String adType;
-    private String zoonId;
+    private String zoneId;
     private int point;
     private String userPointFlag;
     private List<AdInfo> AdInfos;

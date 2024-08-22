@@ -61,11 +61,17 @@ public abstract class BaseHttpService {
                         conn.addHandlerLast(new ReadTimeoutHandler(10))
                                 .addHandlerLast(new WriteTimeoutHandler(10)));
 
-        return WebClient.builder()
+        //수정
+        WebClient.Builder builder =  WebClient.builder()
                 .baseUrl(domain)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .filters(filtersConsumer)
-                .defaultHeaders(headersConsumer);
+                .filters(filtersConsumer);
+
+        if (headersConsumer != null) {
+            builder.defaultHeaders(headersConsumer);
+        }
+
+        return builder;
     }
 
     private static Consumer<HttpHeaders> defaultHeadersConsumer() {
@@ -252,6 +258,37 @@ public abstract class BaseHttpService {
                         response.bodyToMono(String.class)
                                 .flatMap(errorMessage -> {
                                     //log.error("API ClientError 5xx : " + errorMessage);
+                                    return Mono.error(new RuntimeException("ClientError 5xx : " + errorMessage));
+                                })
+                ).bodyToMono(responseType)
+                .onErrorResume(WebClientResponseException.class, ex -> {
+                    log.error("API WebClientResponseException" + System.lineSeparator() + ex);
+                    return Mono.error(new RuntimeException("API WebClientResponseException", ex));
+                })
+                .onErrorResume(Exception.class, ex -> {
+                    log.error("API Exception " + System.lineSeparator() + ex);
+                    return Mono.error(new RuntimeException("API Exception : " + ex.getMessage()));
+                });
+    }
+
+    //post 요청
+    public <T>Mono<T> PostAsync(String endPoint,Object requestData, Class<T> responseType, Consumer<HttpHeaders> headersConsumer) throws Exception {
+        LogRequestData(requestData);
+        return this.webClient.post()
+                .uri(endPoint)
+                .bodyValue(requestData)
+                .headers(headersConsumer)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(errorMessage -> {
+                                    log.error("API ClientError 4xx :" +  errorMessage);
+                                    return Mono.error(new RuntimeException("ClientError 4xx :" + errorMessage));
+                                })
+                ).onStatus(HttpStatusCode::is5xxServerError, response ->
+                        response.bodyToMono(String.class)
+                                .flatMap(errorMessage -> {
+                                    log.error("API ClientError 5xx : " + errorMessage);
                                     return Mono.error(new RuntimeException("ClientError 5xx : " + errorMessage));
                                 })
                 ).bodyToMono(responseType)

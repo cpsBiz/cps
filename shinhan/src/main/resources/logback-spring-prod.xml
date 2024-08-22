@@ -21,7 +21,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/bak/logback.performance.time.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -39,7 +39,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/bak/logback.latency.time.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -58,7 +58,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/bak/logback.sample.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -75,7 +75,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/logback.info.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -92,7 +92,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/logback.httpLog.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -109,6 +109,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/logback.error.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -120,6 +121,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/logback.api.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -130,7 +132,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${PATH}/logback.sql.log.%d{yyyyMMdd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>20</maxHistory>
         </rollingPolicy>
     </appender>
 

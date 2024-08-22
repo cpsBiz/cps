@@ -3,6 +3,8 @@ package com.mobcomms.shinhan.service;
 import com.mobcomms.common.servcies.BaseHttpService;
 import com.mobcomms.shinhan.dto.packet.CoupangPacket;
 import org.apache.commons.codec.binary.Hex;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
@@ -25,18 +27,32 @@ import java.util.function.Consumer;
  */
 @Service
 public class CoupangHttpService extends BaseHttpService {
-    public static final String DOMAIN = "https://api-gateway.coupang.com";
+    /*public static final String DOMAIN = "https://api-gateway.coupang.com";
     public static final String GET_AD_ENDPOINT="/v2/providers/affiliate_open_api/apis/openapi/v1/products/reco";
+
+    private static final String ACCESS_KEY = "37a19127-d99d-4415-b059-937ecaad7a85";
+    private static final String SECRET_KEY = "eac2c8e2ccc7962f736b31b5f8a3f1c009e5212c";*/
+
     private static final Charset STANDARD_CHARSET = Charset.forName("UTF-8");
     private static final String AUTHORIZATION = "Authorization";
     private static final String ALGORITHM = "HmacSHA256";
     private static final String REQUEST_METHOD = "GET";
 
-    private static final String ACCESS_KEY = "37a19127-d99d-4415-b059-937ecaad7a85";
-    private static final String SECRET_KEY = "eac2c8e2ccc7962f736b31b5f8a3f1c009e5212c";
+    private static String DOMAIN;
+    private static String GET_AD_ENDPOINT;
+    private static String ACCESS_KEY;
+    private static String SECRET_KEY;
 
-    public CoupangHttpService() {
-        super(DOMAIN);
+    @Autowired
+    public CoupangHttpService(@Value("${coupang.domain.url}") String domain,
+                              @Value("${coupang.reco.url}") String getAdEndpoint,
+                              @Value("${coupang.access.key}") String accessKey,
+                              @Value("${coupang.secret.key}") String secretKey) {
+        super(domain);
+        CoupangHttpService.DOMAIN = domain;
+        CoupangHttpService.GET_AD_ENDPOINT = getAdEndpoint;
+        CoupangHttpService.ACCESS_KEY = accessKey;
+        CoupangHttpService.SECRET_KEY = secretKey;
     }
 
     public CoupangHttpService(String domain, Consumer<HttpHeaders> headersConsumer) {
