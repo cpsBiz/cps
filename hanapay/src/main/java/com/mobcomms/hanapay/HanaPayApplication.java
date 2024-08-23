@@ -6,8 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @OpenAPIDefinition(servers = {
-        @Server(url = "https://api.commsad.com/hana/hanapay"),
-        @Server(url = "http://localhost:8080/hana/hanapay")
+        @Server(url = "https://api.commsad.com/hanapay"),
+        @Server(url = "http://localhost:8080/hanapay")
 })
 @SpringBootApplication
 @EnableJpaAuditing

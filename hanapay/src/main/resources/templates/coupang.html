@@ -53,7 +53,7 @@
               if (resData === undefined || resData === "default" || resData === null) {
                   // Log 기록
                   $.ajax({
-                      url: "/hana/hanapay/api/v1/coupang_error_log",
+                      url: "/hanapay/api/v1/coupang_error_log",
                       type: "POST",
                       contentType: "application/json",
                       data: JSON.stringify(log_params),
@@ -70,7 +70,7 @@
           } catch (error) {
               console.log("Error : " + error);
               $.ajax({
-                  url: "/hana/hanapay/api/v1/coupang_error_log",
+                  url: "/hanapay/api/v1/coupang_error_log",
                   type: "POST",
                   contentType: "application/json",
                   data: JSON.stringify(log_params),

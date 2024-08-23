@@ -137,7 +137,7 @@ public class BannerController {
 
                 if(response.getData().size() == 0){
                     newJsonArray.add(objectMapper.createObjectNode()
-                            .put("productImage", "/hana/hanapay/img/250x250.png")
+                            .put("productImage", "/hanapay/img/250x250.png")
                             .put("productUrl", "https://www.mobon.net/bridge"));
                     model.addAttribute("mobon", "Y");
                     model.addAttribute("coupang_point", coupangRequest.getCoupangPoint());
@@ -155,7 +155,7 @@ public class BannerController {
             }
         } else {
             newJsonArray.add(objectMapper.createObjectNode()
-                    .put("productImage", "/hana/hanapay/img/250x250.png")
+                    .put("productImage", "/hanapay/img/250x250.png")
                     .put("productUrl", "https://www.mobon.net/bridge"));
             model.addAttribute("coupang_point", coupangRequest.getCoupangPoint());
             model.addAttribute("mobon", "Y");

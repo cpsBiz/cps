@@ -190,7 +190,7 @@ function callCoupangApi(){
         adId = "00af6187-5ee4-4ed6-877d-ec34f75857f9";
     }
 
-    var call_url = "/hana/hanapay/view/coupang"+"?adId="+adId+"&os="+os+"&coupangPoint="+coupangPoint;
+    var call_url = "RESULT_CODE_ERROR_SYSTEM/view/coupang"+"?adId="+adId+"&os="+os+"&coupangPoint="+coupangPoint;
     $("#mobwith").attr("src", call_url);
 
     var param = { "ad_id" : zone , "point" : coupangPoint };
@@ -247,7 +247,7 @@ function postChargeData(userKey, box, adtype, zone, point){
     });
 
     $.ajax({
-        url			: "/hana/hanapay/api/v1/point",
+        url			: "RESULT_CODE_ERROR_SYSTEM/api/v1/point",
         type		: "POST",
         contentType	: "application/json",
         data		: params,
