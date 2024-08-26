@@ -6,4 +6,5 @@ include 'cgv-reward-plus-support'
 include 'raising'
 include 'shinhan'
 include 'hanapay'
+include 'finnq'
 

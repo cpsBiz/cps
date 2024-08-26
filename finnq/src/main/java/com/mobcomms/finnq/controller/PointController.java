@@ -1,10 +1,9 @@
-package com.mobcomms.hanapay.controller;
+package com.mobcomms.finnq.controller;
 
 import com.mobcomms.common.constant.Constant;
-import com.mobcomms.hanapay.dto.PointDto;
-import com.mobcomms.hanapay.dto.UserDto;
-import com.mobcomms.hanapay.dto.packet.PointPacket;
-import com.mobcomms.hanapay.service.PointService;
+import com.mobcomms.finnq.dto.PointDto;
+import com.mobcomms.finnq.dto.packet.PointPacket;
+import com.mobcomms.finnq.service.PointService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class PointController {
             var getPointInfo =  pointService.getPoint(pointDto);
             if (getPointInfo.getResultCode().equals(Constant.RESULT_CODE_SUCCESS)) {
                 result.setSuccess();
-                result.setData(getPointInfo.getData());
+                result.setDatas(getPointInfo.getDatas());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             } else {
                 result.setError(getPointInfo.getResultMessage());
@@ -89,7 +88,7 @@ public class PointController {
 
             if (getPointSettingInfo.getResultCode().equals(Constant.RESULT_CODE_SUCCESS)) {
                 result.setSuccess();
-                result.setData(getPointSettingInfo.getData());
+                result.setDatas(getPointSettingInfo.getDatas());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             } else {
                 result.setError(getPointSettingInfo.getResultMessage());

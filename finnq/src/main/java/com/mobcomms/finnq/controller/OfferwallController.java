@@ -1,9 +1,8 @@
-package com.mobcomms.hanapay.controller;
+package com.mobcomms.finnq.controller;
 
-import com.mobcomms.hanapay.dto.OfferwallDto;
-import com.mobcomms.hanapay.dto.PointDto;
-import com.mobcomms.hanapay.dto.packet.OfferwallPacket;
-import com.mobcomms.hanapay.service.OfferwallService;
+import com.mobcomms.finnq.dto.OfferwallDto;
+import com.mobcomms.finnq.dto.packet.OfferwallPacket;
+import com.mobcomms.finnq.service.OfferwallService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
