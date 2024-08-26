@@ -54,6 +54,7 @@ public class OfferwallController {
                 setUserPoint(request.getUserPoint());
                 setAdverName(request.getAdverName());
                 setMissionType(request.getMissionType());
+                setParticipationSeq(request.getParticipationSeq());
             }};
 
             var offerwall =  offerwallService.postPomission(offerwallDto);

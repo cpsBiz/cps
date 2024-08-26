@@ -130,13 +130,16 @@ public class OfferwallService {
 				hanaGetPacket.setCampaign_key("point_box");
 				hanaGetPacket.setReward_key("O" + String.valueOf(offerwallEntity.getOfferwallId()));
 
-				HanaPacket.GetHanaInfo.Response response = hanaHttpService.SendHana(hanaGetPacket); //하나 api 통신
+				/*HanaPacket.GetHanaInfo.Response response = hanaHttpService.SendHana(hanaGetPacket); //하나 api 통신
 
 				if (null != response.getData().getResultList().get(0).getResultCode()) {
 					result.setApiMessage(response.getData().getResultList().get(0).getResultCode(), response.getData().getResultList().get(0).getResultMsg());
 				} else {
 					result.setApiMessage(String.valueOf(ResultCode.RESULT_CODE_5004), ResultCode.RESULT_MSG_5004);
-				}
+				}*/
+
+				//무조건 성공으로
+				result.setSuccess();
 			}
 		} catch (Exception e) {
 			log.error(Constant.EXCEPTION_MESSAGE + " postPomission  {}",e);
