@@ -34,7 +34,6 @@ public class UserPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public  static class UpdateUserAgreeTermsRequest extends UserPacketBaseRequset{
-            @NotBlank(message = "agreeTerms params is wrong")
             private String agreeTerms;
         }
         @Data

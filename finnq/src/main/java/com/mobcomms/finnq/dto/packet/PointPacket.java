@@ -33,8 +33,6 @@ public class PointPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class PostPointRequest extends PointPacketBaseRequset {
-            @NotBlank(message = "point params is wrong")
-            private String point;
             @NotBlank(message = "adName params is wrong")
             private String adName;
             @NotBlank(message = "adId params is wrong")

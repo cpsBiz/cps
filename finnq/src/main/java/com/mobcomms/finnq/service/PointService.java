@@ -148,7 +148,7 @@ public class PointService {
 			pointEntity.setIpAddress(ipAddress);
 			pointEntity.setRegDateNum(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-			if (!"hanacardADAPIaos".equals(request.getAdId()) && !"hanacardADAPIios".equals(request.getAdId()) && !"houseIos".equals(request.getAdId()) && !"houseAos".equals(request.getAdId())) {
+			if (!"finnqbox1aos".equals(request.getAdId()) && !"finnqbox2aos".equals(request.getAdId()) && !"finnqbox1ios".equals(request.getAdId()) && !"finnqbox2ios".equals(request.getAdId())) {
 				pointEntity.setType("1");
 			}
 

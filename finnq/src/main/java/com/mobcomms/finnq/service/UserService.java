@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final UserRepository userRepository;
 
@@ -62,7 +61,7 @@ public class UserService {
 
 			if (userEntity == null) {
 				userEntity = new UserEntity();
-				userEntity.setUserAgreeTerms("N");
+				userEntity.setUserAgreeTerms("Y");
 			} else {
 				userEntity.setUserAgreeTerms(request.getAgreeTerms());
 			}

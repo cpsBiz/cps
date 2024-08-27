@@ -141,7 +141,7 @@ public class PointService {
 			pointEntity.setIpAddress(ipAddress);
 			pointEntity.setRegDateNum(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-			if (!"hanacardADAPIaos".equals(request.getAdId()) && !"hanacardADAPIios".equals(request.getAdId()) && !"houseIos".equals(request.getAdId()) && !"houseAos".equals(request.getAdId())) {
+			if (!"hanapaybox1aos".equals(request.getAdId()) && !"hanapaybox2aos".equals(request.getAdId()) && !"hanapaybox1ios".equals(request.getAdId()) && !"hanapaybox2ios".equals(request.getAdId())) {
 				pointEntity.setType("1");
 			}
 
@@ -152,6 +152,8 @@ public class PointService {
 				result.setApiMessage(Constant.RESULT_CODE_ERROR_BIZ,ConstantMoneyBox.INSERT_FAIL);
 				return result;
 			} else {
+				pointEntity.setUniqueInsert(u.toString());
+
 				/* 지정된 박스 명칭이 아닌 경우 */
 				if (!pointEntity.getBox().equals("box_1") && !pointEntity.getBox().equals("box_2") && !pointEntity.getBox().equals("box_3")) {
 					result.setApiMessage(Constant.RESULT_CODE_ERROR_BIZ,ConstantMoneyBox.INVALID_BOX);
@@ -211,8 +213,6 @@ public class PointService {
 				pointBoxDto.setAdName(pointEntity.getBox());
 				result.setData(pointBoxDto);
 				result.setSuccess();
-
-				pointEntity.setUniqueInsert(u.toString());
 			}
 		} catch (Exception e) {
 			log.error(Constant.EXCEPTION_MESSAGE + " postPoint  {}",e);

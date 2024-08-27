@@ -160,15 +160,15 @@ function initAdIframe(){
 // 모비위드 광고 호출
 function callGetApi(index){
     var adId = $("#adid").val();
-    var with_domain = "https://www.mobwithad.com/api/banner/app/vp/v1/paybooc?zone=";
-    var with_param  = "&count=1&pb=&w=250&h=250&adid="+adId+"&auid=&clientIp=";
-
     var zone = zone_list[index];
-    var call_url = with_domain + zone + with_param;
+
+    var with_domain = $("#mobwithadDomain").val();
+    var with_param  = "/api/banner/app/mobicomms/v1/finnq?zone="+zone+"&adid="+adId;
+
+    var call_url = with_domain + with_param;
     coupang_yn = "N";
 
     $("#mobwith").attr("src", call_url);
-    //ad_info(ad_id, point);
 
     var param = { "ad_id" : zone , "point" : mobcomms_point};
     console.log("param : " + param);

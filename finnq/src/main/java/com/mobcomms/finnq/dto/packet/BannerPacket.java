@@ -41,6 +41,7 @@ public class BannerPacket {
             private String houseAos;
             private int resPointCnt;
             private String serverType;
+            private String mobwithadDomain;
         }
 
         @Data

@@ -62,7 +62,7 @@ public class UserService {
 
 			if (userEntity == null) {
 				userEntity = new UserEntity();
-				userEntity.setUserAgreeTerms("N");
+				userEntity.setUserAgreeTerms("Y");
 			} else {
 				userEntity.setUserAgreeTerms(request.getAgreeTerms());
 			}

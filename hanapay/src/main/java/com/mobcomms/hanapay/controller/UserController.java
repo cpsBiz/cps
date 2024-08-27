@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
 public class UserController {
 
     @Autowired
@@ -62,7 +61,7 @@ public class UserController {
         try {
             var userDto = new UserDto() {{
                 setUserKey(request.getUserKey());
-                setAgreeTerms(request.getUserKey());
+                setAgreeTerms(request.getAgreeTerms());
                 setAdId(request.getAdId());
                 setOs(request.getOs());
             }};

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
 public class PointController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -39,7 +38,7 @@ public class PointController {
             var getPointInfo =  pointService.getPoint(pointDto);
             if (getPointInfo.getResultCode().equals(Constant.RESULT_CODE_SUCCESS)) {
                 result.setSuccess();
-                result.setData(getPointInfo.getData());
+                result.setDatas(getPointInfo.getDatas());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             } else {
                 result.setError(getPointInfo.getResultMessage());
@@ -67,7 +66,7 @@ public class PointController {
 
             if (postPoint.getResultCode().equals(Constant.RESULT_CODE_SUCCESS)) {
                 result.setSuccess();
-                result.setData(postPoint.getData());
+                result.setDatas(postPoint.getDatas());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             } else {
                 result.setError(postPoint.getResultMessage());
@@ -89,7 +88,7 @@ public class PointController {
 
             if (getPointSettingInfo.getResultCode().equals(Constant.RESULT_CODE_SUCCESS)) {
                 result.setSuccess();
-                result.setData(getPointSettingInfo.getData());
+                result.setDatas(getPointSettingInfo.getDatas());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             } else {
                 result.setError(getPointSettingInfo.getResultMessage());

@@ -53,6 +53,8 @@ public class BannerController {
     private String subIdAos;
     @Value("${coupang.subId.ios}")
     private String subIdIos;
+    @Value("${mobwithad.domain.url}")
+    private String mobwithad_domain;
 
     private String serverType = System.getProperty("spring.profiles.active");
 
@@ -107,7 +109,7 @@ public class BannerController {
         } else {
             request.setResPointCnt(0);
         }
-
+        request.setMobwithadDomain(mobwithad_domain);
         request.setServerType(serverType);
 
         return "index";
