@@ -35,10 +35,10 @@ public class InterceptorConfig implements WebMvcConfigurer  {
 						"http://localhost",
 						"http://127.0.0.1",
 						"http://localhost:8001",
-						"https://dpay.hanacard.co.kr:14443",
-						"https://m.hanacard.co.kr",
-						"http://10.251.1.161:8086",
-						"http://10.251.1.162:8086",
+						"https://fgw.finnq.com",
+						"https://sfgw.finnq.com",
+						"http://10.251.1.161:8090",
+						"http://10.251.1.162:8090",
 						"https://api.commsad.com")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 				.allowedHeaders("*")

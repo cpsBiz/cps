@@ -75,7 +75,7 @@ public class PointService {
 			int i = 0;
 			String regDateNum = DateTime.getCurrDate();
 
-			List<PointEntity> pointList = pointRepository.findAllByUserIdAndRegDateNum(request.getUserKey(), regDateNum);
+			List<PointEntity> pointList = pointRepository.findAllByUserIdAndRegDateNumAndCode(request.getUserKey(), regDateNum, "0000");
 
 			for (PointEntity pointEntity : pointList) {
 				if (pointEntity.getBox().equals(returnPointList.get(i).getAdName())) {
