@@ -28,7 +28,7 @@ public class UserController {
         try {
             var userDto = new UserDto() {{
                 setUserKey(request.getUserKey());
-                setAgreeTerms(request.getUserKey());
+                setAgreeTerms(request.getAgreeTerms());
             }};
 
             var postUserAgreeResult = userService.postUserAgree(userDto);
