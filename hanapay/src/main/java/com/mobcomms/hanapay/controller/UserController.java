@@ -61,7 +61,6 @@ public class UserController {
         try {
             var userDto = new UserDto() {{
                 setUserKey(request.getUserKey());
-                setAgreeTerms(request.getAgreeTerms());
                 setAdId(request.getAdId());
                 setOs(request.getOs());
             }};

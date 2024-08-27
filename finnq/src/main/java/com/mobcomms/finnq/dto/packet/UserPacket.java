@@ -1,5 +1,6 @@
 package com.mobcomms.finnq.dto.packet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mobcomms.common.model.BaseRequset;
 import com.mobcomms.common.model.GenericBaseResponse;
 import com.mobcomms.finnq.dto.UserDto;
@@ -50,7 +51,8 @@ public class UserPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class PostUserinfoRequest extends UpdateUserAgreeTerms.UpdateUserAgreeTermsRequest {
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class PostUserinfoRequest extends UserPacketBaseRequset {
             @NotBlank(message = "adId params is wrong")
             private String adId;
             private String os;

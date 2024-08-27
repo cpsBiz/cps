@@ -1,5 +1,6 @@
 package com.mobcomms.hanapay.dto.packet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mobcomms.common.model.BaseRequset;
 import com.mobcomms.common.model.GenericBaseResponse;
 import com.mobcomms.hanapay.dto.PointBoxDto;
@@ -32,6 +33,7 @@ public class PointPacket {
     public static class PostPoint {
         @Data
         @EqualsAndHashCode(callSuper = false)
+        @JsonIgnoreProperties(ignoreUnknown = true)
         public static class PostPointRequest extends PointPacketBaseRequset {
             @NotBlank(message = "adName params is wrong")
             private String adName;
