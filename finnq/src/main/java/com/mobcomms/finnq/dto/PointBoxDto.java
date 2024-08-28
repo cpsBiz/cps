@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class PointBoxDto {
     String adName;
-    String point;
+    int point;
 }
 

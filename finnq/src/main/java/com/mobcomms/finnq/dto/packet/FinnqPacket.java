@@ -25,7 +25,7 @@ public class FinnqPacket {
             private String trsnKey;
             private String alinCd;
             private String userId;
-            private String amt;
+            private int amt;
             private String adId;
             private String adCode;
             private String adTitle;

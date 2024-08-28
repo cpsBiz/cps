@@ -66,7 +66,7 @@ public class PointController {
 
             if (postPoint.getResultCode().equals(Constant.RESULT_CODE_SUCCESS)) {
                 result.setSuccess();
-                result.setDatas(postPoint.getDatas());
+                result.setData(postPoint.getData());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             } else {
                 result.setError(postPoint.getResultMessage());

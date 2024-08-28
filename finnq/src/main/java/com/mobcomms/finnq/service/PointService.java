@@ -65,24 +65,20 @@ public class PointService {
 
 			List<PointBoxDto> returnPointList = new ArrayList<>();
 
-			IntStream.range(1, 4).forEach(i -> {
-				PointBoxDto pointBoxDto = new PointBoxDto();
-				pointBoxDto.setPoint("0");
-				pointBoxDto.setAdName("box_" + i);
-				returnPointList.add(pointBoxDto);
-			});
-
-			int i = 0;
 			String regDateNum = DateTime.getCurrDate();
 
 			List<PointEntity> pointList = pointRepository.findAllByUserIdAndRegDateNumAndCode(request.getUserKey(), regDateNum, "0000");
 
-			for (PointEntity pointEntity : pointList) {
-				if (pointEntity.getBox().equals(returnPointList.get(i).getAdName())) {
-					returnPointList.get(i).setPoint(pointEntity.getPoint());
-				}
-				i++;
-			}
+			IntStream.range(1, 4).forEach(i -> {
+				PointBoxDto pointBoxDto = new PointBoxDto();
+				pointBoxDto.setAdName("box_" + i);
+				pointBoxDto.setPoint(0);
+				pointList.stream().filter(point -> pointBoxDto.getAdName().equals(point.getBox()))
+						.findFirst()
+						.ifPresent(point -> {pointBoxDto.setPoint(point.getPoint());
+						});
+				returnPointList.add(pointBoxDto);
+			});
 
 			result.setSuccess();
 			result.setDatas(returnPointList);
@@ -176,17 +172,17 @@ public class PointService {
 					os = "IDFA";
 				}
 
-				pointEntity.setPoint(String.valueOf(pointSettingRepository.findAllByType(Integer.parseInt(pointEntity.getType())).getPoint())) ;
+				pointEntity.setPoint(pointSettingRepository.findAllByType(Integer.parseInt(pointEntity.getType())).getPoint()) ;
 
 				/* 포인트 정보 조회 */
-				List<PointEntity> pointList = pointRepository.findAllByUserIdAndRegDateNumAndCode(request.getUserKey(), regDateNum, "1");
+				List<PointEntity> pointList = pointRepository.findAllByUserIdAndRegDateNumAndCode(request.getUserKey(), regDateNum, "0000");
 				if (pointList.size() > 0) {
 					if (pointList.stream().filter(point -> pointEntity.getBox().equals(point.getBox())
-							&& "1".equals(point.getCode())).collect(Collectors.toList()).size() > 0) {
+							&& "0000".equals(point.getCode())).collect(Collectors.toList()).size() > 0) {
 						//동일 한 박스이고 이미 적립된 포인트 요청 시
 						result.setApiMessage(Constant.RESULT_CODE_ERROR_BIZ,ConstantMoneyBox.DUPLICATION_BOX);
 						return result;
-					} else if ((pointList.stream().filter(point -> point.getCode().equals("1")).collect(Collectors.toList()).size()) > 3) {
+					} else if ((pointList.stream().filter(point -> point.getCode().equals("0000")).collect(Collectors.toList()).size()) > 2) {
 						//일 적립 3회 초과
 						result.setApiMessage(Constant.RESULT_CODE_ERROR_BIZ,ConstantMoneyBox.OVER_POINT);
 						return result;
@@ -202,7 +198,7 @@ public class PointService {
 						.adCode("")
 						.adTitle("")
 						.adInfo("")
-						.hmac(HmacSHA.hmacKey("P"+String.valueOf(pointEntity.getPointId()), "TES1000",pointEntity.getUserId(), pointEntity.getPoint()))
+						.hmac(HmacSHA.hmacKey("P"+String.valueOf(pointEntity.getPointId()), "TES1000",pointEntity.getUserId(), String.valueOf(pointEntity.getPoint())))
 						.build();
 
 				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //핀크 api 통신

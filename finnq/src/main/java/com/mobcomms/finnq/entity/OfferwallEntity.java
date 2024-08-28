@@ -43,7 +43,7 @@ public class OfferwallEntity {
     private String adType;
 
     @Column(name = "point")
-    private String point;
+    private int point;
 
     @Column(name = "exchange")
     private double exchange;

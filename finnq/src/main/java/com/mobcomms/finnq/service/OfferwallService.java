@@ -37,7 +37,7 @@ public class OfferwallService {
 	private final OfferwallMediaRepository offerwallMediaRepository;
 	private final UserRepository userRepository;
 	private final OfferwallRepository offerwallRepository;
-	private final FinnqHttpService hanaHttpService;
+	private final FinnqHttpService finnqHttpService;
 
 	/**
 	 * 오퍼월 포미션 url 조회
@@ -86,12 +86,12 @@ public class OfferwallService {
 			offerwallEntity.setCode("0");
 			offerwallEntity.setAdType(request.getMissionType());
 			offerwallEntity.setAdName(request.getAdverName());
-			offerwallEntity.setPoint(String.valueOf(request.getUserPoint()));
+			offerwallEntity.setPoint(request.getUserPoint());
 			offerwallEntity.setIpAddress(ipAddress);
 
 			double exchange = request.getUserPoint() / 1.4;
 			double profit = request.getUserPoint() - exchange;
-			offerwallEntity.setPoint(String.valueOf(request.getUserPoint()));
+			offerwallEntity.setPoint(request.getUserPoint());
 			offerwallEntity.setExchange(exchange);
 			offerwallEntity.setProfit(profit);
 			offerwallEntity.setCode("0");
@@ -138,10 +138,10 @@ public class OfferwallService {
 						.adCode("")
 						.adTitle("")
 						.adInfo("")
-						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), "",offerwallEntity.getUserId(), offerwallEntity.getPoint()))
+						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), "",offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
 						.build();
 
-				FinnqPacket.GetFinnqInfo.Response response = hanaHttpService.SendFinnq(finnqGetPacket); //하나 api 통신
+				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //하나 api 통신
 
 				if (null != response.getRsltCd()) {
 					result.setApiMessage(response.getRsltCd(), "성공");

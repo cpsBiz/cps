@@ -40,7 +40,7 @@ public class PointEntity {
     private String zone;
 
     @Column(name = "point")
-    private String point;
+    private int point;
 
     @Column(name = "unique_insert")
     private String uniqueInsert;
