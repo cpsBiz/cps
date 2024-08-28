@@ -160,8 +160,8 @@ function initAdIframe(){
 // 모비위드 광고 호출
 function callGetApi(index){
     var adid = $("#adid").val();
-    var with_domain = "https://www.mobwithad.com/api/banner/app/vp/v1/paybooc?zone=";
-    var with_param  = "&count=1&pb=&w=250&h=250&adid="+adid+"&auid=&clientIp=";
+    var with_domain = "https://www.mobwithad.com/api/banner/app/mobicomms/v1/hanapay?zone=";
+    var with_param  = "&adid="+adid;
 
     var zone = zone_list[index];
     var call_url = with_domain + zone + with_param;
