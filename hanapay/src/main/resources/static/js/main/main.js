@@ -16,13 +16,13 @@ $(document).ready(function() {
         with_ios_zone = ["10886287", "10886288", "10886287", "10886288", "10886287", "10886288"]; //ios용 지면
     }
 
-    var adId = $("#adId").val();
+    var adid = $("#adid").val();
 
     var userkey = $("#userkey").val();
     var type = $("#type").val();
     var os = $("#os").val().toLowerCase();
 
-    console.log("call param - "+"adId:"+adId+", userkey:"+userkey+", type:"+type+", os:"+os);
+    console.log("call param - "+"adid:"+adid+", userkey:"+userkey+", type:"+type+", os:"+os);
 
 
 
@@ -33,8 +33,8 @@ $(document).ready(function() {
         zone_list = with_ios_zone;
     }
 
-    //adId 값이 있을때만 광고 실행
-    //if(adId != ""){
+    //adid 값이 있을때만 광고 실행
+    //if(adid != ""){
     //now_index = Number(type) - 1;
 
     //console.log(resPointCnt);
@@ -45,12 +45,12 @@ $(document).ready(function() {
     //    callGetApi(now_index); //일반광고 호출
     //}
 
-//        var ad_coupang = localStorage.getItem("ad_coupang_" + adId + "_" + todayDate());
+//        var ad_coupang = localStorage.getItem("ad_coupang_" + adid + "_" + todayDate());
 //        //마지막 광고 시 한번도 쿠팡광고가 나오지 않았다면 쿠팡광고 호출
 //        if( Number(type) == zone_list.length && ad_coupang == "N"){
 //            callCoupangApi();
 //        } else {
-//            //getCheckMobWithData(zone_list[now_index], adId, os); //모비위드 개선건 input lastMoment 체크
+//            //getCheckMobWithData(zone_list[now_index], adid, os); //모비위드 개선건 input lastMoment 체크
 //            callGetApi(now_index);
 //        }
     //}
@@ -159,9 +159,9 @@ function initAdIframe(){
 
 // 모비위드 광고 호출
 function callGetApi(index){
-    var adId = $("#adid").val();
+    var adid = $("#adid").val();
     var with_domain = "https://www.mobwithad.com/api/banner/app/vp/v1/paybooc?zone=";
-    var with_param  = "&count=1&pb=&w=250&h=250&adid="+adId+"&auid=&clientIp=";
+    var with_param  = "&count=1&pb=&w=250&h=250&adid="+adid+"&auid=&clientIp=";
 
     var zone = zone_list[index];
     var call_url = with_domain + zone + with_param;
@@ -177,7 +177,7 @@ function callGetApi(index){
 
 // 쿠팡 파트너스 상품리스트를 가져와 호출
 function callCoupangApi(){
-    var adId = $("#adId").val();
+    var adid = $("#adid").val();
     var os = $("#os").val();
     var zone = subIdIos;
     if (os == "aos") {
@@ -185,12 +185,12 @@ function callCoupangApi(){
     }
 
     coupang_yn ="Y";
-    //비회원인 경우 adId 임의처리
-    if(adId == ""){
-        adId = "00af6187-5ee4-4ed6-877d-ec34f75857f9";
+    //비회원인 경우 adid 임의처리
+    if(adid == ""){
+        adid = "noadid00-0000-0000-0000-000000000000";
     }
 
-    var call_url = "/hanapay/view/coupang"+"?adId="+adId+"&os="+os+"&coupangPoint="+coupangPoint;
+    var call_url = "/hanapay/view/coupang"+"?adid="+adid+"&os="+os+"&coupangPoint="+coupangPoint;
     $("#mobwith").attr("src", call_url);
 
     var param = { "ad_id" : zone , "point" : coupangPoint };
@@ -202,7 +202,7 @@ function callCoupangApi(){
 function adClickOk(){
     //console.log("=======adClickOk=======");
 
-    var adId = $("#adId").val();
+    var adid = $("#adid").val();
     var userKey = $("#userKey").val();
     var box = $("#type").val();
     var os = $("#os").val().toLowerCase();
@@ -311,14 +311,14 @@ function getPointData(){
 }
 
 // 모비위드 광고 존재여부 확인(테스트용: 미사용)
-function getCheckMobWithData(zone, adId, os){
+function getCheckMobWithData(zone, adid, os){
     //var params = {
     //     zone	: zone
-    //    ,adId	: adId
+    //    ,adid	: adid
     //    ,os	    : os
     //};
 
-    var call_url = "/webapi/check?zone="+ zone + "&adId=" + adId + "&os=" + os;
+    var call_url = "/webapi/check?zone="+ zone + "&adid=" + adid + "&os=" + os;
     $.ajax({
         url			: call_url,
         type		: "GET",

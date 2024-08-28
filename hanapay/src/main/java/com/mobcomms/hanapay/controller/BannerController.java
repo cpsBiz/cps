@@ -76,6 +76,9 @@ public class BannerController {
         List<PointSettingEntity> pointSettingEntityList = pointSettingRepository.findAllByUseYN("Y") ;
         String useYn[] = new String[2];
 
+        System.out.println("request : " + request.getAdid());
+        System.out.println("request : " + request.getOs());
+        System.out.println("request : " + request.getUserKey());
         for (PointSettingEntity pointSettingEntity : pointSettingEntityList) {
             String point_type = String.valueOf(pointSettingEntity.getType());
             String point_value = String.valueOf(pointSettingEntity.getPoint());
@@ -128,9 +131,9 @@ public class BannerController {
         }
 
         //adid 가 있을 시 쿠팡 API 호출
-        if (coupangRequest.getAdId() != null && coupangRequest.getOs() != null) {
+        if (coupangRequest.getAdid() != null && coupangRequest.getOs() != null) {
             try {
-                coupangRequest.setEndPoint(String.format(reco_url, coupangRequest.getAdId(), subId, "300x250"));
+                coupangRequest.setEndPoint(String.format(reco_url, coupangRequest.getAdid(), subId, "300x250"));
 
                 coupangRequest.setAuthorization(generate("GET", coupangRequest.getEndPoint(), secret_key, access_key));
                 BannerPacket.Banner.Response  response = cupangHttpService.SendCoupang(coupangRequest);

@@ -24,7 +24,7 @@ public class BannerPacket {
             private String userKey;
             private String type;
             private String os;
-            private String adId;
+            private String adid;
             private String coupangPoint;
         }
 
