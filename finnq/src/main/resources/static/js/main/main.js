@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     var serverType = $("#serverType").val();
 
-    if (serverType == "prod") {
+    if (serverType != "local") {
         with_aos_zone = ["10886585", "10886586", "10886585", "10886586", "10886585", "10886586"]; //aos용 지면
         with_ios_zone = ["10886587", "10886588", "10886587", "10886588", "10886587", "10886588"]; //ios용 지면
     }

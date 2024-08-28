@@ -76,9 +76,6 @@ public class BannerController {
         List<PointSettingEntity> pointSettingEntityList = pointSettingRepository.findAllByUseYN("Y") ;
         String useYn[] = new String[2];
 
-        System.out.println("request : " + request.getAdid());
-        System.out.println("request : " + request.getOs());
-        System.out.println("request : " + request.getUserKey());
         for (PointSettingEntity pointSettingEntity : pointSettingEntityList) {
             String point_type = String.valueOf(pointSettingEntity.getType());
             String point_value = String.valueOf(pointSettingEntity.getPoint());
@@ -105,7 +102,7 @@ public class BannerController {
         if(request.getUserKey() != null && !"".equals(request.getUserKey())){
             String regDateNum = DateTime.getCurrDate();
             // 사용자 포인트 적립 내역 조회
-            List<PointEntity> pointEntitiesList = pointRepository.findAllByUserIdAndRegDateNumAndCodeAndType(request.getUserKey(), regDateNum, "1", searchType);
+            List<PointEntity> pointEntitiesList = pointRepository.findAllByUserIdAndRegDateNumAndCodeAndType(request.getUserKey(), regDateNum, "0000", searchType);
             request.setResPointCnt(pointEntitiesList.size());
         } else {
             request.setResPointCnt(0);

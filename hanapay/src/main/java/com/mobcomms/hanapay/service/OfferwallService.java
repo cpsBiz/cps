@@ -113,7 +113,7 @@ public class OfferwallService {
 				result.setApiMessage(ResultCode.RESULT_CODE_5001, ResultCode.RESULT_MSG_5001);
 				return result;
 			} else {
-				long offerwall = offerwallRepository.countByUserIdAndMediaAndAdIdAndCode(offerwallEntity.getUserId(), offerwallEntity.getMedia(), offerwallEntity.getAdId(), "1");
+				long offerwall = offerwallRepository.countByUserIdAndMediaAndAdIdAndCode(offerwallEntity.getUserId(), offerwallEntity.getMedia(), offerwallEntity.getAdId(), "0000");
 
 				if (offerwall > 0) {
 					logger.info("리워드중복지급");
