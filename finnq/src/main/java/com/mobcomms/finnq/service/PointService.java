@@ -190,7 +190,7 @@ public class PointService {
 				}
 
 				FinnqPacket.GetFinnqInfo.Request finnqGetPacket = FinnqPacket.GetFinnqInfo.Request.builder()
-						.trsnKey("P"+String.valueOf(pointEntity.getPointId()))
+						.trsnKey("P" + String.valueOf(pointEntity.getPointId()))
 						.alinCd("TES1000")
 						.userId(pointEntity.getUserId())
 						.amt(pointEntity.getPoint())
@@ -198,7 +198,7 @@ public class PointService {
 						.adCode("")
 						.adTitle("")
 						.adInfo("")
-						.hmac(HmacSHA.hmacKey("P"+String.valueOf(pointEntity.getPointId()), "TES1000",pointEntity.getUserId(), String.valueOf(pointEntity.getPoint())))
+						.hmac(HmacSHA.hmacKey("P" + String.valueOf(pointEntity.getPointId()), "TES1000", pointEntity.getUserId(), String.valueOf(pointEntity.getPoint())))
 						.build();
 
 				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //핀크 api 통신
