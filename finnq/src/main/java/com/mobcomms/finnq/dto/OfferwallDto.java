@@ -9,5 +9,6 @@ public class OfferwallDto {
     int userPoint;
     String adverName;
     String missionType;
+    String adInfo;
 }
 

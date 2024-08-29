@@ -24,6 +24,7 @@ public class OfferwallPacket {
             private int userPoint;
             private String adverName;
             private String missionType;
+            private String adInfo;
         }
 
         @Data

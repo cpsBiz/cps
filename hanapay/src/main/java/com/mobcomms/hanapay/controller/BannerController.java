@@ -71,7 +71,8 @@ public class BannerController {
      * 광고 API 호출
      * @date 2024-08-19
      */
-    @RequestMapping(value = "/api/v1/banner", method = {RequestMethod.GET})
+    @RequestMapping(value = "" +
+            "", method = {RequestMethod.GET})
     public String banner(@ModelAttribute BannerPacket.Banner.IndexRequest request) throws Exception{
         List<PointSettingEntity> pointSettingEntityList = pointSettingRepository.findAllByUseYN("Y") ;
         String useYn[] = new String[2];

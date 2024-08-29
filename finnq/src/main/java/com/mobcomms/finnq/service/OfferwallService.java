@@ -131,14 +131,14 @@ public class OfferwallService {
 
 				FinnqPacket.GetFinnqInfo.Request finnqGetPacket = FinnqPacket.GetFinnqInfo.Request.builder()
 						.trsnKey("O"+String.valueOf(offerwallEntity.getOfferwallId()))
-						.alinCd("TES1000")
+						.alinCd("ANIC100")
 						.userId(offerwallEntity.getUserId())
 						.amt(offerwallEntity.getPoint())
 						.adId(os)
 						.adCode("")
 						.adTitle("")
-						.adInfo("")
-						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), "",offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
+						.adInfo(request.getAdInfo())
+						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), "ANIC100",offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
 						.build();
 
 				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //하나 api 통신
