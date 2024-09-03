@@ -29,7 +29,11 @@ public class OfferwallPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class Response extends GenericBaseResponse<OfferwallInfoDto> {}
+        public static class Response {
+            private boolean Result;
+            private int ResultCode;
+            private String ResultMsg;
+        }
     }
 
 

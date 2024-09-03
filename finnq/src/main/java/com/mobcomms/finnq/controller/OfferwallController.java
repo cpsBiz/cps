@@ -1,5 +1,6 @@
 package com.mobcomms.finnq.controller;
 
+import com.mobcomms.common.api.ResultCode;
 import com.mobcomms.finnq.dto.OfferwallDto;
 import com.mobcomms.finnq.dto.packet.OfferwallPacket;
 import com.mobcomms.finnq.service.OfferwallService;
@@ -57,13 +58,13 @@ public class OfferwallController {
             }};
 
             var offerwall =  offerwallService.postPomission(offerwallDto);
-            result.setResultCode(offerwall.getResultCode());
-            result.setResultMessage(offerwall.getResultMessage());
-            result.setData(offerwall.getData());
-            return new ResponseEntity<>(result, HttpStatus.OK);
+
+            return new ResponseEntity<>(offerwall, HttpStatus.OK);
         } catch (Exception e) {
             log.error("ERROR", e);
-            result.setError(e.getMessage());
+            result.setResult(false);
+            result.setResultCode(9999);
+            result.setResultMsg(ResultCode.ERROR.getResultMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

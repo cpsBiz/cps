@@ -69,7 +69,7 @@ public class OfferwallService {
 	 * 오퍼월 포미션 적립
 	 * @date 2024-08-19
 	 */
-	public GenericBaseResponse<OfferwallInfoDto> postPomission(OfferwallDto request) throws Exception {
+	public OfferwallPacket.PostOfferwall.Response postPomission(OfferwallDto request) throws Exception {
 		HttpServletRequest httpRequest = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 
 		OfferwallPacket.PostOfferwall.Response result = new OfferwallPacket.PostOfferwall.Response();
@@ -103,7 +103,9 @@ public class OfferwallService {
 			/* 접근 허용 IP 확인 :: 각 매체별 접근이 허용된 IP 인지 확인 */
 			if (!accessAllowCheck(httpRequest, offerwallEntity.getMedia())) {
 				logger.info("접근 불가");
-				result.setApiMessage(String.valueOf(ResultCode.RESULT_CODE_5002), ResultCode.RESULT_MSG_5002);
+				result.setResult(false);
+				result.setResultCode(5002);
+				result.setResultMsg("접근 불가");
 				return result;
 			}
 
@@ -111,14 +113,18 @@ public class OfferwallService {
 			UserEntity userEntity = userRepository.findAllByUserUuid(offerwallEntity.getUserId());
 
 			if (userEntity == null) {
-				result.setApiMessage(ResultCode.RESULT_CODE_2001, ResultCode.RESULT_MSG_2001);
+				result.setResult(false);
+				result.setResultCode(2001);
+				result.setResultMsg(ResultCode.RESULT_MSG_2001);
 				return result;
 			}
 
 
 
 			if (null == saveChk) {
-				result.setApiMessage(ResultCode.RESULT_CODE_5001, ResultCode.RESULT_MSG_5001);
+				result.setResult(false);
+				result.setResultCode(5001);
+				result.setResultMsg(ResultCode.RESULT_MSG_5001);
 				return result;
 			} else {
 				long offerwall = offerwallRepository.countByUserIdAndMediaAndAdIdAndCode(offerwallEntity.getUserId(), offerwallEntity.getMedia(), offerwallEntity.getAdId(), "1");
@@ -126,7 +132,9 @@ public class OfferwallService {
 				if (offerwall > 0) {
 					logger.info("리워드중복지급");
 					/* 중복 참여 에러 */
-					result.setApiMessage(ResultCode.RESULT_CODE_5003, ResultCode.RESULT_MSG_5003);
+					result.setResult(false);
+					result.setResultCode(5003);
+					result.setResultMsg(ResultCode.RESULT_MSG_5003);
 					return result;
 				}
 
@@ -139,24 +147,30 @@ public class OfferwallService {
 						.adCode("")
 						.adTitle("")
 						.adInfo(request.getAdInfo())
-						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), ALINCD,offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
+						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), "",offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
 						.build();
 
 				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //하나 api 통신
 
 				if (null != response.getRsltCd()) {
-					result.setApiMessage(response.getRsltCd(), "성공");
+					result.setResult(true);
+					result.setResultCode(0);
+					result.setResultMsg(ResultCode.RESULT_MSG_0);
 				} else {
-					result.setApiMessage(String.valueOf(ResultCode.RESULT_CODE_5004), ResultCode.RESULT_MSG_5004);
+					result.setResult(false);
+					result.setResultCode(5004);
+					result.setResultMsg(ResultCode.RESULT_MSG_5004);
 				}
 			}
 		} catch (Exception e) {
 			log.error(Constant.EXCEPTION_MESSAGE + " postPomission  {}",e);
-			result.setError(e.getMessage());
+			result.setResult(false);
+			result.setResultCode(9999);
+			result.setResultMsg(ResultCode.RESULT_MSG_9999);
 		} finally {
 			if (offerwallEntity.getOfferwallId() > 0) {
-				offerwallEntity.setCode(result.getResultCode());
-				offerwallEntity.setRes(result.getResultMessage());
+				offerwallEntity.setCode(result.getResultCode()+"");
+				offerwallEntity.setRes(result.getResultMsg());
 				offerwallRepository.save(offerwallEntity);
 			}
 		}
