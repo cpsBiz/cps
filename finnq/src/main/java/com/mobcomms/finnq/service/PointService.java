@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -50,6 +51,7 @@ public class PointService {
 
 	private final String ALINCD = "ANIC100";
 
+	private final String ANICK_ADINFO = "bubble";
 	/**
 	 * 포인트 적립 내역 조회
 	 * @date 2024-08-26
@@ -139,15 +141,15 @@ public class PointService {
 			pointEntity.setRegDateNum(regDateNum);
 			pointEntity.setBox(request.getAdName());
 			pointEntity.setZone(request.getAdId());
-			pointEntity.setType("2");
+			pointEntity.setType("1");
 			pointEntity.setCode("0");
 			pointEntity.setUniqueInsert("0");
 			pointEntity.setIpAddress(ipAddress);
 			pointEntity.setRegDateNum(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-			//쿠팡 광고는 setType 1
+			//쿠팡 광고는 Type 2
 			if(request.getAdId().startsWith("finnqbox")){
-				pointEntity.setType("1");
+				pointEntity.setType("2");
 			}
 
 			/*포인트 적립 내역 등록*/
@@ -170,7 +172,14 @@ public class PointService {
 					return result;
 				}
 
-				pointEntity.setPoint(pointSettingRepository.findAllByType(Integer.parseInt(pointEntity.getType())).getPoint()) ;
+
+				Random random = new Random();
+				int randomNumber = random.nextInt(4) + 1;
+
+				//포인트 1~4 렌덤 지급
+				//pointSettingRepository.findAllByType(Integer.parseInt(pointEntity.getType())).getPoint()
+
+				pointEntity.setPoint(randomNumber);
 
 				/* 포인트 정보 조회 */
 				List<PointEntity> pointList = pointRepository.findAllByUserIdAndRegDateNumAndCode(request.getUserKey(), regDateNum, "0000");
@@ -195,7 +204,7 @@ public class PointService {
 						.adId(userEntity.getUserAdid())
 						.adCode(request.getAdId())
 						.adTitle("anick")
-						.adInfo("money_box")
+						.adInfo(ANICK_ADINFO)
 						.hmac(HmacSHA.hmacKey("P" + String.valueOf(pointEntity.getPointId()), ALINCD, pointEntity.getUserId(), String.valueOf(pointEntity.getPoint())))
 						.build();
 

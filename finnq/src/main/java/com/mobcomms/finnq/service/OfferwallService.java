@@ -39,6 +39,10 @@ public class OfferwallService {
 	private final OfferwallRepository offerwallRepository;
 	private final FinnqHttpService finnqHttpService;
 
+	private final String ALINCD = "ANIC100";
+
+	//private final String ANICK_ADINFO = "quiz";
+
 	/**
 	 * 오퍼월 포미션 url 조회
 	 * @date 2024-08-19
@@ -76,7 +80,6 @@ public class OfferwallService {
 		String regDateNum = DateTime.getCurrDate();
 		OfferwallEntity offerwallEntity = new OfferwallEntity();
 
-		String os = "ADID";
 
 		try{
 			offerwallEntity.setUserId(request.getUserKey());
@@ -112,15 +115,13 @@ public class OfferwallService {
 				return result;
 			}
 
-			if (userEntity.getUserAppOs().equals("ios")) {
-				os = "IDFA";
-			}
+
 
 			if (null == saveChk) {
 				result.setApiMessage(ResultCode.RESULT_CODE_5001, ResultCode.RESULT_MSG_5001);
 				return result;
 			} else {
-				long offerwall = offerwallRepository.countByUserIdAndMediaAndAdIdAndCode(offerwallEntity.getUserId(), offerwallEntity.getMedia(), offerwallEntity.getAdId(), "0000");
+				long offerwall = offerwallRepository.countByUserIdAndMediaAndAdIdAndCode(offerwallEntity.getUserId(), offerwallEntity.getMedia(), offerwallEntity.getAdId(), "1");
 
 				if (offerwall > 0) {
 					logger.info("리워드중복지급");
@@ -131,14 +132,14 @@ public class OfferwallService {
 
 				FinnqPacket.GetFinnqInfo.Request finnqGetPacket = FinnqPacket.GetFinnqInfo.Request.builder()
 						.trsnKey("O"+String.valueOf(offerwallEntity.getOfferwallId()))
-						.alinCd("ANIC100")
+						.alinCd(ALINCD)
 						.userId(offerwallEntity.getUserId())
 						.amt(offerwallEntity.getPoint())
-						.adId(os)
+						.adId(userEntity.getUserAdid())
 						.adCode("")
 						.adTitle("")
 						.adInfo(request.getAdInfo())
-						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), "ANIC100",offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
+						.hmac(HmacSHA.hmacKey("O"+String.valueOf(offerwallEntity.getOfferwallId()), ALINCD,offerwallEntity.getUserId(), String.valueOf(offerwallEntity.getPoint())))
 						.build();
 
 				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //하나 api 통신
