@@ -48,6 +48,8 @@ public class PointService {
 	private final UserRepository userRepository;
 	private final FinnqHttpService finnqHttpService;
 
+	private final String ALINCD = "ANIC100";
+
 	/**
 	 * 포인트 적립 내역 조회
 	 * @date 2024-08-26
@@ -126,10 +128,9 @@ public class PointService {
 
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
-		UUID u = UUID.randomUUID();
+
 
 		String regDateNum = DateTime.getCurrDate();
-		String os = "ADID";
 		PointEntity pointEntity = new PointEntity();
 		PointBoxDto pointBoxDto = new PointBoxDto();
 
@@ -144,7 +145,8 @@ public class PointService {
 			pointEntity.setIpAddress(ipAddress);
 			pointEntity.setRegDateNum(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-			if (!"finnqbox1aos".equals(request.getAdId()) && !"finnqbox2aos".equals(request.getAdId()) && !"finnqbox1ios".equals(request.getAdId()) && !"finnqbox2ios".equals(request.getAdId())) {
+			//쿠팡 광고는 setType 1
+			if(request.getAdId().startsWith("finnqbox")){
 				pointEntity.setType("1");
 			}
 
@@ -168,10 +170,6 @@ public class PointService {
 					return result;
 				}
 
-				if (userEntity.getUserAppOs().equals("ios")) {
-					os = "IDFA";
-				}
-
 				pointEntity.setPoint(pointSettingRepository.findAllByType(Integer.parseInt(pointEntity.getType())).getPoint()) ;
 
 				/* 포인트 정보 조회 */
@@ -191,14 +189,14 @@ public class PointService {
 
 				FinnqPacket.GetFinnqInfo.Request finnqGetPacket = FinnqPacket.GetFinnqInfo.Request.builder()
 						.trsnKey("P" + String.valueOf(pointEntity.getPointId()))
-						.alinCd("ANIC100")
+						.alinCd(ALINCD)
 						.userId(pointEntity.getUserId())
 						.amt(pointEntity.getPoint())
-						.adId(os)
-						.adCode(pointEntity.getBox())
-						.adTitle("")
-						.adInfo("")
-						.hmac(HmacSHA.hmacKey("P" + String.valueOf(pointEntity.getPointId()), "ANIC100", pointEntity.getUserId(), String.valueOf(pointEntity.getPoint())))
+						.adId(userEntity.getUserAdid())
+						.adCode(request.getAdId())
+						.adTitle("anick")
+						.adInfo("money_box")
+						.hmac(HmacSHA.hmacKey("P" + String.valueOf(pointEntity.getPointId()), ALINCD, pointEntity.getUserId(), String.valueOf(pointEntity.getPoint())))
 						.build();
 
 				FinnqPacket.GetFinnqInfo.Response response = finnqHttpService.SendFinnq(finnqGetPacket); //핀크 api 통신
@@ -216,13 +214,14 @@ public class PointService {
 				} else {
 					result.setApiMessage(Constant.RESULT_CODE_ERROR_BIZ,ConstantMoneyBox.EMPTY_DATA);
 				}
-				pointEntity.setUniqueInsert(u.toString());
+
 			}
 		} catch (Exception e) {
 			log.error(Constant.EXCEPTION_MESSAGE + " postPoint  {}",e);
 			result.setError(e.getMessage());
 		} finally {
 			if(pointEntity.getPointId() > 0){
+				pointEntity.setUniqueInsert(UUID.randomUUID().toString());
 				pointEntity.setCode(result.getResultCode());
 				pointEntity.setRes(result.getResultMessage());
 				pointRepository.save(pointEntity);

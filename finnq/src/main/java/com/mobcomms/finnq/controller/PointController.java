@@ -57,7 +57,7 @@ public class PointController {
         try {
             var pointDto = new PointDto(){{
                 setUserKey(request.getUserKey());
-                setAdId(request.getAdId());
+                setAdId(request.getAnickAdId());
                 setAdName(request.getAdName());
             }};
 
