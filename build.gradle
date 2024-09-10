@@ -77,7 +77,7 @@ subprojects {
             implementation  'org.mariadb.jdbc:mariadb-java-client:3.1.2'
             implementation 'mysql:mysql-connector-java:8.0.32'
 
-
+            implementation 'org.springframework.security:spring-security-crypto:5.7.0'
         }
 
         test {

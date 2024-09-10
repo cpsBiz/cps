@@ -126,10 +126,10 @@
         <appender-ref ref="SQL_FILE"/>
     </logger>
 
-    <logger name="com.mobcomms.common.servcies.BaseHttpService" level="debug" additivity="false">
+    <logger name="com.cps.common.servcies.BaseHttpService" level="debug" additivity="false">
         <appender-ref ref="API_LOG"/>
     </logger>
-    <logger name="com.mobcomms.common.filter.HttpLoggingFilter" level="INFO" additivity="false">
+    <logger name="com.cps.common.filter.HttpLoggingFilter" level="INFO" additivity="false">
         <appender-ref ref="HTTP_LOG"/>
     </logger>
     <springProfile name = "local">
