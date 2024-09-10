@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ClickDto {
-    String clickId;
+    int clickNum;
 }
 

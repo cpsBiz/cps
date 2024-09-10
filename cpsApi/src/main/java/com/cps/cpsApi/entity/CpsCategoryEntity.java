@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "CPS_CATEGORY")
-public class CategoryEntity {
+public class CpsCategoryEntity {
     @Id
     @Column(name = "CATEGORY", updatable = false, nullable = false)
     private String category;

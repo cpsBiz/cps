@@ -20,15 +20,17 @@ public class ClickPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class ClickRequest {
-            @NotBlank(message = "campaignId 확인")
+            @NotBlank(message = "campaignNum 확인")
             @Size(max=20, message="20자 이내로 입력")
-            private String campaignId;
+            private String campaignNum;
+            @NotBlank(message = "memberId 확인")
+            private String memberId;
             @NotBlank(message = "affliateId 확인")
             private String affliateId;
-            @NotBlank(message = "userId 확인")
-            private String userId;
             @NotBlank(message = "zoneId 확인")
             private String zoneId;
+            @NotBlank(message = "userId 확인")
+            private String userId;
         }
 
         @Data

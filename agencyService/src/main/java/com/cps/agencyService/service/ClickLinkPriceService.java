@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -29,29 +30,36 @@ public class ClickLinkPriceService {
 		ClickPacket.ClickInfo.Response response = new ClickPacket.ClickInfo.Response();
 		ClickEntity clickEntity = new ClickEntity();
 
+		InetAddress inetAddress = InetAddress.getLocalHost();
+		String ipAddress = inetAddress.getHostAddress();
+
 		try {
-			clickEntity.setCampaignId(request.getCampaignId());
+			clickEntity.setCampaignNum(request.getCampaignNum());
+			clickEntity.setDateNum(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 			clickEntity.setAffliateId(request.getAffliateId());
+			clickEntity.setMemberId(request.getMemberId());
 			clickEntity.setZoneId(request.getZoneId());
 			clickEntity.setUserId(request.getUserId());
-			clickEntity.setDateNum(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+			clickEntity.setRewardYn("N");
+			clickEntity.setCode("9999");
+			clickEntity.setIpAddress(ipAddress);
 
 			if (null == clickRepository.save(clickEntity)) {
 				response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
 				return response;
 			} else {
 				ClickDto clickDto = new ClickDto();
-				clickDto.setClickId(String.valueOf(clickEntity.getClickNum()));
+				clickDto.setClickNum(clickEntity.getClickNum());
 				clickEntity.setCode("200");
 				clickEntity.setMessage("성공");
+				clickRepository.save(clickEntity);
+
 				response.setSuccess();
 				response.setData(clickDto);
 			}
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " memberSignIn  {}", e);
-		} finally {
-			if (null != clickEntity) clickRepository.save(clickEntity);
 		}
 
 		return response;

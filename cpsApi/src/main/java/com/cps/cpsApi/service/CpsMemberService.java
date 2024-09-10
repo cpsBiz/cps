@@ -5,15 +5,11 @@ import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
 
 import com.cps.cpsApi.dto.CpsMemberDto;
-import com.cps.cpsApi.dto.CpsMemberListDto;
+import com.cps.cpsApi.entity.CpsCampaignEntity;
 import com.cps.cpsApi.entity.CpsMemberEntity;
 import com.cps.cpsApi.packet.CpsMemberPacket;
+import com.cps.cpsApi.repository.CpsCampaignRepository;
 import com.cps.cpsApi.repository.CpsMemberRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,9 +28,15 @@ public class CpsMemberService {
 
 	private final CpsMemberRepository cpsMemberRepository;
 
+	private final CpsCampaignRepository cpsCampaignRepository;
+
 	private final HttpService httpService;
 
 	private final MemberService memberService;
+
+	private final SearchService sarchService;
+
+	private final CpsCampaignService cpsCampaignService;
 
 	/**
 	 * 회원 등록, 수정, 삭제
@@ -62,6 +64,7 @@ public class CpsMemberService {
 				log.error(Constant.EXCEPTION_MESSAGE + " memberSignIn  {}", e);
 			}
 		} else if (null != memberCheck) {
+
 			if (request.getApiType().equals("D")) {
 				try {
 					cpsMemberRepository.deleteByMemberId(request.getMemberId());
@@ -98,43 +101,52 @@ public class CpsMemberService {
 		CpsMemberPacket.MemberInfo.Response response = new CpsMemberPacket.MemberInfo.Response();
 
 		List<CpsMemberEntity> cpsMemberEntityList = new ArrayList<>();
+		List<CpsCampaignEntity> cpsCampaignEntityList = new ArrayList<>();
 		List<CpsMemberPacket.MemberInfo.MemberRequest> memberRequestList = new ArrayList<>();
 
-		String[] allAprArray = {"/all", "/apr"};
-		String[] cpsCpaArray = {"/cps", "/cpa"};
-
 		try {
-			for (String allApr : allAprArray) {
-				for (String cpsCpa : cpsCpaArray) {
-					//링크프라이스 광고주 데이터 가져오기
-					CpsMemberPacket.MemberInfo.Domain linkPriceRequest = new CpsMemberPacket.MemberInfo.Domain();
-					linkPriceRequest.setDomain(linkPriceDomain + linkPriceEndPoint + allApr + cpsCpa);
-					List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> linkPriceMerchantList = httpService.SendLinkPriceMerchant(linkPriceRequest);
+			//링크프라이스 광고주 데이터 가져오기
+			CpsMemberPacket.MemberInfo.Domain linkPriceRequest = new CpsMemberPacket.MemberInfo.Domain();
+			linkPriceRequest.setDomain(linkPriceDomain + linkPriceEndPoint + "/all/cps/detail");
+			List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> linkPriceMerchantList = httpService.SendLinkPriceMerchant(linkPriceRequest);
 
-					//CPS_MEMBER 데이터 전환
-					memberRequestList = memberService.linkPriceAgencyMemberList(linkPriceMerchantList);
+			//CPS_MEMBER 데이터 전환
+			memberRequestList = memberService.linkPriceAgencyMemberList(linkPriceMerchantList);
 
-					memberRequestList.forEach(member -> {
-						//회원 정보가 있는 경우 회원테이블 수정 제외 (관리자 화면에서만 수정)
-						if (null == cpsMemberRepository.findByMemberIdAndManagerId(member.getMemberId(), member.getManagerId())) {
-							member.setMemberPw("ENLIPLE_"+member.getMemberId());
-							member.setType("C"); member.setStatus("N");
-							if (member.getMemberId().equals("linkprice")) {
-								member.setType("A");
-								member.setStatus("Y");
-							}
-							member.setManagerId("linkprice");
-							CpsMemberEntity cpsMemberEntity = memberService.cpsMember(member);
-							cpsMemberEntityList.add(cpsMemberEntity);
-						}
-					});
-
-					if (cpsMemberEntityList.size() > 0) {
-						cpsMemberRepository.saveAll(cpsMemberEntityList);
+			memberRequestList.forEach(member -> {
+				//회원 정보가 있는 경우 회원테이블 수정 제외 (관리자 화면에서만 수정)
+				if (null == cpsMemberRepository.findByMemberIdAndManagerId(member.getMemberId(), member.getManagerId())) {
+					member.setMemberPw("ENLIPLE_"+member.getMemberId());
+					member.setType("C"); member.setStatus("N");
+					if (member.getMemberId().equals("linkprice")) {
+						member.setType("A");
+						member.setStatus("Y");
 					}
-					response.setSuccess();
+					member.setManagerId("linkprice");
+
+					CpsMemberEntity cpsMemberEntity =  new CpsMemberEntity();
+					CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
+
+					try {
+						cpsMemberEntity = memberService.cpsMember(member);
+						cpsCampaignEntity = cpsCampaignService.cpsMemberCampaign(member);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					cpsMemberEntityList.add(cpsMemberEntity);
+					cpsCampaignEntityList.add(cpsCampaignEntity);
 				}
+			});
+
+			//회원, 캠페인 자동 등록
+			if (cpsMemberEntityList.size() > 0) {
+				cpsMemberRepository.saveAll(cpsMemberEntityList);
+				cpsCampaignRepository.saveAll(cpsCampaignEntityList);
+				response.setSuccess();
+			} else {
+				response.setApiMessage(Constants.AGENCY_NOT_SEARCH.getCode(), Constants.AGENCY_NOT_SEARCH.getValue());
 			}
+
 		} catch (Exception e) {
 			response.setApiMessage(Constants.API_EXCEPTION.getCode(), Constants.API_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " linkPriceMemberSignIn api  {}", e);
@@ -147,41 +159,20 @@ public class CpsMemberService {
 	 * 회원 정보 리스트
 	 * @date 2024-09-09
 	 */
-	public GenericBaseResponse<CpsMemberListDto> memberSearch(CpsMemberPacket.MemberInfo.MemberListRequest request) throws Exception {
-		CpsMemberPacket.MemberInfo.MemberListResponse response = new CpsMemberPacket.MemberInfo.MemberListResponse();
-		List<CpsMemberListDto> cpsMemberList = new ArrayList<>();
+	public GenericBaseResponse<CpsMemberEntity> memberSearch(CpsMemberPacket.MemberInfo.MemberSearcgRequest request) throws Exception {
+		CpsMemberPacket.MemberInfo.MemberSearchResponse response = new CpsMemberPacket.MemberInfo.MemberSearchResponse();
+		List<CpsMemberEntity> cpsMemberList = new ArrayList<>();
 
 		try {
-			List<CpsMemberEntity> cpsMemberEntityList = memberService.memberSearch(request);
-
-			if (cpsMemberEntityList.size() > 0) {
-				cpsMemberEntityList.forEach(member -> {
-					CpsMemberListDto cpsMemberListDto = new CpsMemberListDto();
-					cpsMemberListDto.setManagerId(member.getManagerId());
-					cpsMemberListDto.setMemberId(member.getMemberId());
-					cpsMemberListDto.setCompanyName(member.getCompanyName());
-					cpsMemberListDto.setType(member.getType());
-					cpsMemberListDto.setStatus(member.getStatus());
-					cpsMemberListDto.setManagerName(member.getManagerName());
-					cpsMemberListDto.setOfficePhone(member.getOfficePhone());
-					cpsMemberListDto.setPhone(member.getPhone());
-					cpsMemberListDto.setMail(member.getMail());
-					cpsMemberListDto.setAddress(member.getAddress());
-					cpsMemberListDto.setBuisnessNumber(member.getBuisnessNumber());
-					cpsMemberListDto.setCategory(member.getCategory());
-					cpsMemberListDto.setRewardYn(member.getRewardYn());
-					cpsMemberListDto.setUrl(member.getUrl());
-					cpsMemberListDto.setLogo(member.getLogo());
-					cpsMemberList.add(cpsMemberListDto);
-				});
-
+			cpsMemberList = sarchService.memberSearch(request);
+			if (cpsMemberList.size() > 0) {
 				response.setSuccess();
 			} else {
 				response.setApiMessage(Constants.MEMBER_BLANK.getCode(), Constants.MEMBER_BLANK.getValue());
 			}
 			response.setDatas(cpsMemberList);
 		} catch (Exception e) {
-			response.setApiMessage(Constants.MEMBER_LIST_EXCEPTION.getCode(), Constants.MEMBER_LIST_EXCEPTION.getValue());
+			response.setApiMessage(Constants.MEMBER_SEARCH_EXCEPTION.getCode(), Constants.MEMBER_SEARCH_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " memberList api  {}", e);
 		}
 

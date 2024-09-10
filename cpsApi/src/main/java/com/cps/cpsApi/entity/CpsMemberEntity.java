@@ -55,6 +55,9 @@ public class CpsMemberEntity {
     @Column(name = "CATEGORY")
     private String category;
 
+    @Column(name = "CATEGORY_NAME")
+    private String categoryName;
+
     @Column(name = "REWARD_YN")
     private String rewardYn;
 
@@ -69,6 +72,27 @@ public class CpsMemberEntity {
 
     @Column(name = "LOGO")
     private String logo;
+
+    @Column(name = "CLICK_URL")
+    private String clickUrl;
+
+    @Column(name = "WHEN_TRANS")
+    private String whenTrans;
+
+    @Column(name = "TRANS_REPOSITION")
+    private String transReposition;
+
+    @Column(name = "DENY_AD")
+    private String denyAd;
+
+    @Column(name = "DENY_PRODUCT")
+    private String denyProduct;
+
+    @Column(name = "NOTICE")
+    private String notice;
+
+    @Column(name = "COMMISSION_PAYMENT_STANDARD")
+    private String commissionPaymentStandard;
 
     @Column(name = "LAST_LOGIN", updatable = false)
     private LocalDateTime lastLogin;

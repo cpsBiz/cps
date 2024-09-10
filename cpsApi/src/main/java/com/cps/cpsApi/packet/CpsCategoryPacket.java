@@ -1,7 +1,7 @@
 package com.cps.cpsApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsApi.dto.CategoryDto;
+import com.cps.cpsApi.dto.CpsCategoryDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
-public class CategoryPacket {
+public class CpsCategoryPacket {
 
     public static class CategoryInfo {
 
@@ -30,7 +30,7 @@ public class CategoryPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class Response extends GenericBaseResponse<CategoryDto> {}
+        public static class Response extends GenericBaseResponse<CpsCategoryDto> {}
 
     }
 }

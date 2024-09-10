@@ -9,6 +9,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -41,14 +45,40 @@ public class HttpService extends BaseHttpService {
 
     public List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> SendLinkPriceMerchant(CpsMemberPacket.MemberInfo.Domain request) {
         try{
-            var result = this.PostAsync(request.getDomain(), request, String.class);
-            List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result.block(), new TypeReference<List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse>>() {});
+            var result = linkPriceDetail(request.getDomain());
+            //var result = this.PostAsync(request.getDomain(), request, String.class);
+            List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse>>() {});
             return responseObj;
         } catch (Exception ex) {
             log.error("SendLinkPriceMerchant : {} ", ex);
             List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
-            errorResult.get(0).setResultCode("9999");
             return errorResult;
         }
+    }
+
+    public  String linkPriceDetail(String Domain) {
+        StringBuilder response = new StringBuilder();
+        HttpURLConnection connection = null;
+        String responseLine;
+
+        try {
+            URL url = new URL(Domain);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            connection.disconnect();
+        }
+        return response.toString();
     }
 }

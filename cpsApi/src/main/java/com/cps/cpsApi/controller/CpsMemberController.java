@@ -83,8 +83,8 @@ public class CpsMemberController {
      */
     @Operation(summary = "회원 조회")
     @PostMapping(value = "/memberSearch")
-    public ResponseEntity<CpsMemberPacket.MemberInfo.MemberListResponse> memberSearch(@Valid @RequestBody CpsMemberPacket.MemberInfo.MemberListRequest request) throws Exception {
-        var result = new CpsMemberPacket.MemberInfo.MemberListResponse();
+    public ResponseEntity<CpsMemberPacket.MemberInfo.MemberSearchResponse> memberSearch(@Valid @RequestBody CpsMemberPacket.MemberInfo.MemberSearcgRequest request) throws Exception {
+        var result = new CpsMemberPacket.MemberInfo.MemberSearchResponse();
 
         try {
             var member = cpsMemberService.memberSearch(request);

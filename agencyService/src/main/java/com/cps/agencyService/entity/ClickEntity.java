@@ -21,8 +21,11 @@ public class ClickEntity {
     @Column(name = "DATE_NUM")
     private String dateNum;
 
-    @Column(name = "CAMPAIGN_ID")
-    private String campaignId;
+    @Column(name = "CAMPAIGN_NUM")
+    private String campaignNum;
+
+    @Column(name = "MEMBER_ID")
+    private String memberId;
 
     @Column(name = "AFFLIATE_ID")
     private String affliateId;
@@ -33,6 +36,9 @@ public class ClickEntity {
     @Column(name = "USER_ID")
     private String userId;
 
+    @Column(name = "REWARD_YN")
+    private String rewardYn = "N";
+
     @Column(name = "CODE")
     private String code = "4000";
 
@@ -41,9 +47,6 @@ public class ClickEntity {
 
     @Column(name = "IP_ADDRESS")
     private String ipAddress;
-
-    @Column(name = "REWARD_YN")
-    private String rewardYn = "N";
 
     @CreatedDate
     @Column(name = "REG_DATE")

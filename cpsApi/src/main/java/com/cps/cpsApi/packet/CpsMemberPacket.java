@@ -2,7 +2,7 @@ package com.cps.cpsApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsApi.dto.CpsMemberDto;
-import com.cps.cpsApi.dto.CpsMemberListDto;
+import com.cps.cpsApi.entity.CpsMemberEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -38,11 +38,19 @@ public class CpsMemberPacket {
             private String address;
             private String buisnessNumber;
             private String category;
+            private String categoryName;
             private String rewardYn;
             private String mobileYn;
             private int returnDay;
             private String url;
             private String logo;
+            private String clickUrl;
+            private String whenTrans;
+            private String transReposition;
+            private String denyAd;
+            private String denyProduct;
+            private String notice;
+            private String commissionPaymentStandard;
             private String apiType;
         }
 
@@ -66,7 +74,7 @@ public class CpsMemberPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class MemberListRequest {
+        public static class MemberSearcgRequest {
             private String memberId;
             private String managerId;
             private String companyName;
@@ -85,41 +93,43 @@ public class CpsMemberPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class MemberListResponse extends GenericBaseResponse<CpsMemberListDto> {}
+        public static class MemberSearchResponse extends GenericBaseResponse<CpsMemberEntity> {}
 
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class LinkPriceAgencyResponse {
-            @JsonProperty("category_id")
-            private String categoryId;
-            @JsonProperty("category_name")
-            private String categoryName;
-            @JsonProperty("deeplink_yn")
-            private String deeplinkYn;
-            @JsonProperty("max_commission_mobile")
-            private String maxCommissionMobile;
-            @JsonProperty("max_commission_pc")
-            private String maxCommissionPc;
             @JsonProperty("merchant_id")
             private String merchantId;
-            @JsonProperty("agencyId")
-            private String agencyId;
-            @JsonProperty("merchant_logo")
-            private String merchantLogo;
             @JsonProperty("merchant_name")
             private String merchantName;
             @JsonProperty("merchant_url")
             private String merchantUrl;
+            @JsonProperty("merchant_logo")
+            private String merchantLogo;
+            @JsonProperty("category_id")
+            private String categoryId;
+            @JsonProperty("category_name")
+            private String categoryName;
+            @JsonProperty("subscript")
+            private String subscript;
+            @JsonProperty("deeplink_yn")
+            private String deeplinkYn;
+            @JsonProperty("pc_yn")
+            private String pc_yn;
             @JsonProperty("mobile_yn")
             private String mobileYn;
+            @JsonProperty("max_commission_pc")
+            private String maxCommissionPc;
+            @JsonProperty("max_commission_mobile")
+            private String maxCommissionMobile;
             @JsonProperty("return_day")
             private int returnDay;
             @JsonProperty("reward_yn")
             private String rewardYn;
-            @JsonProperty("subscript")
-            private String subscript;
             @JsonProperty("click_url")
             private String clickUrl;
+            @JsonProperty("merchant_desc")
+            private String merchantDesc;
             @JsonProperty("when_trans")
             private String whenTrans;
             @JsonProperty("trans_reposition")
@@ -136,7 +146,8 @@ public class CpsMemberPacket {
             private String appIosYn;
             @JsonProperty("app_android_yn")
             private String appnAdroidYn;
-            private String resultCode;
+            @JsonProperty("agencyId")
+            private String agencyId;
         }
 
     }

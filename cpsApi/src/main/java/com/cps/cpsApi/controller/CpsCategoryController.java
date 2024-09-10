@@ -1,8 +1,8 @@
 package com.cps.cpsApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsApi.packet.CategoryPacket;
-import com.cps.cpsApi.service.CategoryService;
+import com.cps.cpsApi.packet.CpsCategoryPacket;
+import com.cps.cpsApi.service.CpsCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CpsCategoryController {
 
-    private final CategoryService categoryService;
+    private final CpsCategoryService cpsCategoryService;
 
     /**
      * 카테고리 등록
@@ -27,11 +27,11 @@ public class CpsCategoryController {
      */
     @Operation(summary = "카테고리 등록, 수정, 삭제")
     @PostMapping(value = "/category")
-    public ResponseEntity<CategoryPacket.CategoryInfo.Response> category(@Valid @RequestBody CategoryPacket.CategoryInfo.CategoryRequest request) throws Exception {
-        var result = new CategoryPacket.CategoryInfo.Response();
+    public ResponseEntity<CpsCategoryPacket.CategoryInfo.Response> category(@Valid @RequestBody CpsCategoryPacket.CategoryInfo.CategoryRequest request) throws Exception {
+        var result = new CpsCategoryPacket.CategoryInfo.Response();
 
         try {
-            var category = categoryService.category(request);
+            var category = cpsCategoryService.category(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(category.getResultCode())) {
                 result.setSuccess();
             } else {

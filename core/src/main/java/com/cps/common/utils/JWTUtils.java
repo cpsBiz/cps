@@ -25,7 +25,7 @@ public class JWTUtils {
 
         return Jwts.builder()
                 .subject(username)
-                .issuer("mobcomms")
+                .issuer("cps")
                 .claim("clientId", clientId)
                 .expiration(validity)
                 .signWith(secretKey,  Jwts.SIG.HS512)
@@ -38,7 +38,7 @@ public class JWTUtils {
 
         return Jwts.builder()
                 .subject(username)
-                .issuer("mobcomms")
+                .issuer("cps")
                 .claim("clientId", clientId)
                 .expiration(validity)
                 .signWith(secretKey,  Jwts.SIG.HS512)

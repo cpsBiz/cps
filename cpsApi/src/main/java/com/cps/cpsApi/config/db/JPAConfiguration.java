@@ -26,7 +26,7 @@ public class JPAConfiguration {
 
         return builder.dataSource(dataSource)
                 .packages("com.cps.cpsApi.entity")
-                .persistenceUnit("mobcomms")
+                .persistenceUnit("cps")
                 .build();
     }
 
