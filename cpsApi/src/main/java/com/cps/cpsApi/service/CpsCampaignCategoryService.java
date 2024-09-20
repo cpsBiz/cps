@@ -4,20 +4,14 @@ import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsApi.dto.CpsCampaignCategoryDto;
-import com.cps.cpsApi.dto.CpsCampaignDto;
 import com.cps.cpsApi.entity.CpsCampaignCategoryEntity;
-import com.cps.cpsApi.entity.CpsCampaignEntity;
 import com.cps.cpsApi.packet.CpsCampaignCategoryPacket;
-import com.cps.cpsApi.packet.CpsCampaignPacket;
-import com.cps.cpsApi.packet.CpsMemberPacket;
 import com.cps.cpsApi.repository.CpsCampaignCategoryRepository;
-import com.cps.cpsApi.repository.CpsCampaignRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

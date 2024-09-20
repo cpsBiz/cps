@@ -18,20 +18,38 @@ public class ClickEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int clickNum;
 
-    @Column(name = "DATE_NUM")
-    private String dateNum;
+    @Column(name = "REG_DAY")
+    private int regDay;
+
+    @Column(name = "REG_YM")
+    private int regYm;
+
+    @Column(name = "REG_HOUR")
+    private String regHour;
 
     @Column(name = "CAMPAIGN_NUM")
     private String campaignNum;
-
-    @Column(name = "MEMBER_ID")
-    private String memberId;
 
     @Column(name = "AFFLIATE_ID")
     private String affliateId;
 
     @Column(name = "ZONE_ID")
     private String zoneId;
+
+    @Column(name = "AGENCY_ID")
+    private String agencyId;
+
+    @Column(name = "MEMBER_ID")
+    private String memberId;
+
+    @Column(name = "TYPE")
+    private String type;
+
+    @Column(name = "SITE")
+    private String site;
+
+    @Column(name = "OS")
+    private String os;
 
     @Column(name = "USER_ID")
     private String userId;

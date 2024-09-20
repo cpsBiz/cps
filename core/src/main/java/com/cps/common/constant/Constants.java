@@ -1,12 +1,16 @@
 package com.cps.common.constant;
 
 public enum Constants {
-//API 통신, NULL 1000번대
-//AGENCY 2000번대
-//MEMBER 3000번대
-//CLICK 4000번대
-//CAMPAIGN 5000번대
-//카테고리 7000번대
+//API 통신, NULL 1000
+//AGENCY 2000
+//MEMBER 3000
+//CLICK 4000
+//CAMPAIGN 5000
+//CAMPAIGN_CATEGORY 5100
+//매체 캠페인 승인 5200
+//카테고리 7000
+//노출 8000
+//노출통계 8100
 
     API_EXCEPTION("1000", "API_EXCEPTION"),
 
@@ -30,11 +34,20 @@ public enum Constants {
     CAMPAIGN_DUPLICATION("5004", "등록되어 있는 캠페인 입니다."),
     CAMPAIGN_SEARCH_EXCEPTION("5005", "캠페인 조회 오류"),
 
-    CAMPAIGN_CATEGORY_EXCEPTION("6000", "캠페인 카테고리 등록 오류"),
-    CAMPAIGN_CATEGORY_BLANK("6001", "캠페인 카테고리 정보가 없습니다."),
-    CAMPAIGN_CATEGORY_SEARCH_EXCEPTION("5005", "캠페인 카테고리 조회 오류"),
+    CAMPAIGN_CATEGORY_EXCEPTION("5100", "캠페인 카테고리 등록 오류"),
+    CAMPAIGN_CATEGORY_BLANK("5101", "캠페인 카테고리 정보가 없습니다."),
+    CAMPAIGN_CATEGORY_SEARCH_EXCEPTION("5105", "캠페인 카테고리 조회 오류"),
 
-    CATEGORY_EXCEPTION("7000", "카테고리 등록 오류");
+    AFFILIATE_CAMPAIGN_EXCEPTION("5200", "매체 캠페인 승인 등록 오류"),
+
+    CATEGORY_EXCEPTION("7000", "카테고리 등록 오류"),
+
+    VIEW_EXCEPTION("8000", "실적 데이터 등록 오류"),
+    VIEW_BLANK("8001", "실적 캠페인 정보가 없습니다."),
+    VIEW_SEARCH_EXCEPTION("8005", "실적 조회 오류"),
+
+    STAT_HOUR_EXCEPTION("8100", "노출 통계 데이터 등록 오류"),
+    STAT_HOUR_BLANK("8101", "노출 통계 데이터 정보가 없습니다.");
 
     private String code;
     private String value;

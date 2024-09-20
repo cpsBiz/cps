@@ -21,10 +21,10 @@ public class CpsCampaignPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class CampaignRequest {
             private int campaignNum;
-            @NotBlank(message = "managerId 확인")
-            private String managerId;
             @NotBlank(message = "memberId 확인")
             private String memberId;
+            @NotBlank(message = "agencyId 확인")
+            private String agencyId;
             private String campaignName;
             private String campaignStart;
             private String campaignEnd;
@@ -32,7 +32,7 @@ public class CpsCampaignPacket {
             private String category;
             private String logo;
             private String icon;
-            private String campaignYn;
+            private String campaignAuto;
             private String rewardYn;
             private String pcYn;
             private String mobileYn;

@@ -23,12 +23,17 @@ public class ClickPacket {
             @NotBlank(message = "campaignNum 확인")
             @Size(max=20, message="20자 이내로 입력")
             private String campaignNum;
-            @NotBlank(message = "memberId 확인")
-            private String memberId;
             @NotBlank(message = "affliateId 확인")
             private String affliateId;
             @NotBlank(message = "zoneId 확인")
             private String zoneId;
+            @NotBlank(message = "agencyId 확인")
+            private String agencyId;
+            @NotBlank(message = "memberId 확인")
+            private String memberId;
+            private String type;
+            private String site;
+            private String os;
             @NotBlank(message = "userId 확인")
             private String userId;
         }

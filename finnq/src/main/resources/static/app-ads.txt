@@ -1,3 +1,0 @@
-google.com, pub-6559641650239946, DIRECT, f08c47fec0942fa0
-mixer.mobon.net, 1033, DIRECT
-admixer.co.kr, 1359, RESELLER

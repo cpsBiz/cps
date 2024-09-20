@@ -1,7 +1,7 @@
 package com.cps.cpsApi.service;
 
 import com.cps.common.servcies.BaseHttpService;
-import com.cps.cpsApi.packet.CpsMemberPacket;
+import com.cps.cpsApi.packet.CpsUserPacket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -43,15 +43,15 @@ public class HttpService extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
-    public List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> SendLinkPriceMerchant(CpsMemberPacket.MemberInfo.Domain request) {
+    public List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsUserPacket.UserInfo.Domain request) {
         try{
             var result = linkPriceDetail(request.getDomain());
             //var result = this.PostAsync(request.getDomain(), request, String.class);
-            List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse>>() {});
+            List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse>>() {});
             return responseObj;
         } catch (Exception ex) {
             log.error("SendLinkPriceMerchant : {} ", ex);
-            List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
+            List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
             return errorResult;
         }
     }

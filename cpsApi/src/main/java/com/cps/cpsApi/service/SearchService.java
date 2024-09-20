@@ -1,16 +1,13 @@
 package com.cps.cpsApi.service;
 
-import com.cps.common.utils.AES256Utils;
-import com.cps.cpsApi.dto.CpsMemberDto;
+import com.cps.cpsApi.dto.SummaryDto;
 import com.cps.cpsApi.entity.CpsCampaignEntity;
-import com.cps.cpsApi.entity.CpsMemberEntity;
+import com.cps.cpsApi.entity.SummaryDayEntity;
 import com.cps.cpsApi.packet.CpsCampaignPacket;
-import com.cps.cpsApi.packet.CpsMemberPacket;
+import com.cps.cpsApi.packet.SummaryPacket;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,60 +21,6 @@ import java.util.List;
 public class SearchService {
 
 	private final EntityManager em;
-
-	public List<CpsMemberEntity> memberSearch(CpsMemberPacket.MemberInfo.MemberSearcgRequest request){
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<CpsMemberEntity> cq = cb.createQuery(CpsMemberEntity.class);
-		Root<CpsMemberEntity> member = cq.from(CpsMemberEntity.class);
-
-		List<Predicate> predicates = new ArrayList<>();
-
-		if (request.getMemberId() != null && !request.getMemberId().equals("")) {
-			predicates.add(cb.like(member.get("memberId"), "%" + request.getMemberId() + "%"));
-		}
-		if (request.getManagerId() != null && !request.getManagerId().equals("")) {
-			predicates.add(cb.like(member.get("managerId"), "%" + request.getManagerId() + "%"));
-		}
-		if (request.getCompanyName() != null && !request.getCompanyName().equals("")) {
-			predicates.add(cb.like(member.get("companyName"), "%" + request.getCompanyName() + "%"));
-		}
-		if (request.getType() != null && !request.getType().equals("")) {
-			predicates.add(cb.equal(member.get("type"), request.getType()));
-		}
-		if (request.getStatus() != null && !request.getStatus().equals("")) {
-			predicates.add(cb.equal(member.get("status"), request.getStatus()));
-		}
-		if (request.getManagerName() != null && !request.getManagerName().equals("")) {
-			predicates.add(cb.like(member.get("managerName"), "%" + request.getManagerName() + "%"));
-		}
-		if (request.getOfficePhone() != null && !request.getOfficePhone().equals("")) {
-			predicates.add(cb.like(member.get("officePhone"), "%" + request.getOfficePhone() + "%"));
-		}
-		if (request.getPhone() != null && !request.getPhone().equals("")) {
-			predicates.add(cb.like(member.get("phone"), "%" + request.getPhone() + "%"));
-		}
-		if (request.getMail() != null && !request.getMail().equals("")) {
-			predicates.add(cb.like(member.get("mail"), "%" + request.getMail() + "%"));
-		}
-		if (request.getAddress() != null && !request.getAddress().equals("")) {
-			predicates.add(cb.like(member.get("address"), "%" + request.getAddress() + "%"));
-		}
-		if (request.getBuisnessNumber() != null && !request.getBuisnessNumber().equals("")) {
-			predicates.add(cb.like(member.get("buisnessNumber"), "%" + request.getBuisnessNumber() + "%"));
-		}
-		if (request.getCategory() != null && !request.getCategory().equals("")) {
-			predicates.add(cb.equal(member.get("category"), request.getCategory()));
-		}
-		if (request.getRewardYn() != null && !request.getRewardYn().equals("")) {
-			predicates.add(cb.equal(member.get("rewardYn"), request.getRewardYn()));
-		}
-		if (request.getMobileYn() != null && !request.getMobileYn().equals("")) {
-			predicates.add(cb.equal(member.get("mobileYn"), request.getMobileYn()));
-		}
-
-		cq.where(cb.and(predicates.toArray(new Predicate[0])));
-		return em.createQuery(cq).getResultList();
-	}
 
 	public List<CpsCampaignEntity> campaignSearch(CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request){
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -113,5 +56,66 @@ public class SearchService {
 
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
 		return em.createQuery(cq).getResultList();
+	}
+
+	public List<SummaryDto> summarySearch(SummaryPacket.SummaryInfo.SummaryRequest request) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<SummaryDto> cq = cb.createQuery(SummaryDto.class);
+		Root<?> root = cq.from(SummaryDayEntity.class);
+
+		List<Predicate> predicates = new ArrayList<>();
+
+		// 날짜 조건 필수
+		if ("MONTH".equals(request.getDayType())) {
+			predicates.add(cb.between(root.get("regYm"), request.getRegStart(), request.getRegEnd()));
+		} else {
+			predicates.add(cb.between(root.get("regDay"), request.getRegStart(), request.getRegEnd()));
+		}
+
+		// 영역
+		if (request.getOs() != null && !request.getOs().equals("")) {
+			predicates.add(cb.equal(root.get("os"), request.getOs()));
+		}
+
+		// 검색어 조회
+		if (request.getKeyword() != null && !request.getKeyword().equals("")) {
+			if ("MEMBER".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
+				Predicate memberName = cb.like(root.get("memberName"), "%" + request.getKeyword() + "%");
+				Predicate memberId = cb.like(root.get("memberId"), "%" + request.getKeyword() + "%");
+				predicates.add(cb.or(memberName, memberId));
+			}
+			if ("SITE".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
+				predicates.add(cb.like(root.get("site"), "%" + request.getKeyword() + "%"));
+			}
+			if ("CAMPAIGN".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
+				predicates.add(cb.like(root.get("campaignName"), "%" + request.getKeyword() + "%"));
+			}
+			if ("AFFLIATE".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
+				predicates.add(cb.like(root.get("affliateId"), "%" + request.getKeyword() + "%"));
+			}
+		}
+
+		// Select 및 Group By 설정
+		if ("DAY".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("regDay"), cb.literal("DAY"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("regDay"));
+		} else if ("MONTH".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("regYm"), cb.literal("MONTH"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("regYm"));
+		} else if ("MEMBER".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("memberId"), root.get("memberName"), cb.literal("MEMBER"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("memberId"), root.get("memberName"));
+		} else if ("CAMPAIGN".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("campaignNum"), root.get("campaignName"), cb.literal("CAMPAIGN"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("campaignNum"));
+		} else if ("AFFLIATE".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("affliateId"), root.get("affliateName"), cb.literal("AFFLIATE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("affliateId"));
+		} else if ("SITE".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("site"), cb.literal("SITE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("site"));
+		} else if ("MEMBERAGC".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("agencyId"), root.get("agencyName"), cb.literal("MEMBERAGC"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("agencyId"), root.get("agencyName"));
+		} else if ("MEMBERAFF".equals(request.getSubSearchType())) {
+			cq.select(cb.construct(SummaryDto.class, root.get("agencyId"), root.get("agencyName"), cb.literal("MEMBERAFF"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("agencyId"), root.get("agencyName"));
+		}
+
+		cq.where(cb.and(predicates.toArray(new Predicate[0])));
+		TypedQuery<SummaryDto> query = em.createQuery(cq);
+		return query.getResultList();
 	}
 }

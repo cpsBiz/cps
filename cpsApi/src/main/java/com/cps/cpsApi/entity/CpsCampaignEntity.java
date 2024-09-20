@@ -18,11 +18,11 @@ public class CpsCampaignEntity {
     @Column(name = "CAMPAIGN_NUM", updatable = false, nullable = false)
     private int campaignNum;
 
-    @Column(name = "MANAGER_ID", updatable = false, nullable = false)
-    private String managerId;
-
     @Column(name = "MEMBER_ID", updatable = false, nullable = false)
     private String memberId;
+
+    @Column(name = "AGENCY_ID", updatable = false, nullable = false)
+    private String agencyId;
 
     @Column(name = "CAMPAIGN_NAME")
     private String campaignName;
@@ -45,8 +45,8 @@ public class CpsCampaignEntity {
     @Column(name = "ICON")
     private String icon;
 
-    @Column(name = "CAMPAIGN_YN")
-    private String campaignYn = "N";
+    @Column(name = "CAMPAIGN_AUTO")
+    private String campaignAuto = "A";
 
     @Column(name = "REWARD_YN")
     private String rewardYn = "N";

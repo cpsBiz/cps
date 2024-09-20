@@ -1,8 +1,8 @@
 rootProject.name = 'cps'
 include 'core'
-include 'finnq'
 include 'cpsApi'
 include 'agencyService'
 include 'agencyApi:linkPrice:click'
 include 'agencyApi:linkPrice:reward'
+include 'cpsViewApi'
 

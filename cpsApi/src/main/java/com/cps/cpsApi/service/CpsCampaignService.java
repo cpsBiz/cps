@@ -6,7 +6,7 @@ import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsApi.dto.CpsCampaignDto;
 import com.cps.cpsApi.entity.CpsCampaignEntity;
 import com.cps.cpsApi.packet.CpsCampaignPacket;
-import com.cps.cpsApi.packet.CpsMemberPacket;
+import com.cps.cpsApi.packet.CpsUserPacket;
 import com.cps.cpsApi.repository.CpsCampaignRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,7 +108,7 @@ public class CpsCampaignService {
 		CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
 
 		cpsCampaignEntity.setCampaignNum(request.getCampaignNum());
-		cpsCampaignEntity.setManagerId(request.getManagerId());
+		cpsCampaignEntity.setAgencyId(request.getAgencyId());
 		cpsCampaignEntity.setMemberId(request.getMemberId());
 		cpsCampaignEntity.setCampaignName(request.getCampaignName());
 		cpsCampaignEntity.setCampaignStart(request.getCampaignStart());
@@ -117,7 +117,7 @@ public class CpsCampaignService {
 		cpsCampaignEntity.setCategory(request.getCategory());
 		cpsCampaignEntity.setLogo(request.getLogo());
 		cpsCampaignEntity.setIcon(request.getIcon());
-		cpsCampaignEntity.setCampaignYn(request.getCampaignYn());
+		cpsCampaignEntity.setCampaignAuto(request.getCampaignAuto());
 		cpsCampaignEntity.setRewardYn(request.getRewardYn());
 		cpsCampaignEntity.setPcYn(request.getPcYn());
 		cpsCampaignEntity.setMobileYn(request.getMobileYn());
@@ -135,14 +135,14 @@ public class CpsCampaignService {
 		return cpsCampaignEntity;
 	}
 
-	public CpsCampaignEntity cpsMemberCampaign(CpsMemberPacket.MemberInfo.MemberRequest request) throws Exception {
+	public CpsCampaignEntity cpsUserCampaign(CpsUserPacket.UserInfo.UserCampaignRequest request) throws Exception {
 		CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
-		cpsCampaignEntity.setManagerId(request.getManagerId());
+		cpsCampaignEntity.setAgencyId(request.getAgencyId());
 		cpsCampaignEntity.setMemberId(request.getMemberId());
 		cpsCampaignEntity.setCampaignName(request.getMemberId()+" 캠페인 자동 등록");
 		cpsCampaignEntity.setClickUrl(request.getClickUrl());
-		cpsCampaignEntity.setCategory(request.getCategory());
 		cpsCampaignEntity.setLogo(request.getLogo());
+		cpsCampaignEntity.setIcon(request.getIcon());
 		cpsCampaignEntity.setRewardYn(request.getRewardYn());
 		cpsCampaignEntity.setMobileYn(request.getMobileYn());
 		cpsCampaignEntity.setReturnDay(request.getReturnDay());

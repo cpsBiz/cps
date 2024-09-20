@@ -1,7 +1,6 @@
 package com.cps.cpsApi.repository;
 
 import com.cps.cpsApi.entity.CpsCampaignCategoryEntity;
-import com.cps.cpsApi.entity.CpsCampaignEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
