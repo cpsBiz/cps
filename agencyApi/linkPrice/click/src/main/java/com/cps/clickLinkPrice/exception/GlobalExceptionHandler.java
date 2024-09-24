@@ -1,4 +1,4 @@
-package com.cps.rewardLinkPrice.exception;
+package com.cps.clickLinkPrice.exception;
 
 import com.cps.common.model.BaseResponse;
 import lombok.extern.slf4j.Slf4j;

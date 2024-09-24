@@ -64,7 +64,7 @@ public class CpsUserService {
 				response.setData(cpsUserDto);
 			} catch (Exception e) {
 				response.setApiMessage(Constants.MEMBER_EXCEPTION.getCode(), Constants.MEMBER_EXCEPTION.getValue());
-				log.error(Constant.EXCEPTION_MESSAGE + " memberSignIn  {}", e);
+				log.error(Constant.EXCEPTION_MESSAGE + "memberSignIn request : {}, exception : {}", request, e);
 			}
 		} else if (null != memberCheck) {
 
@@ -75,7 +75,7 @@ public class CpsUserService {
 					response.setData(cpsUserDto);
 				} catch (Exception e) {
 					response.setApiMessage(Constants.MEMBER_DELETE_EXCEPTION.getCode(), Constants.MEMBER_DELETE_EXCEPTION.getValue());
-					log.error(Constant.EXCEPTION_MESSAGE + " memberDelete  {}", e);
+					log.error(Constant.EXCEPTION_MESSAGE + "memberDelete request : {}, exception : {}", request, e);
 				}
 			} else if (request.getApiType().equals("U")) {
 				try {
@@ -86,7 +86,7 @@ public class CpsUserService {
 					response.setData(cpsUserDto);
 				} catch (Exception e) {
 					response.setApiMessage(Constants.MEMBER_UPDATE_EXCEPTION.getCode(), Constants.MEMBER_UPDATE_EXCEPTION.getValue());
-					log.error(Constant.EXCEPTION_MESSAGE + " memberUpdate  {}", e);
+					log.error(Constant.EXCEPTION_MESSAGE + "memberUpdate request : {}, exception : {}", request, e);
 				}
 			}
 		} else {
@@ -106,7 +106,6 @@ public class CpsUserService {
 		List<CpsUserEntity> cpsUserEntityList = new ArrayList<>();
 		List<CpsAgencyEntity> cpsAgencyEntityList = new ArrayList<>();
 		List<CpsCampaignEntity> cpsCampaignEntityList = new ArrayList<>();
-		List<CpsUserPacket.UserInfo.UserCampaignRequest> memberRequestList = new ArrayList<>();
 
 		try {
 			//링크프라이스 광고주 데이터 가져오기
@@ -115,15 +114,14 @@ public class CpsUserService {
 			List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> linkPriceMerchantList = httpService.SendUserLinkPriceMerchant(linkPriceRequest);
 
 			//CPS_USER 데이터 전환
-			memberRequestList = userService.linkPriceAgencyMemberList(linkPriceMerchantList);
+			List<CpsUserPacket.UserInfo.UserCampaignRequest> memberRequestList = userService.linkPriceAgencyMemberList(linkPriceMerchantList);
 
 			memberRequestList.forEach(member -> {
-				CpsAgencyEntity cpsAgencyEntity =  new CpsAgencyEntity();
-				cpsAgencyEntity = userService.cpsAgency(member);
-				cpsAgencyEntityList.add(cpsAgencyEntity);
+				cpsAgencyEntityList.add(userService.cpsAgency(member));
 
 				//회원 정보가 있는 경우 회원테이블 수정 제외 (관리자 화면에서만 수정)
 				if (null == cpsUserRepository.findByMemberId("link_"+member.getMemberId())) {
+					member.setMemberId("link_"+member.getMemberId());
 					member.setMemberPw("link_"+member.getMemberId());
 					member.setType("MEMBER"); member.setStatus("N");member.setBusinessType("B");
 					member.setAgencyId("linkprice");

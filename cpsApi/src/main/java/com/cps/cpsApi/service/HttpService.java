@@ -1,6 +1,8 @@
 package com.cps.cpsApi.service;
 
+import com.cps.common.constant.Constant;
 import com.cps.common.servcies.BaseHttpService;
+import com.cps.cpsApi.packet.CpsRewardPacket;
 import com.cps.cpsApi.packet.CpsUserPacket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -43,6 +46,67 @@ public class HttpService extends BaseHttpService {
         super(domain, headersConsumer, filtersConsumer);
     }
 
+    //도트피치 익일CPS, 매출 취소 내역 호출
+    public CpsRewardPacket.RewardInfo.DotPitchListResponse SendDotPitchReward(String domain, CpsRewardPacket.RewardInfo.DotPitchRequest request) {
+        CpsRewardPacket.RewardInfo.DotPitchListResponse responseObj = new CpsRewardPacket.RewardInfo.DotPitchListResponse();
+        try{
+            var result = this.GetAsync(domain, request, String.class);
+            /*
+            String json = "{\n" +
+                    "  \"searchDate\": \"20240101\",\n" +
+                    "  \"result\": \"OK\",\n" +
+                    "  \"listData\": [\n" +
+                    "    {\n" +
+                    "      \"orderid\": \"12312111111111\",\n" +
+                    "      \"m_name\": \"11번가\",\n" +
+                    "      \"aff_id\": \"test1\",\n" +
+                    "      \"p_name\": \"테스트상품1\",\n" +
+                    "      \"quantity\": \"7\",\n" +
+                    "      \"price\": \"3650732\",\n" +
+                    "      \"comm\": 175234,\n" +
+                    "      \"commission_rate\": \"80\",\n" +
+                    "      \"a_info\": \"40\",\n" +
+                    "      \"order_flag\": \"확정\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"orderid\": \"12312111111111\",\n" +
+                    "      \"m_name\": \"11번가\",\n" +
+                    "      \"aff_id\": \"test1\",\n" +
+                    "      \"p_name\": \"테스트상품1\",\n" +
+                    "      \"quantity\": \"7\",\n" +
+                    "      \"price\": \"3650732\",\n" +
+                    "      \"comm\": 175234,\n" +
+                    "      \"commission_rate\": \"80\",\n" +
+                    "      \"a_info\": \"44\",\n" +
+                    "      \"order_flag\": \"확정\"\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}";
+            */
+            // listData 유무 체크
+            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
+            if (responseMap.containsKey("listData")) {
+                Object listData = responseMap.get("listData");
+                if (listData instanceof List && !((List<?>) listData).isEmpty()) {
+                    // listData를 DotData 리스트로 변환
+                    List<CpsRewardPacket.RewardInfo.DotData> dotDataList = new ObjectMapper().convertValue(listData, new TypeReference<List<CpsRewardPacket.RewardInfo.DotData>>() {});
+                   // DotPitchListResponse 객체 생성
+                    responseObj = new CpsRewardPacket.RewardInfo.DotPitchListResponse();
+                    responseObj.setSearchDate((String) responseMap.get("searchDate"));
+                    responseObj.setResult((String) responseMap.get("result"));
+                    responseObj.setListData(dotDataList);
+                }
+            }
+            return responseObj;
+        } catch (Exception ex) {
+            log.error(Constant.EXCEPTION_MESSAGE + " SendDotPitchReward request : {}, exception : {}", request, ex);
+            CpsRewardPacket.RewardInfo.DotPitchListResponse errorResult = new CpsRewardPacket.RewardInfo.DotPitchListResponse();
+            errorResult.setResult("9999");
+            errorResult.setListData(null);
+            return errorResult;
+        }
+    }
+
     public List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsUserPacket.UserInfo.Domain request) {
         try{
             var result = linkPriceDetail(request.getDomain());
@@ -50,7 +114,7 @@ public class HttpService extends BaseHttpService {
             List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse>>() {});
             return responseObj;
         } catch (Exception ex) {
-            log.error("SendLinkPriceMerchant : {} ", ex);
+            log.error(Constant.EXCEPTION_MESSAGE + " SendUserLinkPriceMerchant request : {}, exception : {}", request, ex);
             List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
             return errorResult;
         }

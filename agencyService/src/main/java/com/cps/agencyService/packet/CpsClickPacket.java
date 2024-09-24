@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
-public class ClickPacket {
+public class CpsClickPacket {
 
     public static class ClickInfo {
 

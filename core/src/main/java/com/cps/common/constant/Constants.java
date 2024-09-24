@@ -11,6 +11,7 @@ public enum Constants {
 //카테고리 7000
 //노출 8000
 //노출통계 8100
+//도트피치 리워드 9000
 
     API_EXCEPTION("1000", "API_EXCEPTION"),
 
@@ -26,6 +27,7 @@ public enum Constants {
     MEMBER_SEARCH_EXCEPTION("3005", "회원 조회 오류"),
 
     CLICK_EXCEPTION("4000", "클릭 캠페인 등록 오류"),
+    CLICK_PFCODE_EXCEPTION("4011", "PF_CODE 오류"),
 
     CAMPAIGN_EXCEPTION("5000", "캠페인정보 등록 오류"),
     CAMPAIGN_BLANK("5001", "캠페인정보가 없습니다."),
@@ -47,7 +49,11 @@ public enum Constants {
     VIEW_SEARCH_EXCEPTION("8005", "실적 조회 오류"),
 
     STAT_HOUR_EXCEPTION("8100", "노출 통계 데이터 등록 오류"),
-    STAT_HOUR_BLANK("8101", "노출 통계 데이터 정보가 없습니다.");
+    STAT_HOUR_BLANK("8101", "노출 통계 데이터 정보가 없습니다."),
+
+    DOTPITCH_EXCEPTION("9000", "도트피치 리워드 데이터 등록 오류"),
+    DOTPITCH_BLANK("9001", "도트피치 정보가 없습니다."),
+    DOTPITCH_NOT_SEARCH("9010", "등록 할 도트피치 정보가 없습니다.");
 
     private String code;
     private String value;

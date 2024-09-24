@@ -1,7 +1,7 @@
 package com.cps.rewardLinkPrice.controller;
 
-import com.cps.agencyService.packet.ClickPacket;
-import com.cps.agencyService.service.ClickLinkPriceService;
+import com.cps.agencyService.packet.CpsClickPacket;
+import com.cps.agencyService.service.CpsClickLinkPriceService;
 import com.cps.common.constant.Constant;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ClickController {
 
-    private final ClickLinkPriceService clickLinkPriceService;
+    private final CpsClickLinkPriceService cpsClickLinkPriceService;
 
     /**
      * 캠페인 클릭
@@ -27,11 +27,11 @@ public class ClickController {
      */
     @Operation(summary = "캠페인 클릭", description = "")
     @PostMapping(value = "/campaignClick")
-    public ResponseEntity<ClickPacket.ClickInfo.Response> campaignClick(@Valid @RequestBody ClickPacket.ClickInfo.ClickRequest request) throws Exception {
-        var result = new ClickPacket.ClickInfo.Response();
+    public ResponseEntity<CpsClickPacket.ClickInfo.Response> campaignClick(@Valid @RequestBody CpsClickPacket.ClickInfo.ClickRequest request) throws Exception {
+        var result = new CpsClickPacket.ClickInfo.Response();
 
         try {
-            var click = clickLinkPriceService.campaignClick(request);
+            var click = cpsClickLinkPriceService.campaignClick(request);
 
             if (Constant.RESULT_CODE_SUCCESS.equals(click.getResultCode())) {
                 result.setSuccess();

@@ -37,7 +37,8 @@ public class CpsAffiliateCampaignService {
 			response.setData(commonCpsAffiliateCampaignDto(cpsAffilateCampaignEntity));
 		}catch (Exception e){
 			response.setApiMessage(Constants.AFFILIATE_CAMPAIGN_EXCEPTION.getCode(), Constants.AFFILIATE_CAMPAIGN_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " affiliateCampaign api  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + " affiliateCampaign api request : {}, exception : {}", request, e);
+
 		}
 		return response;
 	}

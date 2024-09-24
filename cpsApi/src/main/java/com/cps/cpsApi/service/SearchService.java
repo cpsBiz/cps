@@ -93,6 +93,26 @@ public class SearchService {
 			if ("AFFLIATE".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
 				predicates.add(cb.like(root.get("affliateId"), "%" + request.getKeyword() + "%"));
 			}
+
+			//상세검색
+			if ("MEMBER_LIST".equals(request.getKeywordType())) {
+				predicates.add(cb.equal(root.get("memberId"), request.getKeyword()));
+			}
+			if ("SITE_LIST".equals(request.getKeywordType())) {
+				predicates.add(cb.equal(root.get("site"), request.getKeyword()));
+			}
+			if ("CAMPAIGN_LIST".equals(request.getKeywordType())) {
+				predicates.add(cb.equal(root.get("campaignNum"), request.getKeyword()));
+			}
+			if ("AFFLIATE_LIST".equals(request.getKeywordType())) {
+				predicates.add(cb.equal(root.get("affliateId"), request.getKeyword()));
+			}
+			if ("MEMBERAGC_LIST".equals(request.getKeywordType())) {
+				predicates.add(cb.equal(root.get("agencyId"), request.getKeyword()));
+			}
+			if ("MEMBERAFF_LIST".equals(request.getKeywordType())) {
+				predicates.add(cb.equal(root.get("agencyId"), request.getKeyword()));
+			}
 		}
 
 		// Select 및 Group By 설정
@@ -107,7 +127,7 @@ public class SearchService {
 		} else if ("AFFLIATE".equals(request.getSubSearchType())) {
 			cq.select(cb.construct(SummaryDto.class, root.get("affliateId"), root.get("affliateName"), cb.literal("AFFLIATE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("affliateId"));
 		} else if ("SITE".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("site"), cb.literal("SITE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("site"));
+			cq.select(cb.construct(SummaryDto.class, root.get("site"), root.get("site"), cb.literal("SITE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("site"));
 		} else if ("MEMBERAGC".equals(request.getSubSearchType())) {
 			cq.select(cb.construct(SummaryDto.class, root.get("agencyId"), root.get("agencyName"), cb.literal("MEMBERAGC"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("agencyId"), root.get("agencyName"));
 		} else if ("MEMBERAFF".equals(request.getSubSearchType())) {

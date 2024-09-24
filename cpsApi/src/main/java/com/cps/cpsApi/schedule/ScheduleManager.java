@@ -22,7 +22,7 @@ public class ScheduleManager {
     /**
      * 통계 스케줄
      */
-    @Scheduled(cron = "0 39 * * * *")
+    @Scheduled(cron = "0 20  * * * *")
     public ResponseEntity<CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse> summarySchedule() throws Exception {
         CpsViewSchedulePacket.ScheduleInfo.ViewScheduleRequest request = new CpsViewSchedulePacket.ScheduleInfo.ViewScheduleRequest();
         request.setMinute(60);

@@ -48,7 +48,7 @@ public class CpsCategoryService {
 			response.setData(cpsCategoryDto);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CATEGORY_EXCEPTION.getCode(), Constants.CATEGORY_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " category  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + "category api request : {}, exception : {}", request, e);
 		}
 
 		return response;

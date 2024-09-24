@@ -1,0 +1,109 @@
+package com.cps.cpsApi.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+@Data
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "CPS_REWARD")
+@IdClass(CpsRewardPk.class)
+public class CpsRewardEntity {
+    @Id
+    @Column(name = "CLICK_NUM")
+    private int clickNum;
+
+    @Id
+    @Column(name = "ORDER_NO")
+    private String orderNo;
+
+    @Id
+    @Column(name = "PRODUCT_CODE")
+    private String productCode;
+
+    @Id
+    @Column(name = "REG_DAY")
+    private int regDay;
+
+    @Column(name = "REG_YM")
+    private int regYm;
+
+    @Column(name = "REG_HOUR")
+    private String regHour;
+
+    @Column(name = "MEMBER_ID")
+    private String memberId;
+
+    @Column(name = "AGENCY_ID")
+    private String agencyId;
+
+    @Column(name = "CAMPAIGN_NUM")
+    private String campaignNum;
+
+    @Column(name = "AFFLIATE_ID")
+    private String affliateId;
+
+    @Column(name = "ZONE_ID")
+    private String zoneId;
+
+    @Column(name = "SITE")
+    private String site;
+
+    @Column(name = "OS")
+    private String os;
+
+    @Column(name = "TYPE")
+    private String type;
+
+    @Column(name = "USER_ID")
+    private String userId;
+
+    @Column(name = "ADID")
+    private String adId;
+
+    @Column(name = "STATUS")
+    private int status;
+
+    @Column(name = "MEMBER_NAME")
+    private String memberName;
+
+    @Column(name = "PRODUCT_NAME")
+    private String productName;
+
+    @Column(name = "PRODUCT_CNT")
+    private int productCnt;
+
+    @Column(name = "PRODUCT_PRICE")
+    private int productPrice;
+
+    @Column(name = "TRANS_COMMENT")
+    private String transComment;
+
+    @Column(name = "CATEGORY")
+    private String category;
+
+    @Column(name = "COMMISSION")
+    private int commission;
+
+    @Column(name = "BASE_COMMISSION")
+    private String baseCommission;
+
+    @Column(name = "INCENTIVE_COMMISSION")
+    private String incentiveCommission;
+
+    @Column(name = "IP_ADDRESS")
+    private String ipAddress;
+
+    @CreatedDate
+    @Column(name = "REG_DATE")
+    private LocalDateTime regDate;
+
+    @LastModifiedDate
+    @Column(name = "MOD_DATE")
+    private LocalDateTime modDate;
+}

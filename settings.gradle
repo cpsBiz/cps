@@ -5,4 +5,6 @@ include 'agencyService'
 include 'agencyApi:linkPrice:click'
 include 'agencyApi:linkPrice:reward'
 include 'cpsViewApi'
+include 'agencyApi:dotPitch:click'
+include 'agencyApi:dotPitch:reward'
 

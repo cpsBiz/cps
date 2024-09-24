@@ -20,8 +20,6 @@ public class UserService {
 
 	private final AES256Utils aes256;
 
-	private final EntityManager em;
-
 	public CpsUserDto commonMemberDto(CpsUserEntity cpsUserEntity){
 		CpsUserDto cpsUserDto = new CpsUserDto();
 		cpsUserDto.setMemberId(cpsUserEntity.getMemberId());
@@ -66,7 +64,7 @@ public class UserService {
 	public CpsAgencyEntity cpsAgency(CpsUserPacket.UserInfo.UserCampaignRequest request){
 		CpsAgencyEntity cpsAgencyEntity = new CpsAgencyEntity();
 		cpsAgencyEntity.setAgencyId(request.getAgencyId());
-		cpsAgencyEntity.setMemberId(request.getMemberId());
+		cpsAgencyEntity.setMemberId("link_"+request.getMemberId());
 		cpsAgencyEntity.setRewardYn(request.getRewardYn());
 		cpsAgencyEntity.setMobileYn(request.getMobileYn());
 		cpsAgencyEntity.setReturnDay(request.getReturnDay());

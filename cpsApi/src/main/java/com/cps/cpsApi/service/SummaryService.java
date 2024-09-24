@@ -27,7 +27,6 @@ public class SummaryService {
 	 */
 	public GenericBaseResponse<SummaryDto> summaryCount(SummaryPacket.SummaryInfo.SummaryRequest request) throws Exception {
 		SummaryPacket.SummaryInfo.SummaryResponse response = new SummaryPacket.SummaryInfo.SummaryResponse();
-		List<SummaryDto> summaryList = new ArrayList<>();
 
 		if (null == request.getSubSearchType() || request.getSubSearchType().equals("")) {request.setSubSearchType(request.getSearchType());}
 
@@ -42,7 +41,7 @@ public class SummaryService {
 			}
 		}catch (Exception e){
 			response.setApiMessage(Constants.VIEW_SEARCH_EXCEPTION.getCode(), Constants.VIEW_SEARCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " summaryCount api  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + "summaryCount request : {}, exception : {}", request, e);
 		}
 		return response;
 	}

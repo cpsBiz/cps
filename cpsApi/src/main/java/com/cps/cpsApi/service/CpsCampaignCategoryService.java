@@ -45,7 +45,7 @@ public class CpsCampaignCategoryService {
 			response.setDatas(CpsCampaignCategoryDto);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CAMPAIGN_CATEGORY_EXCEPTION.getCode(), Constants.CAMPAIGN_CATEGORY_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " campaignCategory {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + " campaignCategory api request : {}, exception : {}", request, e);
 		}
 
 		return response;
@@ -70,7 +70,7 @@ public class CpsCampaignCategoryService {
 			response.setDatas(cpsCampaignCategoryEntityList);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CAMPAIGN_CATEGORY_SEARCH_EXCEPTION.getCode(), Constants.CAMPAIGN_CATEGORY_SEARCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " campaignCategorySearch api  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + "campaignCategorySearch api request : {}, exception : {}", request, e);
 		}
 
 		return response;

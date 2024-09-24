@@ -54,14 +54,11 @@ public class CpsClickEntity {
     @Column(name = "USER_ID")
     private String userId;
 
+    @Column(name = "ADID")
+    private String adId;
+
     @Column(name = "REWARD_YN")
     private String rewardYn = "N";
-
-    @Column(name = "CODE")
-    private String code = "4000";
-
-    @Column(name = "MESSAGE")
-    private String message = "클릭 캠페인 등록 오류";
 
     @Column(name = "IP_ADDRESS")
     private String ipAddress;

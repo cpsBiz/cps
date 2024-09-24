@@ -38,38 +38,9 @@ public class CpsScheduleService {
 			cpsViewScheduleRepository.insertSummaryClickDay(request.getMinute());
 		} catch (Exception e) {
 			response.setApiMessage(Constants.STAT_HOUR_EXCEPTION.getCode(), Constants.STAT_HOUR_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " summarySchedule service  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + " summarySchedule request : {}, exception : {}", request, e);
 		}
 		response.setDatas(null);
 		return response;
-	}
-
-
-
-
-
-
-
-
-	public List<CpsViewrDto> commonViewDto(List<CpsViewEntity> cpsViewEntityList){
-		List<CpsViewrDto> cpsViewrDtoList = new ArrayList<>();
-		cpsViewEntityList.forEach(view -> {
-			CpsViewrDto cpsViewrDto = new CpsViewrDto();
-			cpsViewrDto.setRegDay(view.getRegDay());
-			cpsViewrDto.setRegHour(view.getRegHour());
-			cpsViewrDto.setCampaignNum(view.getCampaignNum());
-			cpsViewrDto.setCampaignName(view.getCampaignName());
-			cpsViewrDto.setAffliateId(view.getAffliateId());
-			cpsViewrDto.setZoneId(view.getZoneId());
-			cpsViewrDto.setAgencyId(view.getAgencyId());
-			cpsViewrDto.setMemberId(view.getMemberId());
-			cpsViewrDto.setType(view.getType());
-			cpsViewrDto.setSite(view.getSite());
-			cpsViewrDto.setUserId(view.getUserId());
-			cpsViewrDto.setOs(view.getOs());
-			cpsViewrDto.setAdId(view.getAdId());
-			cpsViewrDtoList.add(cpsViewrDto);
-		});
-		return cpsViewrDtoList;
 	}
 }

@@ -98,7 +98,8 @@ public class CpsCampaignService {
 			response.setDatas(cpsCampaignList);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CAMPAIGN_SEARCH_EXCEPTION.getCode(), Constants.CAMPAIGN_SEARCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " campaignList api  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + "campaignList api request : {}, exception : {}", request, e);
+
 		}
 
 		return response;
