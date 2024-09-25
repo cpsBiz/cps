@@ -1,8 +1,8 @@
 package com.cps.cpsApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsApi.packet.CpsAffiliateCampaignPacket;
-import com.cps.cpsApi.service.CpsAffiliateCampaignService;
+import com.cps.cpsApi.packet.CpsCampaignCommissionPacket;
+import com.cps.cpsApi.service.CpsCampaignCommissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CpsAffiliateCampaignController {
+public class CpsCampaignCommissionController {
 
-    private final CpsAffiliateCampaignService cpsAffiliateCampaignService;
+    private final CpsCampaignCommissionService cpsCampaignCommissionService;
 
     /**
      * 매체 캠페인 승인
@@ -26,18 +26,18 @@ public class CpsAffiliateCampaignController {
      * @date 2024-09-12
      */
     @Operation(summary = "매체 캠페인 승인")
-    @PostMapping(value = "/affiliateCampaign")
-    public ResponseEntity<CpsAffiliateCampaignPacket.CpsAffiliateCampaignInfo.Response> affiliateCampaign(@Valid @RequestBody CpsAffiliateCampaignPacket.CpsAffiliateCampaignInfo.CpsAffiliateCampaignRequest request) throws Exception {
-        var result = new CpsAffiliateCampaignPacket.CpsAffiliateCampaignInfo.Response();
+    @PostMapping(value = "/campaignCommission")
+    public ResponseEntity<CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.Response> campaignCommission(@Valid @RequestBody CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.CpsAffiliateCampaignRequest request) throws Exception {
+        var result = new CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.Response();
 
         try {
-            var member = cpsAffiliateCampaignService.affiliateCampaign(request);
-            if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
+            var commission = cpsCampaignCommissionService.campaignCommission(request);
+            if (Constant.RESULT_CODE_SUCCESS.equals(commission.getResultCode())) {
                 result.setSuccess();
             } else {
-                result.setApiMessage(member.getResultCode(), member.getResultMessage());
+                result.setApiMessage(commission.getResultCode(), commission.getResultMessage());
             }
-            result.setDatas(member.getDatas());
+            result.setData(commission.getData());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             result.setError("affiliateCampaign Controller Error");

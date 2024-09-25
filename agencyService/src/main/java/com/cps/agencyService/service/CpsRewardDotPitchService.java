@@ -1,7 +1,7 @@
 package com.cps.agencyService.service;
 
+import com.cps.agencyService.dto.CommissionDto;
 import com.cps.agencyService.dto.RewardDotPitchDto;
-import com.cps.agencyService.entity.CpsClickEntity;
 import com.cps.agencyService.entity.CpsRewardEntity;
 import com.cps.agencyService.packet.CpsRewardDotPitchPacket;
 import com.cps.agencyService.repository.CpsClickRepository;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -36,10 +38,11 @@ public class CpsRewardDotPitchService {
 
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
-
+		
+		List<Integer> resultList = Collections.singletonList(Integer.parseInt(request.getR_Keyid()));
 		try {
-			CpsClickEntity cpsClickEntity = cpsClickRepository.findByClickNum(Integer.parseInt(request.getR_Keyid()));
-			if (cpsClickEntity != null) {
+			CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(request.getR_Keyid()));
+			if (commissionDto != null) {
 				cpsRewardEntity.setClickNum(Integer.parseInt(request.getR_Keyid()));
 				cpsRewardEntity.setOrderNo(request.getR_Ordid());
 				cpsRewardEntity.setProductCode(request.getR_Ordid());
@@ -54,21 +57,21 @@ public class CpsRewardDotPitchService {
 					String regHour = String.format("%02d", dateTime.getHour());  // 두 자리로 맞춰주기
 					cpsRewardEntity.setRegHour(regHour);
 				} else {
-					cpsRewardEntity.setRegDay(cpsClickEntity.getRegDay());
-					cpsRewardEntity.setRegYm(cpsClickEntity.getRegYm());
-					cpsRewardEntity.setRegHour(cpsClickEntity.getRegHour());
+					cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
+					cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
+					cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());
 				}
 
-				cpsRewardEntity.setMemberId("dot_"+cpsClickEntity.getMemberId());
-				cpsRewardEntity.setAgencyId(cpsClickEntity.getAgencyId());
-				cpsRewardEntity.setCampaignNum(cpsClickEntity.getCampaignNum());
-				cpsRewardEntity.setAffliateId(cpsClickEntity.getAffliateId());
-				cpsRewardEntity.setZoneId(cpsClickEntity.getZoneId());
-				cpsRewardEntity.setSite(cpsClickEntity.getSite());
-				cpsRewardEntity.setOs(cpsClickEntity.getOs());
-				cpsRewardEntity.setType(cpsClickEntity.getType());
-				cpsRewardEntity.setUserId(cpsClickEntity.getUserId());
-				cpsRewardEntity.setAdId(cpsClickEntity.getAdId());
+				cpsRewardEntity.setMemberId(commissionDto.getCpsClickEntity().getMemberId());
+				cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
+				cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
+				cpsRewardEntity.setAffliateId(commissionDto.getCpsClickEntity().getAffliateId());
+				cpsRewardEntity.setZoneId(commissionDto.getCpsClickEntity().getZoneId());
+				cpsRewardEntity.setSite(commissionDto.getCpsClickEntity().getSite());
+				cpsRewardEntity.setOs(commissionDto.getCpsClickEntity().getOs());
+				cpsRewardEntity.setType(commissionDto.getCpsClickEntity().getType());
+				cpsRewardEntity.setUserId(commissionDto.getCpsClickEntity().getUserId());
+				cpsRewardEntity.setAdId(commissionDto.getCpsClickEntity().getAdId());
 				cpsRewardEntity.setStatus(100);
 				if (!request.getR_Gubun().equals("GMV")) {
 					cpsRewardEntity.setStatus(300);
@@ -77,13 +80,31 @@ public class CpsRewardDotPitchService {
 				cpsRewardEntity.setProductName(request.getR_ProdNm());
 				cpsRewardEntity.setProductCnt(request.getR_Quantity());
 				cpsRewardEntity.setProductPrice(request.getR_OrdPrice());
-				cpsRewardEntity.setCommission(request.getR_CommRate());
+
+				int commission = request.getR_CommRate();
+				double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
+				double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
+
+				//커미션 매출
+				cpsRewardEntity.setCommission(commission);
+				//커미션 순이익 (커미션 매출 - 매체 커미션)
+				cpsRewardEntity.setCommissionProfit(commission - (int) (commission * memberCommissionShareDouble));
+				//매체 커미션 (커미션 매출 * 매체쉐어)
+				cpsRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
+				//유저 커미션 (매체 커미션 * 유저쉐어)
+				cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
+
+				cpsRewardEntity.setCommissionRate(String.valueOf(request.getCommRate()));
+				cpsRewardEntity.setBaseCommission("0");
+				cpsRewardEntity.setIncentiveCommission("0");
 				cpsRewardEntity.setIpAddress(ipAddress);
 
 				if (null == cpsRewardRepository.save(cpsRewardEntity)) {
 					response.setApiMessage(Constants.DOTPITCH_EXCEPTION.getCode(), Constants.DOTPITCH_EXCEPTION.getValue());
 					return response;
-				} else {
+				} else {					
+					//클릭 테이블 리워드 상태로 업데이트
+					cpsClickRepository.updateRewardYnByClickNumList("R", resultList);
 					RewardDotPitchDto rewardDotPitchDto = new RewardDotPitchDto();
 					response.setSuccess();
 					response.setData(rewardDotPitchDto);
@@ -94,7 +115,7 @@ public class CpsRewardDotPitchService {
 			}
 		} catch (Exception e) {
 			response.setApiMessage(Constants.DOTPITCH_EXCEPTION.getCode(), Constants.DOTPITCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " dotPitch request : {}, exception : {}", request, e);
+			log.error(Constant.EXCEPTION_MESSAGE + " dotPitch realTime request : {}, exception : {}", request, e);
 		}
 
 		return response;

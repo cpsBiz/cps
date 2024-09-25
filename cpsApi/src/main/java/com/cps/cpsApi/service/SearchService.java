@@ -117,25 +117,79 @@ public class SearchService {
 
 		// Select 및 Group By 설정
 		if ("DAY".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("regDay"), cb.literal("DAY"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("regDay"));
+			cq = createSummaryQuery(cb, cq, root, "DAY", "regDay", root.get("regDay"));
 		} else if ("MONTH".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("regYm"), cb.literal("MONTH"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("regYm"));
+			cq = createSummaryQuery(cb, cq, root, "MONTH", "regDay", root.get("regYm"));
 		} else if ("MEMBER".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("memberId"), root.get("memberName"), cb.literal("MEMBER"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("memberId"), root.get("memberName"));
+			cq = createSummaryQuery(cb, cq, root, "MEMBER", "memberId", root.get("memberId"), root.get("memberName"));
 		} else if ("CAMPAIGN".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("campaignNum"), root.get("campaignName"), cb.literal("CAMPAIGN"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("campaignNum"));
+			cq = createSummaryQuery(cb, cq, root, "CAMPAIGN", "campaignNum", root.get("campaignNum"), root.get("campaignName"));
 		} else if ("AFFLIATE".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("affliateId"), root.get("affliateName"), cb.literal("AFFLIATE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("affliateId"));
+			cq = createSummaryQuery(cb, cq, root, "AFFLIATE", "affliateId", root.get("affliateId"), root.get("affliateName"));
 		} else if ("SITE".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("site"), root.get("site"), cb.literal("SITE"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("site"));
+			cq = createSummaryQuery(cb, cq, root, "SITE", "site", root.get("site"), root.get("site"));
 		} else if ("MEMBERAGC".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("agencyId"), root.get("agencyName"), cb.literal("MEMBERAGC"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("agencyId"), root.get("agencyName"));
+			cq = createSummaryQuery(cb, cq, root, "MEMBERAGC", "agencyId", root.get("agencyId"), root.get("agencyName"));
 		} else if ("MEMBERAFF".equals(request.getSubSearchType())) {
-			cq.select(cb.construct(SummaryDto.class, root.get("agencyId"), root.get("agencyName"), cb.literal("MEMBERAFF"), cb.sum(root.get("cnt")), cb.sum(root.get("clickCnt")))).groupBy(root.get("agencyId"), root.get("agencyName"));
+			cq = createSummaryQuery(cb, cq, root, "MEMBERAFF", "agencyId", root.get("agencyId"), root.get("agencyName"));
 		}
 
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
 		TypedQuery<SummaryDto> query = em.createQuery(cq);
 		return query.getResultList();
+	}
+
+	private <T> CriteriaQuery<SummaryDto> createSummaryQuery(CriteriaBuilder cb, CriteriaQuery<SummaryDto> cq, Root<T> root, String subSearchType, String groupByField, Expression<?>... additionalFields) {
+		Expression<String> subSearchTypeLiteral = cb.literal(subSearchType); // 서브 검색 타입 리터럴
+		Expression<Long> sumCnt = cb.sum(root.get("cnt"));
+		Expression<Long> sumClickCnt = cb.sum(root.get("clickCnt"));
+		Expression<Long> rewardCnt = cb.sum(root.get("rewardCnt"));
+		Expression<Long> confirmRewardCnt = cb.sum(root.get("confirmRewardCnt"));
+		Expression<Long> cancelRewardCnt = cb.sum(root.get("cancelRewardCnt"));
+		Expression<Long> productPrice = cb.sum(root.get("productPrice"));
+		Expression<Long> confirmProductPrice = cb.sum(root.get("confirmProductPrice"));
+		Expression<Long> cancelProductPrice = cb.sum(root.get("cancelProductPrice"));
+		Expression<Long> commission = cb.sum(root.get("commission"));
+		Expression<Long> confirmCommission = cb.sum(root.get("confirmCommission"));
+		Expression<Long> cancelCommission = cb.sum(root.get("cancelCommission"));
+		Expression<Long> commissionProfit = cb.sum(root.get("commissionProfit"));
+		Expression<Long> confirmCommissionProfit = cb.sum(root.get("confirmCommissionProfit"));
+		Expression<Long> cancelCommissionProfit = cb.sum(root.get("cancelCommissionProfit"));
+		Expression<Long> affliateCommission = cb.sum(root.get("affliateCommission"));
+		Expression<Long> confirmAffliateCommission = cb.sum(root.get("confirmAffliateCommission"));
+		Expression<Long> cancelAffliateCommission = cb.sum(root.get("cancelAffliateCommission"));
+		Expression<Long> userCommission = cb.sum(root.get("userCommission"));
+		Expression<Long> confirmUserCommission = cb.sum(root.get("confirmUserCommission"));
+		Expression<Long> cancelUserCommission = cb.sum(root.get("cancelUserCommission"));
+
+		// 공통 construct 구조에 필요한 필드 추가
+		cq.select(cb.construct(
+				SummaryDto.class,
+				additionalFields[0],
+				additionalFields.length > 1 ? additionalFields[1] : subSearchTypeLiteral,
+				subSearchTypeLiteral,
+				sumCnt,
+				sumClickCnt,
+				rewardCnt,
+				confirmRewardCnt,
+				cancelRewardCnt,
+				productPrice,
+				confirmProductPrice,
+				cancelProductPrice,
+				commission,
+				confirmCommission,
+				cancelCommission,
+				commissionProfit,
+				confirmCommissionProfit,
+				cancelCommissionProfit,
+				affliateCommission,
+				confirmAffliateCommission,
+				cancelAffliateCommission,
+				userCommission,
+				confirmUserCommission,
+				cancelUserCommission
+		)).groupBy(root.get(groupByField));
+
+		return cq;
 	}
 }

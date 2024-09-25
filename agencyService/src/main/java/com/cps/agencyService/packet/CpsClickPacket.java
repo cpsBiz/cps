@@ -20,9 +20,7 @@ public class CpsClickPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class ClickRequest {
-            @NotBlank(message = "campaignNum 확인")
-            @Size(max=20, message="20자 이내로 입력")
-            private String campaignNum;
+            private int campaignNum;
             @NotBlank(message = "affliateId 확인")
             private String affliateId;
             @NotBlank(message = "zoneId 확인")

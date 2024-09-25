@@ -58,6 +58,60 @@ public class SummaryDayEntity {
     @Column(name = "CLICK_CNT")
     private int clickCnt;
 
+    @Column(name = "REWARD_CNT")
+    private int rewardCnt;
+
+    @Column(name = "CONFIRM_REWARD_CNT")
+    private int confirmRewardCnt;
+
+    @Column(name = "CANCEL_REWARD_CNT")
+    private int cancelRewardCnt;
+
+    @Column(name = "PRODUCT_PRICE")
+    private int productPrice;
+
+    @Column(name = "CONFIRM_PRODUCT_PRICE")
+    private int confirmProductPrice;
+
+    @Column(name = "CANCEL_PRODUCT_PRICE")
+    private int cancelProductPrice;
+
+    @Column(name = "COMMISSION")
+    private int commission;
+
+    @Column(name = "COMFIRM_COMMISSION")
+    private int confirmCommission;
+
+    @Column(name = "CANCEL_COMMISSION")
+    private int cancelCommission;
+
+    @Column(name = "COMMISSION_PROFIT")
+    private int commissionProfit;
+
+    @Column(name = "COMFIRM_COMMISSION_PROFIT")
+    private int confirmCommissionProfit;
+
+    @Column(name = "CANCEL_COMMISSION_PROFIT")
+    private int cancelCommissionProfit;
+
+    @Column(name = "AFFLIATE_COMMISSION")
+    private int affliateCommission;
+
+    @Column(name = "COMFIRM_AFFLIATE_COMMISSION")
+    private int confirmAffliateCommission;
+
+    @Column(name = "CANCEL_AFFLIATE_COMMISSION")
+    private int cancelAffliateCommission;
+
+    @Column(name = "USER_COMMISSION")
+    private int userCommission;
+
+    @Column(name = "COMFIRM_USER_COMMISSION")
+    private int confirmUserCommission;
+
+    @Column(name = "CANCEL_USER_COMMISSION")
+    private int cancelUserCommission;
+
     @Column(name = "CAMPAIGN_NAME")
     private String campaignName;
 

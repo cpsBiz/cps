@@ -43,7 +43,7 @@ public class CpsRewardEntity {
     private String agencyId;
 
     @Column(name = "CAMPAIGN_NUM")
-    private String campaignNum;
+    private int campaignNum;
 
     @Column(name = "AFFLIATE_ID")
     private String affliateId;
@@ -90,6 +90,18 @@ public class CpsRewardEntity {
     @Column(name = "COMMISSION")
     private int commission;
 
+    @Column(name = "COMMISSION_PROFIT")
+    private int commissionProfit;
+
+    @Column(name = "AFFLIATE_COMMISSION")
+    private int affliateCommission;
+
+    @Column(name = "USER_COMMISSION")
+    private int userCommission;
+
+    @Column(name = "COMMISSION_RATE")
+    private String commissionRate;
+
     @Column(name = "BASE_COMMISSION")
     private String baseCommission;
 
@@ -100,7 +112,7 @@ public class CpsRewardEntity {
     private String ipAddress;
 
     @CreatedDate
-    @Column(name = "REG_DATE")
+    @Column(name = "REG_DATE", updatable = false)
     private LocalDateTime regDate;
 
     @LastModifiedDate

@@ -28,7 +28,7 @@ public class CpsClickEntity {
     private String regHour;
 
     @Column(name = "CAMPAIGN_NUM")
-    private String campaignNum;
+    private int campaignNum;
 
     @Column(name = "AFFLIATE_ID")
     private String affliateId;
@@ -58,13 +58,13 @@ public class CpsClickEntity {
     private String adId;
 
     @Column(name = "REWARD_YN")
-    private String rewardYn = "N";
+    private String rewardYn;
 
     @Column(name = "IP_ADDRESS")
     private String ipAddress;
 
     @CreatedDate
-    @Column(name = "REG_DATE")
+    @Column(name = "REG_DATE", updatable = false)
     private LocalDateTime regDate;
 
     @LastModifiedDate

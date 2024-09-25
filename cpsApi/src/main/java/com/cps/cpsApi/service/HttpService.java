@@ -51,40 +51,76 @@ public class HttpService extends BaseHttpService {
         CpsRewardPacket.RewardInfo.DotPitchListResponse responseObj = new CpsRewardPacket.RewardInfo.DotPitchListResponse();
         try{
             var result = this.GetAsync(domain, request, String.class);
-            /*
+
             String json = "{\n" +
                     "  \"searchDate\": \"20240101\",\n" +
                     "  \"result\": \"OK\",\n" +
                     "  \"listData\": [\n" +
                     "    {\n" +
-                    "      \"orderid\": \"12312111111111\",\n" +
+                    "      \"orderid\": \"20240924001\",\n" +
                     "      \"m_name\": \"11번가\",\n" +
                     "      \"aff_id\": \"test1\",\n" +
                     "      \"p_name\": \"테스트상품1\",\n" +
                     "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"3650732\",\n" +
-                    "      \"comm\": 175234,\n" +
+                    "      \"price\": \"10000\",\n" +
+                    "      \"comm\": 1000,\n" +
                     "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"40\",\n" +
+                    "      \"a_info\": \"51\",\n" +
                     "      \"order_flag\": \"확정\"\n" +
                     "    },\n" +
                     "    {\n" +
-                    "      \"orderid\": \"12312111111111\",\n" +
+                    "      \"orderid\": \"20240924002\",\n" +
                     "      \"m_name\": \"11번가\",\n" +
                     "      \"aff_id\": \"test1\",\n" +
                     "      \"p_name\": \"테스트상품1\",\n" +
                     "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"3650732\",\n" +
-                    "      \"comm\": 175234,\n" +
+                    "      \"price\": \"20000\",\n" +
+                    "      \"comm\": 2000,\n" +
                     "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"44\",\n" +
+                    "      \"a_info\": \"54\",\n" +
+                    "      \"order_flag\": \"확정\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"orderid\": \"20240924003\",\n" +
+                    "      \"m_name\": \"11번가\",\n" +
+                    "      \"aff_id\": \"test1\",\n" +
+                    "      \"p_name\": \"테스트상품1\",\n" +
+                    "      \"quantity\": \"7\",\n" +
+                    "      \"price\": \"30000\",\n" +
+                    "      \"comm\": 3000,\n" +
+                    "      \"commission_rate\": \"80\",\n" +
+                    "      \"a_info\": \"55\",\n" +
+                    "      \"order_flag\": \"확정\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"orderid\": \"20240924004\",\n" +
+                    "      \"m_name\": \"11번가\",\n" +
+                    "      \"aff_id\": \"test1\",\n" +
+                    "      \"p_name\": \"테스트상품1\",\n" +
+                    "      \"quantity\": \"7\",\n" +
+                    "      \"price\": \"40000\",\n" +
+                    "      \"comm\": 4000,\n" +
+                    "      \"commission_rate\": \"80\",\n" +
+                    "      \"a_info\": \"59\",\n" +
+                    "      \"order_flag\": \"확정\"\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      \"orderid\": \"20240924005\",\n" +
+                    "      \"m_name\": \"11번가\",\n" +
+                    "      \"aff_id\": \"test1\",\n" +
+                    "      \"p_name\": \"테스트상품1\",\n" +
+                    "      \"quantity\": \"7\",\n" +
+                    "      \"price\": \"50000\",\n" +
+                    "      \"comm\": 5000,\n" +
+                    "      \"commission_rate\": \"80\",\n" +
+                    "      \"a_info\": \"60\",\n" +
                     "      \"order_flag\": \"확정\"\n" +
                     "    }\n" +
                     "  ]\n" +
                     "}";
-            */
+
             // listData 유무 체크
-            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> responseMap = new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("listData")) {
                 Object listData = responseMap.get("listData");
                 if (listData instanceof List && !((List<?>) listData).isEmpty()) {

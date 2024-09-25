@@ -1,8 +1,7 @@
 package com.cps.cpsApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsApi.dto.CpsAffiliateCampaignDto;
-import com.cps.cpsApi.entity.CpsViewEntity;
+import com.cps.cpsApi.dto.CpsCampaignCommissionDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,23 +12,23 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
-public class CpsAffiliateCampaignPacket {
+public class CpsCampaignCommissionPacket {
 
     public static class CpsAffiliateCampaignInfo {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class CpsAffiliateCampaignRequest {
-            @NotBlank(message = "affiliateId 확인")
-            private String affiliateId;
-            @NotBlank(message = "memberId 확인")
-            private String memberId;
             private int campaignNum;
+            @NotBlank(message = "affiliateId 확인")
+            private String memberId;
             private String status;
+            private int memberCommissionShare;
+            private int userCommissionShare;
         }
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class Response extends GenericBaseResponse<CpsAffiliateCampaignDto> {}
+        public static class Response extends GenericBaseResponse<CpsCampaignCommissionDto> {}
     }
 }

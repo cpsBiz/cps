@@ -30,12 +30,15 @@ public class CpsScheduleService {
 		try {
 			//노출 전체 데이터 시간별 합계
 			cpsViewScheduleRepository.insertSummaryViewHour(request.getMinute());
-			//노출 전체 데이터 일별 합계
-			cpsViewScheduleRepository.insertSummaryViewDay(request.getMinute());
 			//클릭 전체 데이터 시간별 합계
 			cpsViewScheduleRepository.insertSummaryClickHour(request.getMinute());
+			//리워드 전체 데이터 시간별 합계
+			cpsViewScheduleRepository.insertSummaryRewardHour(request.getMinute());
+			//노출 전체 데이터 일별 합계
+			cpsViewScheduleRepository.insertSummaryViewDay(request.getMinute());
 			//클릭 전체 데이터 일별 합계
-			cpsViewScheduleRepository.insertSummaryClickDay(request.getMinute());
+			//cpsViewScheduleRepository.insertSummaryClickDay(request.getMinute());
+
 		} catch (Exception e) {
 			response.setApiMessage(Constants.STAT_HOUR_EXCEPTION.getCode(), Constants.STAT_HOUR_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " summarySchedule request : {}, exception : {}", request, e);

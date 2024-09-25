@@ -11,23 +11,25 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@IdClass(CpsAffiliateCampaignPk.class)
-@Table(name = "CPS_AFFILIATE_CAMPAIGN")
-public class CpsAffilateCampaignEntity {
+@IdClass(CpsCampaignCommissionPk.class)
+@Table(name = "CPS_CAMPAIGN_COMMISSION")
+public class CpsCampaignCommissionEntity {
     @Id
-    @Column(name = "AFFILIATE_ID", updatable = false, nullable = false)
-    private String affiliateId;
+    @Column(name = "CAMPAIGN_NUM", updatable = false, nullable = false)
+    private int campaignNum;
 
     @Id
     @Column(name = "MEMBER_ID", updatable = false, nullable = false)
     private String memberId;
 
-    @Id
-    @Column(name = "CAMPAIGN_NUM", updatable = false, nullable = false)
-    private int campaignNum;
-
     @Column(name = "STATUS")
     private String status;
+
+    @Column(name = "MEMBER_COMMISSION_SHARE")
+    private int memberCommissionShare;
+
+    @Column(name = "USER_COMMISSION_SHARE")
+    private int userCommissionShare;
 
     @CreatedDate
     @Column(name = "REG_DATE", updatable = false)

@@ -50,7 +50,7 @@ public class DotPitchScheduleManager {
     /**
      * 도트피치 매출내역 호출 스케줄
      */
-    @Scheduled(cron = "50 48 * * * *")
+    @Scheduled(cron = "0 0 13 6 * *")
     public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> dotPitchRewardMonthSchedule() throws Exception {
         var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
         CpsRewardPacket.RewardInfo.DotPitchRequest request = new CpsRewardPacket.RewardInfo.DotPitchRequest();

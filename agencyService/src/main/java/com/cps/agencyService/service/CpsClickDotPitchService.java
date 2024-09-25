@@ -59,27 +59,27 @@ public class CpsClickDotPitchService {
 			cpsClickEntity.setRewardYn("N");
 			cpsClickEntity.setIpAddress(ipAddress);
 
-			if (null == cpsClickRepository.save(cpsClickEntity)) {
-				response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
-				return response;
-			} else {
-				if (!"".equals(pfCode(request.getSite()))) {
-					CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest clickRequest = new CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest();
-					clickRequest.setPf_code(pfCode(request.getSite()));
-					clickRequest.setKeyid(String.valueOf(cpsClickEntity.getClickNum()));
-					clickRequest.setTurl(site("https://www.11st.co.kr/products/7584400564?trTypeCd=22&trCtgrNo=895019", request.getMemberId()));
-					String outputUrl = String.format("?pf_code=%s&keyid=%s&turl=%s", clickRequest.getPf_code(), clickRequest.getKeyid(), clickRequest.getTurl());
-
-					ClickDto clickDto = new ClickDto();
-					clickDto.setClickNum(cpsClickEntity.getClickNum());
-					clickDto.setClickUrl(dotpitchClickDomain + outputUrl);
-
-					response.setSuccess();
-					response.setData(clickDto);
-				} else {
-					response.setApiMessage(Constants.CLICK_PFCODE_EXCEPTION.getCode(), Constants.CLICK_PFCODE_EXCEPTION.getValue());
+			if (!"".equals(pfCode(request.getSite()))) {
+				if (null == cpsClickRepository.save(cpsClickEntity)) {
+					response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
 					return response;
+				} else {
+						CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest clickRequest = new CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest();
+						clickRequest.setPf_code(pfCode(request.getSite()));
+						clickRequest.setKeyid(String.valueOf(cpsClickEntity.getClickNum()));
+						clickRequest.setTurl(site("https://www.11st.co.kr/products/2744617875?trTypeCd=03&trCtgrNo=2151825", request.getMemberId()));
+						String outputUrl = String.format("?pf_code=%s&keyid=%s&turl=%s", clickRequest.getPf_code(), clickRequest.getKeyid(), clickRequest.getTurl());
+
+						ClickDto clickDto = new ClickDto();
+						clickDto.setClickNum(cpsClickEntity.getClickNum());
+						clickDto.setClickUrl(dotpitchClickDomain + outputUrl);
+
+						response.setSuccess();
+						response.setData(clickDto);
 				}
+			} else {
+				response.setApiMessage(Constants.CLICK_PFCODE_EXCEPTION.getCode(), Constants.CLICK_PFCODE_EXCEPTION.getValue());
+				return response;
 			}
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
@@ -108,7 +108,7 @@ public class CpsClickDotPitchService {
 					.findFirst()
 					.orElse("");
 		} catch (Exception e) {
-			log.error(Constant.EXCEPTION_MESSAGE + " pfCode site : {}, exception : {}", site, e);
+			log.error(Constant.EXCEPTION_MESSAGE + " pfCode : {}, exception : {}", site, e);
 			return "";
 		}
 	}
