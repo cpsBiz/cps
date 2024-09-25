@@ -4,6 +4,7 @@ import com.cps.agencyService.dto.CommissionDto;
 import com.cps.agencyService.dto.RewardDto;
 import com.cps.agencyService.entity.CpsRewardEntity;
 import com.cps.agencyService.packet.CpsRewardDotPitchPacket;
+import com.cps.agencyService.packet.CpsRewardLinkPricePacket;
 import com.cps.agencyService.repository.CpsClickRepository;
 import com.cps.agencyService.repository.CpsRewardRepository;
 import com.cps.common.constant.Constant;
@@ -14,15 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CpsRewardDotPitchService {
+public class CpsRewardLinkPriceService {
 
 	private final CpsClickRepository cpsClickRepository;
 
@@ -30,32 +29,27 @@ public class CpsRewardDotPitchService {
 
 	/**
 	 * 클릭정보 실시간 저장
-	 * @date 2024-09-23
+	 * @date 2024-09-25
 	 */
-	public GenericBaseResponse<RewardDto> realTime(CpsRewardDotPitchPacket.RewardInfo.RealTimeRequest request) throws Exception {
+	public GenericBaseResponse<RewardDto> realTime(CpsRewardLinkPricePacket.RewardInfo.RealTimeRequest request) throws Exception {
 		CpsRewardDotPitchPacket.RewardInfo.RewardResponse response = new CpsRewardDotPitchPacket.RewardInfo.RewardResponse();
 		CpsRewardEntity cpsRewardEntity = new CpsRewardEntity();
 
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
 		
-		List<Integer> resultList = Collections.singletonList(Integer.parseInt(request.getR_Keyid()));
+		List<Integer> resultList = Collections.singletonList(Integer.parseInt(request.getTrlog_id()));
 		try {
-			CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(request.getR_Keyid()));
+			CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(request.getTrlog_id()));
 			if (commissionDto != null) {
-				cpsRewardEntity.setClickNum(Integer.parseInt(request.getR_Keyid()));
-				cpsRewardEntity.setOrderNo(request.getR_Ordid());
-				cpsRewardEntity.setProductCode(request.getR_Ordid());
+				cpsRewardEntity.setClickNum(Integer.parseInt(request.getTrlog_id()));
+				cpsRewardEntity.setOrderNo(request.getOrder_code());
+				cpsRewardEntity.setProductCode(request.getProduct_code());
 
-				if (null != request.getR_Date()) {
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-					LocalDateTime dateTime = LocalDateTime.parse(request.getR_Date(), formatter);
-					int regDay = dateTime.getYear() * 10000 + dateTime.getMonthValue() * 100 + dateTime.getDayOfMonth();
-					cpsRewardEntity.setRegDay(regDay);
-					int regYm = dateTime.getYear() * 100 + dateTime.getMonthValue();
-					cpsRewardEntity.setRegYm(regYm);
-					String regHour = String.format("%02d", dateTime.getHour());  // 두 자리로 맞춰주기
-					cpsRewardEntity.setRegHour(regHour);
+				if (null != request.getDay()) {
+					cpsRewardEntity.setRegDay(Integer.parseInt(request.getDay()));
+					cpsRewardEntity.setRegYm(Integer.parseInt(request.getDay().substring(0,6)));
+					cpsRewardEntity.setRegHour(request.getTime().substring(0,2));
 				} else {
 					cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
 					cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
@@ -73,15 +67,13 @@ public class CpsRewardDotPitchService {
 				cpsRewardEntity.setUserId(commissionDto.getCpsClickEntity().getUserId());
 				cpsRewardEntity.setAdId(commissionDto.getCpsClickEntity().getAdId());
 				cpsRewardEntity.setStatus(100);
-				if (!request.getR_Gubun().equals("GMV")) {
-					cpsRewardEntity.setStatus(300);
-				}
-				cpsRewardEntity.setMemberName(request.getR_Mid());
-				cpsRewardEntity.setProductName(request.getR_ProdNm());
-				cpsRewardEntity.setProductCnt(request.getR_Quantity());
-				cpsRewardEntity.setProductPrice(request.getR_OrdPrice());
 
-				int commission = request.getR_CommRate();
+				cpsRewardEntity.setMemberName(commissionDto.getMemberName());
+				cpsRewardEntity.setProductName(request.getProduct_name());
+				cpsRewardEntity.setProductCnt(request.getItem_count());
+				cpsRewardEntity.setProductPrice(request.getPrice());
+
+				int commission = request.getCommision();
 				double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
 				double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
 
@@ -94,7 +86,7 @@ public class CpsRewardDotPitchService {
 				//유저 커미션 (매체 커미션 * 유저쉐어)
 				cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
 
-				cpsRewardEntity.setCommissionRate(String.valueOf(request.getCommRate()));
+				cpsRewardEntity.setCommissionRate(request.getBase_commission());
 				cpsRewardEntity.setBaseCommission("0");
 				cpsRewardEntity.setIncentiveCommission("0");
 				cpsRewardEntity.setIpAddress(ipAddress);
@@ -110,12 +102,12 @@ public class CpsRewardDotPitchService {
 					response.setData(rewardDto);
 				}
 			} else {
-				response.setApiMessage(Constants.DOTPITCH_BLANK.getCode(), Constants.DOTPITCH_BLANK.getValue());
+				response.setApiMessage(Constants.LINKPRICE_BLANK.getCode(), Constants.LINKPRICE_BLANK.getValue());
 				return response;
 			}
 		} catch (Exception e) {
-			response.setApiMessage(Constants.DOTPITCH_EXCEPTION.getCode(), Constants.DOTPITCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " dotPitch realTime request : {}, exception : {}", request, e);
+			response.setApiMessage(Constants.LINKPRICE_EXCEPTION.getCode(), Constants.LINKPRICE_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " linkPrice realTime request : {}, exception : {}", request, e);
 		}
 
 		return response;

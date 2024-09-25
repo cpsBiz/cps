@@ -1,6 +1,6 @@
 package com.cps.agencyService.packet;
 
-import com.cps.agencyService.dto.RewardDotPitchDto;
+import com.cps.agencyService.dto.RewardDto;
 import com.cps.common.model.GenericBaseResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -50,6 +50,6 @@ public class CpsRewardDotPitchPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class RewardResponse extends GenericBaseResponse<RewardDotPitchDto> {}
+        public static class RewardResponse extends GenericBaseResponse<RewardDto> {}
     }
 }

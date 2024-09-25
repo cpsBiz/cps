@@ -64,7 +64,7 @@ public class CpsClickLinkPriceService {
 				ClickDto clickDto = new ClickDto();
 				clickDto.setClickNum(cpsClickEntity.getClickNum());
 
-				String domain = "https://click.linkprice.com/click.php";
+				String domain = linkPriceClickDomain+linkPriceClickEndPoint;
 				CpsLinkPriceClickPacket.CpsLinkPriceClickInfo.CpsLinkPriceClickRequest clickRequest = new CpsLinkPriceClickPacket.CpsLinkPriceClickInfo.CpsLinkPriceClickRequest();
 				clickRequest.setU_id(String.valueOf(cpsClickEntity.getClickNum()));
 				clickRequest.setM(cpsClickEntity.getMemberId().replace("link_",""));
@@ -76,7 +76,7 @@ public class CpsClickLinkPriceService {
 			}
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " memberSignIn request : {}, exception : {}", request, e);
+			log.error(Constant.EXCEPTION_MESSAGE + " campaignClick request : {}, exception : {}", request, e);
 		}
 
 		return response;

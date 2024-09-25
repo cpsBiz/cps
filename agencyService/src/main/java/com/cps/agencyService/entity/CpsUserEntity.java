@@ -1,4 +1,4 @@
-package com.cps.cpsApi.entity;
+package com.cps.agencyService.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

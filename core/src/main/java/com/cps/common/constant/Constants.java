@@ -53,7 +53,11 @@ public enum Constants {
 
     DOTPITCH_EXCEPTION("9000", "도트피치 리워드 데이터 등록 오류"),
     DOTPITCH_BLANK("9001", "도트피치 정보가 없습니다."),
-    DOTPITCH_NOT_SEARCH("9010", "등록 할 도트피치 정보가 없습니다.");
+    DOTPITCH_NOT_SEARCH("9010", "등록 할 도트피치 정보가 없습니다."),
+
+    LINKPRICE_EXCEPTION("9100", "링크프라이스 리워드 데이터 등록 오류"),
+    LINKPRICE_BLANK("9101", "링크프라이스 정보가 없습니다."),
+    LINKPRICE_NOT_SEARCH("9110", "등록 할 링크프라이스 정보가 없습니다.");
 
     private String code;
     private String value;

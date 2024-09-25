@@ -1,7 +1,9 @@
 package com.cps.rewardLinkPrice.controller;
 
 import com.cps.agencyService.packet.CpsClickPacket;
+import com.cps.agencyService.packet.CpsRewardLinkPricePacket;
 import com.cps.agencyService.service.CpsClickLinkPriceService;
+import com.cps.agencyService.service.CpsRewardLinkPriceService;
 import com.cps.common.constant.Constant;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -16,22 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ClickController {
+public class RewardController {
 
-    private final CpsClickLinkPriceService cpsClickLinkPriceService;
+    private final CpsRewardLinkPriceService cpsRewardLinkPriceService;
 
     /**
-     * 캠페인 클릭
+     * 링크 실시간 API
      *
-     * @date 2024-09-04
+     * @date 2024-09-25
      */
-    @Operation(summary = "캠페인 클릭", description = "")
-    @PostMapping(value = "/campaignClick")
-    public ResponseEntity<CpsClickPacket.ClickInfo.Response> campaignClick(@Valid @RequestBody CpsClickPacket.ClickInfo.ClickRequest request) throws Exception {
-        var result = new CpsClickPacket.ClickInfo.Response();
+    @Operation(summary = "링크 실시간 API", description = "")
+    @PostMapping(value = "/realTime")
+    public ResponseEntity<CpsRewardLinkPricePacket.RewardInfo.RewardResponse> realTime(@Valid @RequestBody CpsRewardLinkPricePacket.RewardInfo.RealTimeRequest request) throws Exception {
+        var result = new CpsRewardLinkPricePacket.RewardInfo.RewardResponse();
 
         try {
-            var click = cpsClickLinkPriceService.campaignClick(request);
+            var click = cpsRewardLinkPriceService.realTime(request);
 
             if (Constant.RESULT_CODE_SUCCESS.equals(click.getResultCode())) {
                 result.setSuccess();
