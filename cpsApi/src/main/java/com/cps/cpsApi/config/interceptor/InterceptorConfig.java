@@ -29,9 +29,9 @@ public class InterceptorConfig implements WebMvcConfigurer  {
 						"http://localhost",
 						"http://127.0.0.1",
 						"http://localhost:8001",
-						"https://180.67.204,124",
-						"https://180.67.204.119",
-						"https://180.67.204.120",
+						"http://180.67.204,124",
+						"http://180.67.204.119",
+						"http://180.67.204.120",
 						"http://10.251.1.161:8090",
 						"http://10.251.1.162:8090",
 						"https://api.commsad.com")

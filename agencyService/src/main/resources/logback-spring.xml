@@ -132,7 +132,7 @@
     <logger name="com.cps.common.filter.HttpLoggingFilter" level="INFO" additivity="false">
         <appender-ref ref="HTTP_LOG"/>
     </logger>
-    <springProfile name = "local">
+    <springProfile name="!prod">
     <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="ERROR"/>

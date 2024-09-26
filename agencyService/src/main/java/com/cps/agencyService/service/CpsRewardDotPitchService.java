@@ -81,7 +81,7 @@ public class CpsRewardDotPitchService {
 				cpsRewardEntity.setProductCnt(request.getR_Quantity());
 				cpsRewardEntity.setProductPrice(request.getR_OrdPrice());
 
-				int commission = request.getR_CommRate();
+				int commission = request.getR_CommPrice();
 				double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
 				double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
 
@@ -94,7 +94,7 @@ public class CpsRewardDotPitchService {
 				//유저 커미션 (매체 커미션 * 유저쉐어)
 				cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
 
-				cpsRewardEntity.setCommissionRate(String.valueOf(request.getCommRate()));
+				cpsRewardEntity.setCommissionRate(String.valueOf(request.getR_CommRate()));
 				cpsRewardEntity.setBaseCommission("0");
 				cpsRewardEntity.setIncentiveCommission("0");
 				cpsRewardEntity.setIpAddress(ipAddress);
