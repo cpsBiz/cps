@@ -59,40 +59,36 @@ public class RewardController {
 
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // 문자열 파라미터를 가져오는 메서드
     private String getStringParam(Map<String, Object> params, String key) {
         Object value = params.get(key);
-        return value != null ? String.valueOf(value) : null; // null일 경우 null 반환
+        return value != null ? String.valueOf(value) : null;
     }
 
-    // 정수 파라미터를 가져오는 메서드
     private int getIntParam(Map<String, Object> params, String key, int defaultValue) {
         Object value = params.get(key);
         if (value != null) {
             try {
                 return Integer.parseInt(String.valueOf(value));
             } catch (NumberFormatException e) {
-                // 숫자 형 변환 실패 시 기본값 반환
+                log.error("getIntParam : {} " + e);
             }
         }
-        return defaultValue; // null이거나 형 변환 실패 시 기본값 반환
+        return defaultValue;
     }
 
-    // 부동 소수점 파라미터를 가져오는 메서드
     private float getFloatParam(Map<String, Object> params, String key, float defaultValue) {
         Object value = params.get(key);
         if (value != null) {
             try {
                 return Float.parseFloat(String.valueOf(value));
             } catch (NumberFormatException e) {
-                // 숫자 형 변환 실패 시 기본값 반환
+                log.error("getFloatParam : {} " + e);
             }
         }
-        return defaultValue; // null이거나 형 변환 실패 시 기본값 반환
+        return defaultValue;
     }
 }

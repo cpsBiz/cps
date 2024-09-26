@@ -38,11 +38,11 @@ public class CpsRewardLinkPriceService {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
 		
-		List<Integer> resultList = Collections.singletonList(Integer.parseInt(request.getTrlog_id()));
+		List<Integer> resultList = Collections.singletonList(request.getAffiliate_user_id());
 		try {
-			CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(request.getTrlog_id()));
+			CommissionDto commissionDto = cpsClickRepository.findClickCommission(request.getAffiliate_user_id());
 			if (commissionDto != null) {
-				cpsRewardEntity.setClickNum(Integer.parseInt(request.getTrlog_id()));
+				cpsRewardEntity.setClickNum(request.getAffiliate_user_id());
 				cpsRewardEntity.setOrderNo(request.getOrder_code());
 				cpsRewardEntity.setProductCode(request.getProduct_code());
 
@@ -87,8 +87,8 @@ public class CpsRewardLinkPriceService {
 				cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
 
 				cpsRewardEntity.setCommissionRate(request.getBase_commission());
-				cpsRewardEntity.setBaseCommission("0");
-				cpsRewardEntity.setIncentiveCommission("0");
+				cpsRewardEntity.setBaseCommission(request.getBase_commission());
+				cpsRewardEntity.setIncentiveCommission(request.getIncentive_commission());
 				cpsRewardEntity.setIpAddress(ipAddress);
 
 				if (null == cpsRewardRepository.save(cpsRewardEntity)) {

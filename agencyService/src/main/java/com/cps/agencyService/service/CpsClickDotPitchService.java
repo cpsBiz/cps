@@ -54,19 +54,20 @@ public class CpsClickDotPitchService {
 			cpsClickEntity.setMemberId(request.getMemberId());
 			cpsClickEntity.setType(request.getType());
 			cpsClickEntity.setSite(request.getSite());
+			cpsClickEntity.setClickUrl(request.getClickUrl());
 			cpsClickEntity.setOs(request.getOs());
 			cpsClickEntity.setUserId(request.getUserId());
 			cpsClickEntity.setAdId(request.getAdId());
 			cpsClickEntity.setRewardYn("N");
 			cpsClickEntity.setIpAddress(ipAddress);
 
-			if (!"".equals(pfCode(request.getSite()))) {
+			if (!"".equals(pfCode(request.getClickUrl()))) {
 				if (null == cpsClickRepository.save(cpsClickEntity)) {
 					response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
 					return response;
 				} else {
 						CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest clickRequest = new CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest();
-						clickRequest.setPf_code(pfCode(request.getSite()));
+						clickRequest.setPf_code(pfCode(request.getClickUrl()));
 						clickRequest.setKeyid(String.valueOf(cpsClickEntity.getClickNum()));
 						//clickRequest.setTurl(site("https://www.11st.co.kr/products/2744617875?trTypeCd=03&trCtgrNo=2151825", request.getMemberId()));
 						String outputUrl = String.format("?pf_code=%s&keyid=%s", clickRequest.getPf_code(), clickRequest.getKeyid());

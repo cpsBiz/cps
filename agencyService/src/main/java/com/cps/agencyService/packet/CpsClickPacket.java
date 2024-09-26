@@ -31,6 +31,7 @@ public class CpsClickPacket {
             private String memberId;
             private String type;
             private String site;
+            private String clickUrl;
             private String os;
             @NotBlank(message = "userId 확인")
             private String userId;

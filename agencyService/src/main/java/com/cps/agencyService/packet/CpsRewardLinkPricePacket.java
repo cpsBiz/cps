@@ -35,7 +35,7 @@ public class CpsRewardLinkPricePacket {
             private int price;
             private int commision;
             private String affiliate_id;
-            private String affiliate_user_id;
+            private int affiliate_user_id;
             private String trlog_id;
             private String base_commission;
             private String incentive_commission;

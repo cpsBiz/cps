@@ -1,8 +1,6 @@
 package com.cps.rewardLinkPrice.controller;
 
-import com.cps.agencyService.packet.CpsClickPacket;
 import com.cps.agencyService.packet.CpsRewardLinkPricePacket;
-import com.cps.agencyService.service.CpsClickLinkPriceService;
 import com.cps.agencyService.service.CpsRewardLinkPriceService;
 import com.cps.common.constant.Constant;
 import io.swagger.v3.oas.annotations.Operation;

@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class SummaryDto {
-    private String keywordType;
+
+    private String keyWord;
+    private String keyWordName;
     private int cnt;
     private int clickCnt;
     private int rewardCnt;
@@ -26,16 +28,9 @@ public class SummaryDto {
     private int confirmUserCommission;
     private int cancelUserCommission;
 
-    private String keyword;
-    private String keywordName;
-
-    private int regStart;
-    private int regEnd;
-
-    public SummaryDto(int regDay, String keywordType, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int memberCommissionShare, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
-        this.regStart = regDay;
-        this.regEnd = regDay;
-        this.keywordType = keywordType;
+    public SummaryDto(int keyWord, int searchKeyName, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int memberCommissionShare, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
+        this.keyWord = String.valueOf(keyWord);
+        this.keyWordName = String.valueOf(keyWord);
         this.cnt = cnt;
         this.clickCnt = clickCnt;
         this.rewardCnt = rewardCnt;
@@ -58,36 +53,9 @@ public class SummaryDto {
         this.cancelUserCommission = cancelUserCommission;
     }
 
-    public SummaryDto(String keyword, String searchName, String keywordType, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int memberCommissionShare, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
-        this.keyword = keyword;
-        this.keywordName = searchName;
-        this.keywordType = keywordType;
-        this.cnt = cnt;
-        this.clickCnt = clickCnt;
-        this.rewardCnt = rewardCnt;
-        this.confirmRewardCnt = confirmRewardCnt;
-        this.cancelRewardCnt = cancelRewardCnt;
-        this.productPrice = productPrice;
-        this.confirmProductPrice = confirmProductPrice;
-        this.cancelProductPrice = cancelProductPrice;
-        this.commission = commission;
-        this.confirmCommission = confirmCommission;
-        this.cancelCommission = cancelCommission;
-        this.commissionProfit = commissionProfit;
-        this.confirmCommissionProfit = confirmCommissionProfit;
-        this.cancelCommissionProfit = cancelCommissionProfit;
-        this.memberCommissionShare = memberCommissionShare;
-        this.confirmAffliateCommission = confirmAffliateCommission;
-        this.cancelAffliateCommission = cancelAffliateCommission;
-        this.userCommission = userCommission;
-        this.confirmUserCommission = confirmUserCommission;
-        this.cancelUserCommission = cancelUserCommission;
-    }
-
-    public SummaryDto(int campaignNum, String campaignName, String keywordType, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int memberCommissionShare, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
-        this.keyword = String.valueOf(campaignNum);
-        this.keywordName = campaignName;
-        this.keywordType = keywordType;
+    public SummaryDto(int keyWord, String keyWordName, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int memberCommissionShare, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
+        this.keyWord = String.valueOf(keyWord);
+        this.keyWordName = keyWordName;
         this.cnt = cnt;
         this.clickCnt = clickCnt;
         this.rewardCnt = rewardCnt;

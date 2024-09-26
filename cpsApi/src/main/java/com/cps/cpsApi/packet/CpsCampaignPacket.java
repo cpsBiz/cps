@@ -28,6 +28,7 @@ public class CpsCampaignPacket {
             private String campaignName;
             private String campaignStart;
             private String campaignEnd;
+            private String url;
             private String clickUrl;
             private String category;
             private String logo;

@@ -47,6 +47,9 @@ public class CpsViewEntity {
     @Column(name = "SITE")
     private String site;
 
+    @Column(name = "CLICK_URL")
+    private String clickUrl;
+
     @Column(name = "OS")
     private String os;
 

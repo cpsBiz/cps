@@ -33,6 +33,9 @@ public class CpsCampaignEntity {
     @Column(name = "CAMPAIGN_END")
     private String campaignEnd;
 
+    @Column(name = "URL")
+    private String url;
+
     @Column(name = "CLICK_URL")
     private String clickUrl;
 

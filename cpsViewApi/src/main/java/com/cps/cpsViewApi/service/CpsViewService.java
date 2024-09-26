@@ -63,14 +63,15 @@ public class CpsViewService {
 			cpsViewEntity.setCampaignName((String) result[3]);
 			cpsViewEntity.setAgencyId((String) result[4]);
 			cpsViewEntity.setMemberId((String) result[5]);
-			cpsViewEntity.setType((String) result[6]);
-			cpsViewEntity.setAffliateId((String) result[7]);
-			cpsViewEntity.setZoneId((String) result[8]);
-			cpsViewEntity.setSite((String) result[9]);
-			cpsViewEntity.setUserId((String) result[10]);
-			cpsViewEntity.setAdId((String) result[11]);
+			cpsViewEntity.setClickUrl((String) result[6]);
+			cpsViewEntity.setType((String) result[7]);
+			cpsViewEntity.setAffliateId((String) result[8]);
+			cpsViewEntity.setZoneId((String) result[9]);
+			cpsViewEntity.setSite((String) result[10]);
+			cpsViewEntity.setUserId((String) result[11]);
+			cpsViewEntity.setAdId((String) result[12]);
+			cpsViewEntity.setOs(Character.toString((Character) result[13]));
 			cpsViewEntity.setIpAddress(finalIpAddress);
-			cpsViewEntity.setOs(Character.toString((Character) result[12]));
 			return cpsViewEntity;
 		}).collect(Collectors.toList());
 	}

@@ -68,8 +68,12 @@ public class SearchService {
 		// 날짜 조건 필수
 		if ("MONTH".equals(request.getDayType())) {
 			predicates.add(cb.between(root.get("regYm"), request.getRegStart(), request.getRegEnd()));
-		} else {
+		} else if ("DAY".equals(request.getDayType())) {
 			predicates.add(cb.between(root.get("regDay"), request.getRegStart(), request.getRegEnd()));
+		} else if ("EQMONTH".equals(request.getDayType())) {
+			predicates.add(cb.equal(root.get("regYm"), request.getKeyword()));
+		} else {
+			predicates.add(cb.equal(root.get("regDay"), request.getKeyword()));
 		}
 
 		// 영역
@@ -88,50 +92,42 @@ public class SearchService {
 				predicates.add(cb.like(root.get("site"), "%" + request.getKeyword() + "%"));
 			}
 			if ("CAMPAIGN".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
-				predicates.add(cb.like(root.get("campaignName"), "%" + request.getKeyword() + "%"));
+				Predicate campaignName = cb.like(root.get("campaignName"), "%" + request.getKeyword() + "%");
+				Predicate campaignId = cb.like(root.get("campaignId"), "%" + request.getKeyword() + "%");
+				predicates.add(cb.or(campaignName, campaignId));
 			}
 			if ("AFFLIATE".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
 				predicates.add(cb.like(root.get("affliateId"), "%" + request.getKeyword() + "%"));
 			}
 
-			//상세검색
-			if ("MEMBER_LIST".equals(request.getKeywordType())) {
+			if ("EQMEMBER".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("memberId"), request.getKeyword()));
-			}
-			if ("SITE_LIST".equals(request.getKeywordType())) {
+			} else if ("EQSITE".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("site"), request.getKeyword()));
-			}
-			if ("CAMPAIGN_LIST".equals(request.getKeywordType())) {
+			} else if ("EQCAMPAIGN".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("campaignNum"), request.getKeyword()));
-			}
-			if ("AFFLIATE_LIST".equals(request.getKeywordType())) {
+			} else if ("EQAFFLIATE".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("affliateId"), request.getKeyword()));
-			}
-			if ("MEMBERAGC_LIST".equals(request.getKeywordType())) {
-				predicates.add(cb.equal(root.get("agencyId"), request.getKeyword()));
-			}
-			if ("MEMBERAFF_LIST".equals(request.getKeywordType())) {
-				predicates.add(cb.equal(root.get("agencyId"), request.getKeyword()));
 			}
 		}
 
 		// Select 및 Group By 설정
-		if ("DAY".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "DAY", "regDay", root.get("regDay"));
-		} else if ("MONTH".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "MONTH", "regDay", root.get("regYm"));
-		} else if ("MEMBER".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "MEMBER", "memberId", root.get("memberId"), root.get("memberName"));
-		} else if ("CAMPAIGN".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "CAMPAIGN", "campaignNum", root.get("campaignNum"), root.get("campaignName"));
-		} else if ("AFFLIATE".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "AFFLIATE", "affliateId", root.get("affliateId"), root.get("affliateName"));
-		} else if ("SITE".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "SITE", "site", root.get("site"), root.get("site"));
-		} else if ("MEMBERAGC".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "MEMBERAGC", "agencyId", root.get("agencyId"), root.get("agencyName"));
-		} else if ("MEMBERAFF".equals(request.getSubSearchType())) {
-			cq = createSummaryQuery(cb, cq, root, "MEMBERAFF", "agencyId", root.get("agencyId"), root.get("agencyName"));
+		if ("DAY".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "regDay", root.get("regDay"), root.get("regDay"));
+		} else if ("MONTH".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "regDay", root.get("regYm"), root.get("regYm"));
+		} else if ("MEMBER".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "memberId", root.get("memberId"), root.get("memberName"));
+		} else if ("CAMPAIGN".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "campaignNum", root.get("campaignNum"), root.get("campaignName"));
+		} else if ("AFFLIATE".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "affliateId", root.get("affliateId"), root.get("affliateName"));
+		} else if ("SITE".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root, "site", root.get("site"), root.get("site"));
+		} else if ("MEMBERAGC".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "agencyId", root.get("agencyId"), root.get("agencyName"));
+		} else if ("MEMBERAFF".equals(request.getSearchType())) {
+			cq = createSummaryQuery(cb, cq, root,  "agencyId", root.get("agencyId"), root.get("agencyName"));
 		}
 
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
@@ -139,8 +135,7 @@ public class SearchService {
 		return query.getResultList();
 	}
 
-	private <T> CriteriaQuery<SummaryDto> createSummaryQuery(CriteriaBuilder cb, CriteriaQuery<SummaryDto> cq, Root<T> root, String subSearchType, String groupByField, Expression<?>... additionalFields) {
-		Expression<String> subSearchTypeLiteral = cb.literal(subSearchType); // 서브 검색 타입 리터럴
+	private <T> CriteriaQuery<SummaryDto> createSummaryQuery(CriteriaBuilder cb, CriteriaQuery<SummaryDto> cq, Root<T> root, String groupByField, Expression<?>... additionalFields) {
 		Expression<Long> sumCnt = cb.sum(root.get("cnt"));
 		Expression<Long> sumClickCnt = cb.sum(root.get("clickCnt"));
 		Expression<Long> rewardCnt = cb.sum(root.get("rewardCnt"));
@@ -166,8 +161,7 @@ public class SearchService {
 		cq.select(cb.construct(
 				SummaryDto.class,
 				additionalFields[0],
-				additionalFields.length > 1 ? additionalFields[1] : subSearchTypeLiteral,
-				subSearchTypeLiteral,
+				additionalFields.length > 1 ? additionalFields[1] : cb.literal(null),
 				sumCnt,
 				sumClickCnt,
 				rewardCnt,

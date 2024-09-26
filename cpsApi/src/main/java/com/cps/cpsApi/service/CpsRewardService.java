@@ -86,6 +86,7 @@ public class CpsRewardService {
 							cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
 							cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());
 						}
+
 						cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
 						cpsRewardEntity.setMemberId(commissionDto.getCpsClickEntity().getMemberId());
 						cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
@@ -106,6 +107,7 @@ public class CpsRewardService {
 							}
 							rewardYn.set("Y"); //구매 확정 취소 여부 확인 완료
 						}
+
 						cpsRewardEntity.setMemberName(dot.getM_name());
 						cpsRewardEntity.setProductName(dot.getP_name());
 						cpsRewardEntity.setProductCnt(Integer.parseInt(dot.getQuantity()));
@@ -181,18 +183,27 @@ public class CpsRewardService {
 
 					//조회 성공 응답 코드가 아닌 경우
 					if (!dotPitchResponseList.getResult().equals("0")) {
-						log.error("linkPriceReward pageEnd : {}, result : {}", i, dotPitchResponseList.getResult());
 						//정상 페이지 호출이 아닌 경우
 						if (dotPitchResponseList.getResult().equals("101")) {
 							break;
+						} else if (dotPitchResponseList.getResult().equals("100")) {
+							log.error("linkPriceReward 100 : {}, result : {}", i, "A코드 (사이트코드)(a_id) 없음");
+						} else if (dotPitchResponseList.getResult().equals("200")) {
+							log.error("linkPriceReward 100 : {}, result : {}", i, "조회일자(yyyymmdd) 없음");
+						} else if (dotPitchResponseList.getResult().equals("210")) {
+							log.error("linkPriceReward 100 : {}, result : {}", i, "조회일자(yyyymmdd) 길이 오류");
+						} else if (dotPitchResponseList.getResult().equals("300")) {
+							log.error("linkPriceReward 100 : {}, result : {}", i, "인증키(auth_key)가 맞지 않음");
+						} else if (dotPitchResponseList.getResult().equals("400")) {
+							log.error("linkPriceReward 100 : {}, result : {}", i, "통화단위(currency)를 지원하지 않음");
 						}
 					}
 
 					dotPitchResponseList.getOrder_list().forEach(link -> {
-						CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(link.getTrlog_id()));
+						CommissionDto commissionDto = cpsClickRepository.findClickCommission(link.getUser_id());
 						if (null != commissionDto) {
 							CpsRewardEntity cpsRewardEntity = new CpsRewardEntity();
-							cpsRewardEntity.setClickNum(Integer.parseInt(link.getTrlog_id()));
+							cpsRewardEntity.setClickNum(link.getUser_id());
 							cpsRewardEntity.setOrderNo(link.getO_cd());
 							cpsRewardEntity.setProductCode(link.getP_cd());
 

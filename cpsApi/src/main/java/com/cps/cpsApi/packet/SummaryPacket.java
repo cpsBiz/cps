@@ -29,7 +29,6 @@ public class SummaryPacket {
             private String searchType; //일반 검색 구분 (일별 DAY, 월별 MON, 광고주 MEMBER, 캠페인 CAMPAIGN, 사이트 SITE, 광고주 대행사 AGC, 매체 대행사 AGC2, 매체 : AFL)
             private String os; //영역 검색 구분
             private String cancelYn;  //상태 검색 구분
-            private String subSearchType; //일반 검색 구분 (일별 DAY, 월별 MON, 광고주 MEMBER, 캠페인 CAMPAIGN, 사이트 SITE, 광고주 대행사 AGC, 매체 대행사 AGC2, 매체 : AFL)
 
             private String keywordType;
             private String keyword;

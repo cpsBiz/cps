@@ -28,13 +28,12 @@ public class SummaryService {
 	public GenericBaseResponse<SummaryDto> summaryCount(SummaryPacket.SummaryInfo.SummaryRequest request) throws Exception {
 		SummaryPacket.SummaryInfo.SummaryResponse response = new SummaryPacket.SummaryInfo.SummaryResponse();
 
-		if (null == request.getSubSearchType() || request.getSubSearchType().equals("")) {request.setSubSearchType(request.getSearchType());}
-
 		try {
 			//노출
 			List<SummaryDto> summaryDayList = searchService.summarySearch(request);
 			if (summaryDayList.size() > 0) {
 				response.setSuccess();
+
 				response.setDatas(summaryDayList);
 			} else {
 				response.setApiMessage(Constants.VIEW_BLANK.getCode(), Constants.VIEW_BLANK.getValue());
