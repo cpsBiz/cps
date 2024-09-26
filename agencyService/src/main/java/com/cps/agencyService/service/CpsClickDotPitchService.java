@@ -56,6 +56,7 @@ public class CpsClickDotPitchService {
 			cpsClickEntity.setSite(request.getSite());
 			cpsClickEntity.setOs(request.getOs());
 			cpsClickEntity.setUserId(request.getUserId());
+			cpsClickEntity.setAdId(request.getAdId());
 			cpsClickEntity.setRewardYn("N");
 			cpsClickEntity.setIpAddress(ipAddress);
 
@@ -67,8 +68,8 @@ public class CpsClickDotPitchService {
 						CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest clickRequest = new CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest();
 						clickRequest.setPf_code(pfCode(request.getSite()));
 						clickRequest.setKeyid(String.valueOf(cpsClickEntity.getClickNum()));
-						clickRequest.setTurl(site("https://www.11st.co.kr/products/2744617875?trTypeCd=03&trCtgrNo=2151825", request.getMemberId()));
-						String outputUrl = String.format("?pf_code=%s&keyid=%s&turl=%s", clickRequest.getPf_code(), clickRequest.getKeyid(), clickRequest.getTurl());
+						//clickRequest.setTurl(site("https://www.11st.co.kr/products/2744617875?trTypeCd=03&trCtgrNo=2151825", request.getMemberId()));
+						String outputUrl = String.format("?pf_code=%s&keyid=%s", clickRequest.getPf_code(), clickRequest.getKeyid());
 
 						ClickDto clickDto = new ClickDto();
 						clickDto.setClickNum(cpsClickEntity.getClickNum());

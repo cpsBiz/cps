@@ -181,4 +181,82 @@ public class HttpService extends BaseHttpService {
         }
         return response.toString();
     }
+
+    //링크프라이스 실적조회
+    public CpsRewardPacket.RewardInfo.LinkPriceListResponse SendLinkPriceReward(String domain, CpsRewardPacket.RewardInfo.LinkPriceRequest request) {
+        CpsRewardPacket.RewardInfo.LinkPriceListResponse responseObj = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
+        try{
+            var result = this.PostAsync(domain, request, String.class);
+            String json = "{"
+                    + "\"result\": \"0\","
+                    + "\"list_count\": 2,"
+                    + "\"order_list\": ["
+                    + "    {"
+                    + "        \"trlog_id\": \"18000406750585\","
+                    + "        \"m_id\": \"clickbuy\","
+                    + "        \"o_cd\": \"recover_231019_182249\","
+                    + "        \"p_cd\": \"recover_231019_182249\","
+                    + "        \"p_nm\": \"pn_recover_5\","
+                    + "        \"it_cnt\": \"1\","
+                    + "        \"user_id\": \"u_id_recover_5\","
+                    + "        \"status\": \"100\","
+                    + "        \"c_cd\": \"test_c_cd\","
+                    + "        \"create_time_stamp\": \"20231020\","
+                    + "        \"applied_pgm_id\": \"0038\","
+                    + "        \"yyyymmdd\": \"20231017\","
+                    + "        \"hhmiss\": \"000000\","
+                    + "        \"trans_comment\": \"\","
+                    + "        \"sales\": 39900,"
+                    + "        \"commission\": 1,"
+                    + "        \"pgm_name\": \"tt_mo\","
+                    + "        \"is_pc\": \"mobile\","
+                    + "        \"pur_rate\": \"1원\""
+                    + "    },"
+                    + "    {"
+                    + "        \"trlog_id\": \"18000406750586\","
+                    + "        \"m_id\": \"clickbuy\","
+                    + "        \"o_cd\": \"recover_231019_182243\","
+                    + "        \"p_cd\": \"recover_231019_182243\","
+                    + "        \"p_nm\": \"pn_recover_4\","
+                    + "        \"it_cnt\": \"1\","
+                    + "        \"user_id\": \"u_id_recover_4\","
+                    + "        \"status\": \"100\","
+                    + "        \"c_cd\": \"test_c_cd\","
+                    + "        \"create_time_stamp\": \"20231020\","
+                    + "        \"applied_pgm_id\": \"0038\","
+                    + "        \"yyyymmdd\": \"20231017\","
+                    + "        \"hhmiss\": \"000000\","
+                    + "        \"trans_comment\": \"\","
+                    + "        \"sales\": 39900,"
+                    + "        \"commission\": 1,"
+                    + "        \"pgm_name\": \"tt_mo\","
+                    + "        \"is_pc\": \"mobile\","
+                    + "        \"pur_rate\": \"1원\""
+                    + "    }"
+                    + "]"
+                    + "}";
+
+            // order_list 유무 체크
+            Map<String, Object> responseMap = new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
+            if (responseMap.containsKey("order_list")) {
+                Object orderList = responseMap.get("order_list");
+                if (orderList instanceof List && !((List<?>) orderList).isEmpty()) {
+                    // order_list LinkData 리스트로 변환
+                    List<CpsRewardPacket.RewardInfo.LinkData> linkDataList = new ObjectMapper().convertValue(orderList, new TypeReference<List<CpsRewardPacket.RewardInfo.LinkData>>() {});
+                    // LinkPriceListResponse 객체 생성
+                    responseObj = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
+                    responseObj.setList_count((String) responseMap.get("list_count"));
+                    responseObj.setResult((String) responseMap.get("result"));
+                    responseObj.setOrder_list(linkDataList);
+                }
+            }
+            return responseObj;
+        } catch (Exception ex) {
+            log.error(Constant.EXCEPTION_MESSAGE + " SendLinkPriceReward request : {}, exception : {}", request, ex);
+            CpsRewardPacket.RewardInfo.LinkPriceListResponse errorResult = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
+            errorResult.setResult("9999");
+            errorResult.setOrder_list(null);
+            return errorResult;
+        }
+    }
 }

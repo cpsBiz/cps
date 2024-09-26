@@ -25,7 +25,7 @@ public class CpsUserPacket {
             private String memberId;
             @NotBlank(message = "memberPw 확인")
             private String memberPw;
-            private String companyName;
+            private String memberName;
             private String type;
             private String businessType;
             private String agencyId;
@@ -91,7 +91,7 @@ public class CpsUserPacket {
         public static class MemberSearcgRequest {
             private String memberId;
             private String managerId;
-            private String companyName;
+            private String memberName;
             private String type;
             private String status;
             private String managerName;

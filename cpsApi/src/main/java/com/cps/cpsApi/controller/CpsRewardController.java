@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -64,26 +66,54 @@ public class CpsRewardController {
 
         try {
             for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                //취소
-                request.setSearch_type("c");
-                request.setSearch_date(date.format(formatter));
-                var cancel = cpsRewardService.dotPitchReward(request);
-                if (Constant.RESULT_CODE_SUCCESS.equals(cancel.getResultCode())) {
-                    result.setSuccess();
-                } else {
-                    result.setApiMessage(cancel.getResultCode(), cancel.getResultMessage());
+                List<String> depthList = Arrays.asList("c", "o");
+                for (String depth : depthList) {
+                    request.setSearch_type(depth);
+                    request.setSearch_date(date.format(formatter));
+                    var reward = cpsRewardService.dotPitchReward(request);
+                    if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                        result.setSuccess();
+                    } else {
+                        result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                    }
+                    result.setData(reward.getData());
                 }
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("userSignIn Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-                //확정
-                request.setSearch_type("o");
-                request.setSearch_date(date.format(formatter));
-                var reward = cpsRewardService.dotPitchReward(request);
-                if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
-                    result.setSuccess();
-                } else {
-                    result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+    /**
+     * 링크프라이스 확정, 취소내역 호출
+     *
+     * @date 2024-09-23
+     */
+    @Operation(summary = "링크프라이스 확정, 취소내역 호출 (6일)")
+    @PostMapping(value = "/linkPrice/rewardMonth")
+    public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> linkPriceRewardMonth(@Valid @RequestBody CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+        LocalDate today = LocalDate.parse(request.getYyyymmdd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate startDate = today.minusMonths(2).withDayOfMonth(6);
+        LocalDate endDate = today.minusMonths(1).withDayOfMonth(6);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        try {
+            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+                List<String> depthList = Arrays.asList("N", "Y");
+                for (String depth : depthList) {
+                    request.setCancel_flag(depth);
+                    request.setYyyymmdd(date.format(formatter));
+                    var reward = cpsRewardService.linkPriceReward(request);
+                    if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                        result.setSuccess();
+                    } else {
+                        result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                    }
+                    result.setData(reward.getData());
                 }
-                result.setData(reward.getData());
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {

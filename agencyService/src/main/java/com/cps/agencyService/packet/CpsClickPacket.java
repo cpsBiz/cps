@@ -34,6 +34,7 @@ public class CpsClickPacket {
             private String os;
             @NotBlank(message = "userId 확인")
             private String userId;
+            private String adId;
         }
 
         @Data

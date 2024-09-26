@@ -22,7 +22,7 @@ public class CpsDotPitchClickPacket {
         public static class DotPitchClickRequest {
             private String pf_code;
             private String keyid;
-            private String turl;
+            //private String turl;
         }
 
         @Data

@@ -25,15 +25,19 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CpsRewardService {
-	@Value("${dotPitch.domain.url}") String dorPriceDomain;
+	@Value("${dotPitch.domain.url}") String dotPitchDomain;
 
-	@Value("${dotPitch.reco.cps.url}") String dorPriceCpsEndPoint;
+	@Value("${dotPitch.reco.cps.url}") String dotPitchCpsEndPoint;
 
-	@Value("${dotPitch.reco.order.url}") String dorPriceOrderEndPoint;
+	@Value("${dotPitch.reco.order.url}") String dotPitchOrderEndPoint;
 
 	@Value("${dotPitch.id}") String dotPitchId;
 
 	@Value("${dotPitch.pw}") String dotPtichPw;
+
+	@Value("${linkPrice.domain.url}") String linkPriceDomain;
+
+	@Value("${linkPrice.domain.reward.url}") String linkPriceReward;
 
 	private final HttpService httpService;
 
@@ -49,9 +53,9 @@ public class CpsRewardService {
 		CpsRewardPacket.RewardInfo.DotPitchResponse response = new CpsRewardPacket.RewardInfo.DotPitchResponse();
 		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
 
-		String endPoint = dorPriceCpsEndPoint;
-		if(null != request.getSearch_type()){endPoint = dorPriceOrderEndPoint;}
-		String domain = dorPriceDomain + endPoint;
+		String endPoint = dotPitchCpsEndPoint;
+		if(null != request.getSearch_type()){endPoint = dotPitchOrderEndPoint;}
+		String domain = dotPitchDomain + endPoint;
 
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
@@ -154,6 +158,119 @@ public class CpsRewardService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.DOTPITCH_EXCEPTION.getCode(), Constants.DOTPITCH_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " dotPitchReward api request : {}, entity : {}, exception : {}", request, cpsRewardEntityList, e);
+		}
+		return response;
+	}
+
+	/**
+	 * 링크프라이스 실적조회 호출
+	 * @date 2024-09-25
+	 */
+	public GenericBaseResponse<DotPitchRewardDto> linkPriceReward(CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
+		CpsRewardPacket.RewardInfo.DotPitchResponse response = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
+		String domain = linkPriceDomain + linkPriceReward;
+
+		InetAddress inetAddress = InetAddress.getLocalHost();
+		String ipAddress = inetAddress.getHostAddress();
+
+		try {
+			for (int i = 1; i <= 20; i++) {
+				CpsRewardPacket.RewardInfo.LinkPriceListResponse dotPitchResponseList = httpService.SendLinkPriceReward(domain, request);
+				if (dotPitchResponseList.getOrder_list() != null) {
+
+					//조회 성공 응답 코드가 아닌 경우
+					if (!dotPitchResponseList.getResult().equals("0")) {
+						log.error("linkPriceReward pageEnd : {}, result : {}", i, dotPitchResponseList.getResult());
+						//정상 페이지 호출이 아닌 경우
+						if (dotPitchResponseList.getResult().equals("101")) {
+							break;
+						}
+					}
+
+					dotPitchResponseList.getOrder_list().forEach(link -> {
+						CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(link.getTrlog_id()));
+						if (null != commissionDto) {
+							CpsRewardEntity cpsRewardEntity = new CpsRewardEntity();
+							cpsRewardEntity.setClickNum(Integer.parseInt(link.getTrlog_id()));
+							cpsRewardEntity.setOrderNo(link.getO_cd());
+							cpsRewardEntity.setProductCode(link.getP_cd());
+
+							if (null != link.getYyyymmdd()) {
+								cpsRewardEntity.setRegDay(Integer.parseInt(link.getYyyymmdd()));
+								cpsRewardEntity.setRegYm(Integer.parseInt(link.getYyyymmdd().substring(0, 6)));
+								cpsRewardEntity.setRegHour(link.getYyyymmdd().substring(0, 2));
+							} else {
+								cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
+								cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
+								cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());
+							}
+
+							cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
+							cpsRewardEntity.setMemberId(commissionDto.getCpsClickEntity().getMemberId());
+							cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
+							cpsRewardEntity.setAffliateId(commissionDto.getCpsClickEntity().getAffliateId());
+							cpsRewardEntity.setZoneId(commissionDto.getCpsClickEntity().getZoneId());
+							cpsRewardEntity.setSite(commissionDto.getCpsClickEntity().getSite());
+							cpsRewardEntity.setOs(commissionDto.getCpsClickEntity().getOs());
+							cpsRewardEntity.setType(commissionDto.getCpsClickEntity().getType());
+							cpsRewardEntity.setUserId(commissionDto.getCpsClickEntity().getUserId());
+							cpsRewardEntity.setAdId(commissionDto.getCpsClickEntity().getAdId());
+							cpsRewardEntity.setStatus(link.getStatus());
+
+							cpsRewardEntity.setMemberName(commissionDto.getMemberName());
+							cpsRewardEntity.setProductName(link.getP_nm());
+							cpsRewardEntity.setProductCnt(Integer.parseInt(link.getIt_cnt()));
+							cpsRewardEntity.setProductPrice(Integer.parseInt(link.getSales()));
+
+							int commission = link.getCommission();
+							double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
+							double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
+
+							//커미션 매출
+							cpsRewardEntity.setCommission(commission);
+							//커미션 순이익 (커미션 매출 - 매체 커미션)
+							cpsRewardEntity.setCommissionProfit(commission - (int) (commission * memberCommissionShareDouble));
+							//매체 커미션 (커미션 매출 * 매체쉐어)
+							cpsRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
+							//유저 커미션 (매체 커미션 * 유저쉐어)
+							cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
+							cpsRewardEntity.setCommissionRate("0");
+
+							cpsRewardEntity.setBaseCommission("0");
+							cpsRewardEntity.setIncentiveCommission("0");
+							cpsRewardEntity.setIpAddress(ipAddress);
+							cpsRewardEntityList.add(cpsRewardEntity);
+
+							if (cpsRewardEntityList.size() == 1000) {
+								//링크프라이스 리워드 저장
+								cpsRewardRepository.saveAll(cpsRewardEntityList);
+
+								//링크프라이스 CLICK REWARD 업데이트
+								cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+								response.setSuccess();
+
+								cpsRewardEntityList.clear();
+							}
+						}
+					});
+
+					if (cpsRewardEntityList.size() > 0) {
+						//링크프라이스 리워드 저장
+						cpsRewardRepository.saveAll(cpsRewardEntityList);
+						//링크프라이스 CLICK 업데이트
+						cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+						response.setSuccess();
+					}
+
+				} else {
+					response.setApiMessage(Constants.LINKPRICE_BLANK.getCode(), Constants.LINKPRICE_BLANK.getValue());
+					return response;
+				}
+			}
+		} catch (Exception e) {
+			response.setApiMessage(Constants.LINKPRICE_EXCEPTION.getCode(), Constants.LINKPRICE_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " linkPriceReward api request : {}, entity : {}, exception : {}", request, cpsRewardEntityList, e);
 		}
 		return response;
 	}

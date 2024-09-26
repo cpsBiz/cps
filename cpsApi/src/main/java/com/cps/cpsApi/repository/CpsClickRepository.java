@@ -21,9 +21,10 @@ public interface CpsClickRepository extends JpaRepository<CpsClickEntity, String
     @Query("UPDATE CpsClickEntity C SET C.rewardYn = :rewardYn WHERE C.clickNum IN :clickNumList")
     int updateRewardYnByClickNumList(@Param("rewardYn") String rewardYn, @Param("clickNumList") List<Integer> clickNumList);
 
-    @Query("SELECT new com.cps.cpsApi.dto.CommissionDto(a, COALESCE(b.memberCommissionShare, 0), COALESCE(b.userCommissionShare, 0)) " +
+    @Query("SELECT new com.cps.cpsApi.dto.CommissionDto(a, COALESCE(c.memberCommissionShare, 0), COALESCE(c.userCommissionShare, 0), b.memberName) " +
             "FROM CpsClickEntity a " +
-            "LEFT JOIN CpsCampaignCommissionEntity b ON b.campaignNum = a.campaignNum " +
+            "JOIN CpsUserEntity b ON b.memberId = a.memberId " +
+            "LEFT JOIN CpsCampaignCommissionEntity c ON c.campaignNum = a.campaignNum " +
             "WHERE a.clickNum = :clickNum")
     CommissionDto findClickCommission(@Param("clickNum") int clickNum);
 

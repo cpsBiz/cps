@@ -32,6 +32,20 @@ public class CpsRewardPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
+        public static class LinkPriceRequest {
+            @NotBlank(message = "a_id 확인")
+            private String a_id ;
+            @NotBlank(message = "auth_key 확인")
+            private String auth_key;
+            @NotBlank(message = "yyyymmdd 확인")
+            private String yyyymmdd;
+            private String cancel_flag;
+            private String currency;
+            private int page;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
         public static class DotPitchResponse extends GenericBaseResponse<DotPitchRewardDto> {}
 
         @Data
@@ -68,6 +82,60 @@ public class CpsRewardPacket {
             String a_info;
             @JsonProperty("order_flag")
             String order_flag;
+        }
+
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class LinkPriceListResponse{
+            @JsonProperty("result")
+            private String result;
+            @JsonProperty("list_count")
+            private String list_count;
+            @JsonProperty("listData")
+            private List<LinkData> order_list;
+        }
+
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class LinkData {
+            @JsonProperty("trlog_id")
+            String trlog_id;
+            @JsonProperty("m_id")
+            String m_id;
+            @JsonProperty("o_cd")
+            String o_cd;
+            @JsonProperty("p_cd")
+            String p_cd;
+            @JsonProperty("p_nm")
+            String p_nm;
+            @JsonProperty("it_cnt")
+            String it_cnt;
+            @JsonProperty("user_id")
+            int user_id;
+            @JsonProperty("status")
+            int status;
+            @JsonProperty("c_cd")
+            String c_cd;
+            @JsonProperty("create_time_stamp")
+            String create_time_stamp;
+            @JsonProperty("applied_pgm_id")
+            String applied_pgm_id;
+            @JsonProperty("yyyymmdd")
+            String yyyymmdd;
+            @JsonProperty("hhmiss")
+            String hhmiss;
+            @JsonProperty("trans_comment")
+            String trans_comment;
+            @JsonProperty("sales")
+            String sales;
+            @JsonProperty("commission")
+            int commission;
+            @JsonProperty("pgm_name")
+            String pgm_name;
+            @JsonProperty("is_pc")
+            String is_pc;
+            @JsonProperty("pur_rate")
+            String pur_rate;
         }
     }
 }

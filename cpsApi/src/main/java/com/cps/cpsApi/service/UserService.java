@@ -23,7 +23,7 @@ public class UserService {
 	public CpsUserDto commonMemberDto(CpsUserEntity cpsUserEntity){
 		CpsUserDto cpsUserDto = new CpsUserDto();
 		cpsUserDto.setMemberId(cpsUserEntity.getMemberId());
-		cpsUserDto.setCompanyName(cpsUserEntity.getCompanyName());
+		cpsUserDto.setMemberName(cpsUserEntity.getManagerName());
 		cpsUserDto.setStatus(cpsUserEntity.getStatus());
 		cpsUserDto.setType(cpsUserEntity.getType());
 		return cpsUserDto;
@@ -35,7 +35,7 @@ public class UserService {
 		if (null != request.getMemberPw()) {
 			cpsUserEntity.setMemberPw(aes256.encrypt(request.getMemberPw()));
 		}
-		cpsUserEntity.setCompanyName(request.getCompanyName());
+		cpsUserEntity.setMemberName(request.getMemberName());
 		cpsUserEntity.setType(request.getType());
 		cpsUserEntity.setBusinessType(request.getBusinessType());
 		cpsUserEntity.setAgencyId(request.getAgencyId());
@@ -87,7 +87,7 @@ public class UserService {
 			CpsUserPacket.UserInfo.UserCampaignRequest userRequest = new CpsUserPacket.UserInfo.UserCampaignRequest();
 			userRequest.setAgencyId("linkprice");
 			userRequest.setMemberId(linkPrice.getMerchantId());
-			userRequest.setCompanyName(linkPrice.getMerchantName());
+			userRequest.setMemberName(linkPrice.getMerchantName());
 			userRequest.setRewardYn(linkPrice.getRewardYn());
 			userRequest.setMobileYn(linkPrice.getMobileYn());
 			userRequest.setReturnDay(linkPrice.getReturnDay());
