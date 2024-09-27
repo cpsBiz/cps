@@ -2,8 +2,8 @@ package com.cps.cpsApi.controller;
 
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
-import com.cps.cpsApi.packet.CpsUserPacket;
-import com.cps.cpsApi.service.CpsUserService;
+import com.cps.cpsApi.packet.CpsMemberPacket;
+import com.cps.cpsApi.service.CpsMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CpsUserController {
+public class CpsMemberController {
 
-    private final CpsUserService cpsUserService;
+    private final CpsMemberService cpsMemberService;
 
     /**
      * 회원 등록, 수정, 삭제
@@ -28,11 +28,11 @@ public class CpsUserController {
      */
     @Operation(summary = "회원 등록, 수정, 삭제")
     @PostMapping(value = "/userSignIn")
-    public ResponseEntity<CpsUserPacket.UserInfo.Response> userSignIn(@Valid @RequestBody CpsUserPacket.UserInfo.UserRequest request) throws Exception {
-        var result = new CpsUserPacket.UserInfo.Response();
+    public ResponseEntity<CpsMemberPacket.UserInfo.Response> userSignIn(@Valid @RequestBody CpsMemberPacket.UserInfo.UserRequest request) throws Exception {
+        var result = new CpsMemberPacket.UserInfo.Response();
 
         try {
-            var member = cpsUserService.userSignIn(request);
+            var member = cpsMemberService.userSignIn(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
                 result.setSuccess();
             } else {
@@ -53,12 +53,12 @@ public class CpsUserController {
      */
     @Operation(summary = "대행사 광고주 회원 가입")
     @PostMapping(value = "/agencyUser")
-    public ResponseEntity<CpsUserPacket.UserInfo.Response> agencyUserSignIn(@Valid @RequestBody CpsUserPacket.UserInfo.AgencyMemberRequest request) throws Exception {
-        var result = new CpsUserPacket.UserInfo.Response();
+    public ResponseEntity<CpsMemberPacket.UserInfo.Response> agencyUserSignIn(@Valid @RequestBody CpsMemberPacket.UserInfo.AgencyMemberRequest request) throws Exception {
+        var result = new CpsMemberPacket.UserInfo.Response();
 
         try {
             if (request.getAgencyId().equals("linkprice")) {
-                var member = cpsUserService.linkPriceUserSignIn(request);
+                var member = cpsMemberService.linkPriceUserSignIn(request);
                 if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
                     result.setSuccess();
                 } else {

@@ -1,7 +1,7 @@
 package com.cps.cpsViewApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsViewApi.dto.CpsViewrDto;
+import com.cps.cpsViewApi.dto.CpsViewDto;
 import com.cps.cpsViewApi.entity.CpsViewEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +29,7 @@ public class CpsViewPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class ViewResponse extends GenericBaseResponse<CpsViewEntity> {}
+        public static class ViewResponse extends GenericBaseResponse<CpsViewDto> {}
 
 
 
@@ -41,6 +41,6 @@ public class CpsViewPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class ViewSchduelResponse extends GenericBaseResponse<CpsViewrDto> {}
+        public static class ViewSchduelResponse extends GenericBaseResponse<CpsViewDto> {}
     }
 }

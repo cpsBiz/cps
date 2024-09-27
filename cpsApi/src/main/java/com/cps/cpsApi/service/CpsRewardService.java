@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -77,11 +78,11 @@ public class CpsRewardService {
 						cpsRewardEntity.setProductCode(dot.getOrderid());
 
 						//11번가 주문번호로 구매일자 넣기, 구매시간은 CLICK 기준, 옥션은 구매일자를 주지 않아 클릭 기준으로 날짜 넣기
-						if (dot.getM_name().equals("11번가")) {
+						if (dot.getM_name().equals("11번가_PC") || dot.getM_name().equals("11번가_모바일")) {
 							cpsRewardEntity.setRegDay(Integer.parseInt(dot.getOrderid().substring(0, 8)));
 							cpsRewardEntity.setRegYm(Integer.parseInt(dot.getOrderid().substring(0, 6)));
 							cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());
-						} else if (dot.getM_name().equals("옥션")) {
+						} else if (dot.getM_name().equals("옥션_PC") || dot.getM_name().equals("옥션_모바일")) {
 							cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
 							cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
 							cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());

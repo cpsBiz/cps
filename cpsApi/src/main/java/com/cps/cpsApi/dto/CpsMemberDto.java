@@ -3,7 +3,7 @@ package com.cps.cpsApi.dto;
 import lombok.Data;
 
 @Data
-public class CpsUserDto {
+public class CpsMemberDto {
     String memberId;
     String memberName;
     String type;

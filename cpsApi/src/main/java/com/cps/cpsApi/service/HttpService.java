@@ -3,7 +3,7 @@ package com.cps.cpsApi.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.servcies.BaseHttpService;
 import com.cps.cpsApi.packet.CpsRewardPacket;
-import com.cps.cpsApi.packet.CpsUserPacket;
+import com.cps.cpsApi.packet.CpsMemberPacket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -120,7 +120,7 @@ public class HttpService extends BaseHttpService {
                     "}";
 
             // listData 유무 체크
-            Map<String, Object> responseMap = new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("listData")) {
                 Object listData = responseMap.get("listData");
                 if (listData instanceof List && !((List<?>) listData).isEmpty()) {
@@ -143,15 +143,15 @@ public class HttpService extends BaseHttpService {
         }
     }
 
-    public List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsUserPacket.UserInfo.Domain request) {
+    public List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsMemberPacket.UserInfo.Domain request) {
         try{
             var result = linkPriceDetail(request.getDomain());
             //var result = this.PostAsync(request.getDomain(), request, String.class);
-            List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse>>() {});
+            List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse>>() {});
             return responseObj;
         } catch (Exception ex) {
             log.error(Constant.EXCEPTION_MESSAGE + " SendUserLinkPriceMerchant request : {}, exception : {}", request, ex);
-            List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
+            List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
             return errorResult;
         }
     }

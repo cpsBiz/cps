@@ -1,7 +1,7 @@
 package com.cps.cpsApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsApi.dto.CpsUserDto;
+import com.cps.cpsApi.dto.CpsMemberDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
-public class CpsUserPacket {
+public class CpsMemberPacket {
 
     public static class UserInfo {
 
@@ -70,7 +70,7 @@ public class CpsUserPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class Response extends GenericBaseResponse<CpsUserDto> {}
+        public static class Response extends GenericBaseResponse<CpsMemberDto> {}
 
 
         @Data
@@ -107,7 +107,7 @@ public class CpsUserPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class UserSearchResponse extends GenericBaseResponse<CpsUserPacket> {}
+        public static class UserSearchResponse extends GenericBaseResponse<CpsMemberPacket> {}
 
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)

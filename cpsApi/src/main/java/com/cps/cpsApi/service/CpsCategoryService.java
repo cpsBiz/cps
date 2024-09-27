@@ -27,12 +27,12 @@ public class CpsCategoryService {
 		CpsCategoryEntity cpsCategoryEntity = new CpsCategoryEntity();
 		CpsCategoryDto cpsCategoryDto = new CpsCategoryDto();
 		try {
-			cpsCategoryEntity.setCategory(request.getCategory());
-			cpsCategoryEntity.setCategoryName(request.getCategoryName());
-
 			if(request.getApiType().equals("D")){
-				cpsCategoryRepository.deleteByCategory(cpsCategoryEntity.getCategory());
+				cpsCategoryRepository.deleteByCategory(request.getCategory());
 			} else {
+				cpsCategoryEntity.setCategory(request.getCategory());
+				cpsCategoryEntity.setCategoryName(request.getCategoryName());
+
 				if (request.getCategoryRank() > 0) {
 					cpsCategoryEntity.setCategoryRank(request.getCategoryRank());
 				} else {
@@ -48,7 +48,7 @@ public class CpsCategoryService {
 			response.setData(cpsCategoryDto);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CATEGORY_EXCEPTION.getCode(), Constants.CATEGORY_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + "category api request : {}, exception : {}", request, e);
+			log.error(Constant.EXCEPTION_MESSAGE + " category api request : {}, exception : {}", request, e);
 		}
 
 		return response;

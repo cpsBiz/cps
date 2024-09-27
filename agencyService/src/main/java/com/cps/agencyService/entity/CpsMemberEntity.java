@@ -1,4 +1,4 @@
-package com.cps.cpsApi.entity;
+package com.cps.agencyService.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "CPS_USER")
-public class CpsUserEntity {
+@Table(name = "CPS_MEMBER")
+public class CpsMemberEntity {
     @Id
     @Column(name = "MEMBER_ID", updatable = false, nullable = false)
     private String memberId;

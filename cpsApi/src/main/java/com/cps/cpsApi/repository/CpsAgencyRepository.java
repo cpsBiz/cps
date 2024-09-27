@@ -1,7 +1,6 @@
 package com.cps.cpsApi.repository;
 
 import com.cps.cpsApi.entity.CpsAgencyEntity;
-import com.cps.cpsApi.entity.CpsUserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

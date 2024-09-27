@@ -6,7 +6,7 @@ import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsApi.dto.CpsCampaignDto;
 import com.cps.cpsApi.entity.CpsCampaignEntity;
 import com.cps.cpsApi.packet.CpsCampaignPacket;
-import com.cps.cpsApi.packet.CpsUserPacket;
+import com.cps.cpsApi.packet.CpsMemberPacket;
 import com.cps.cpsApi.repository.CpsCampaignRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -136,7 +136,7 @@ public class CpsCampaignService {
 		return cpsCampaignEntity;
 	}
 
-	public CpsCampaignEntity cpsUserCampaign(CpsUserPacket.UserInfo.UserCampaignRequest request) throws Exception {
+	public CpsCampaignEntity cpsUserCampaign(CpsMemberPacket.UserInfo.UserCampaignRequest request) throws Exception {
 		CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
 		cpsCampaignEntity.setAgencyId(request.getAgencyId());
 		cpsCampaignEntity.setMemberId(request.getMemberId());

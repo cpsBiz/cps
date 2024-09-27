@@ -10,11 +10,11 @@ import java.util.List;
 public interface CpsViewRepository extends JpaRepository<CpsViewEntity, String> {
     @Query(value = "SELECT DATE_FORMAT(NOW(), '%Y%m%d') AS REG_DAY, DATE_FORMAT(NOW(), '%H') AS REG_HOUR," +
             "A.CAMPAIGN_NUM, A.CAMPAIGN_NAME," +
-            "A.AGENCY_ID, A.MEMBER_ID, A.CLICK_URL, B.TYPE, " +
+            "A.AGENCY_ID, A.MEMBER_ID, A.CLICK_URL, A.ICON, A.LOGO, B.TYPE, " +
             ":affliateId AS AFFLIATE_ID, :zoneId AS ZONE_ID," +
             ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, NOW() AS REG_DATE " +
             "FROM CPS_CAMPAIGN A " +
-            "JOIN CPS_USER B " +
+            "JOIN CPS_MEMBER B " +
             "  ON B.MEMBER_ID = A.MEMBER_ID " +
             "WHERE A.CAMPAIGN_START <= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 0 DAY), '%Y%m%d') " +
             "AND A.CAMPAIGN_END >= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 0 DAY), '%Y%m%d') " +

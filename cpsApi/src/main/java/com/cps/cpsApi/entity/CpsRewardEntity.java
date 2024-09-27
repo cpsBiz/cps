@@ -27,13 +27,13 @@ public class CpsRewardEntity {
     private String productCode;
 
     @Id
-    @Column(name = "REG_DAY")
+    @Column(name = "REG_DAY", updatable = false)
     private int regDay;
 
-    @Column(name = "REG_YM")
+    @Column(name = "REG_YM", updatable = false)
     private int regYm;
 
-    @Column(name = "REG_HOUR")
+    @Column(name = "REG_HOUR", updatable = false)
     private String regHour;
 
     @Column(name = "MEMBER_ID")

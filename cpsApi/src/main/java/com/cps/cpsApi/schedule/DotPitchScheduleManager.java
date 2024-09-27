@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -24,7 +26,7 @@ public class DotPitchScheduleManager {
     /**
      * 도트피치 익일 호출 스케줄
      */
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "10 10 10 * * *")
     public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> dotPitchRewardSchedule() throws Exception {
         var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
         CpsRewardPacket.RewardInfo.DotPitchRequest request = new CpsRewardPacket.RewardInfo.DotPitchRequest();
@@ -61,26 +63,18 @@ public class DotPitchScheduleManager {
 
         try {
             for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                //취소
-                request.setSearch_type("c");
-                request.setSearch_date(date.format(formatter));
-                var cancel = cpsRewardService.dotPitchReward(request);
-                if (Constant.RESULT_CODE_SUCCESS.equals(cancel.getResultCode())) {
-                    result.setSuccess();
-                } else {
-                    result.setApiMessage(cancel.getResultCode(), cancel.getResultMessage());
+                List<String> depthList = Arrays.asList("c", "o");
+                for (String depth : depthList) {
+                    request.setSearch_type(depth);
+                    request.setSearch_date(date.format(formatter));
+                    var reward = cpsRewardService.dotPitchReward(request);
+                    if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                        result.setSuccess();
+                    } else {
+                        result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                    }
+                    result.setData(reward.getData());
                 }
-
-                //확정
-                request.setSearch_type("o");
-                request.setSearch_date(date.format(formatter));
-                var reward = cpsRewardService.dotPitchReward(request);
-                if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
-                    result.setSuccess();
-                } else {
-                    result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
-                }
-                result.setData(reward.getData());
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {

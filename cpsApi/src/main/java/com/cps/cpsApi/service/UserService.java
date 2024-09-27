@@ -1,11 +1,10 @@
 package com.cps.cpsApi.service;
 
 import com.cps.common.utils.AES256Utils;
-import com.cps.cpsApi.dto.CpsUserDto;
+import com.cps.cpsApi.dto.CpsMemberDto;
 import com.cps.cpsApi.entity.CpsAgencyEntity;
-import com.cps.cpsApi.entity.CpsUserEntity;
-import com.cps.cpsApi.packet.CpsUserPacket;
-import jakarta.persistence.EntityManager;
+import com.cps.cpsApi.entity.CpsMemberEntity;
+import com.cps.cpsApi.packet.CpsMemberPacket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,48 +19,48 @@ public class UserService {
 
 	private final AES256Utils aes256;
 
-	public CpsUserDto commonMemberDto(CpsUserEntity cpsUserEntity){
-		CpsUserDto cpsUserDto = new CpsUserDto();
-		cpsUserDto.setMemberId(cpsUserEntity.getMemberId());
-		cpsUserDto.setMemberName(cpsUserEntity.getManagerName());
-		cpsUserDto.setStatus(cpsUserEntity.getStatus());
-		cpsUserDto.setType(cpsUserEntity.getType());
-		return cpsUserDto;
+	public CpsMemberDto commonMemberDto(CpsMemberEntity cpsMemberEntity){
+		CpsMemberDto cpsMemberDto = new CpsMemberDto();
+		cpsMemberDto.setMemberId(cpsMemberEntity.getMemberId());
+		cpsMemberDto.setMemberName(cpsMemberEntity.getManagerName());
+		cpsMemberDto.setStatus(cpsMemberEntity.getStatus());
+		cpsMemberDto.setType(cpsMemberEntity.getType());
+		return cpsMemberDto;
 	}
 
-	public CpsUserEntity cpsUser(CpsUserPacket.UserInfo.UserRequest request){
-		CpsUserEntity cpsUserEntity = new CpsUserEntity();
-		cpsUserEntity.setMemberId(request.getMemberId());
+	public CpsMemberEntity cpsUser(CpsMemberPacket.UserInfo.UserRequest request){
+		CpsMemberEntity cpsMemberEntity = new CpsMemberEntity();
+		cpsMemberEntity.setMemberId(request.getMemberId());
 		if (null != request.getMemberPw()) {
-			cpsUserEntity.setMemberPw(aes256.encrypt(request.getMemberPw()));
+			cpsMemberEntity.setMemberPw(aes256.encrypt(request.getMemberPw()));
 		}
-		cpsUserEntity.setMemberName(request.getMemberName());
-		cpsUserEntity.setType(request.getType());
-		cpsUserEntity.setBusinessType(request.getBusinessType());
-		cpsUserEntity.setAgencyId(request.getAgencyId());
-		if (null == cpsUserEntity.getAgencyId() || cpsUserEntity.getAgencyId().equals("")) {
-			cpsUserEntity.setAgencyId("ENLIPLE");
+		cpsMemberEntity.setMemberName(request.getMemberName());
+		cpsMemberEntity.setType(request.getType());
+		cpsMemberEntity.setBusinessType(request.getBusinessType());
+		cpsMemberEntity.setAgencyId(request.getAgencyId());
+		if (null == cpsMemberEntity.getAgencyId() || cpsMemberEntity.getAgencyId().equals("")) {
+			cpsMemberEntity.setAgencyId("ENLIPLE");
 		}
-		cpsUserEntity.setBank(request.getBank());
-		cpsUserEntity.setAccountName(request.getAccountName());
-		cpsUserEntity.setStatus(request.getStatus());
-		cpsUserEntity.setCeoName(request.getCeoName());
-		cpsUserEntity.setBusinessNumber(request.getBusinessNumber());
-		cpsUserEntity.setCompanyAddress(request.getCompanyAddress());
-		cpsUserEntity.setBusinessCategory(request.getBusinessCategory());
-		cpsUserEntity.setBuisinessSector(request.getBusinessSector());
-		cpsUserEntity.setManagerName(request.getManagerName());
-		cpsUserEntity.setManagerEmail(request.getManagerEmail());
-		cpsUserEntity.setManagerPhone(request.getManagerPhone());
-		cpsUserEntity.setCompanyPhone(request.getCompanyPhone());
-		cpsUserEntity.setLicense(request.getLicense());
-		cpsUserEntity.setBirthYear(request.getBirthYear());
-		cpsUserEntity.setSex(request.getSex());
+		cpsMemberEntity.setBank(request.getBank());
+		cpsMemberEntity.setAccountName(request.getAccountName());
+		cpsMemberEntity.setStatus(request.getStatus());
+		cpsMemberEntity.setCeoName(request.getCeoName());
+		cpsMemberEntity.setBusinessNumber(request.getBusinessNumber());
+		cpsMemberEntity.setCompanyAddress(request.getCompanyAddress());
+		cpsMemberEntity.setBusinessCategory(request.getBusinessCategory());
+		cpsMemberEntity.setBuisinessSector(request.getBusinessSector());
+		cpsMemberEntity.setManagerName(request.getManagerName());
+		cpsMemberEntity.setManagerEmail(request.getManagerEmail());
+		cpsMemberEntity.setManagerPhone(request.getManagerPhone());
+		cpsMemberEntity.setCompanyPhone(request.getCompanyPhone());
+		cpsMemberEntity.setLicense(request.getLicense());
+		cpsMemberEntity.setBirthYear(request.getBirthYear());
+		cpsMemberEntity.setSex(request.getSex());
 		//aES256Utils.decrypt(cpsMemberEntity.getMemberPw());
-		return cpsUserEntity;
+		return cpsMemberEntity;
 	}
 
-	public CpsAgencyEntity cpsAgency(CpsUserPacket.UserInfo.UserCampaignRequest request){
+	public CpsAgencyEntity cpsAgency(CpsMemberPacket.UserInfo.UserCampaignRequest request){
 		CpsAgencyEntity cpsAgencyEntity = new CpsAgencyEntity();
 		cpsAgencyEntity.setAgencyId(request.getAgencyId());
 		cpsAgencyEntity.setMemberId("link_"+request.getMemberId());
@@ -80,11 +79,11 @@ public class UserService {
 		return cpsAgencyEntity;
 	}
 
-	public List<CpsUserPacket.UserInfo.UserCampaignRequest> linkPriceAgencyMemberList(List<CpsUserPacket.UserInfo.LinkPriceAgencyResponse> linkPriceMerchantList){
-		List<CpsUserPacket.UserInfo.UserCampaignRequest> memberRequestList = new ArrayList<>();
+	public List<CpsMemberPacket.UserInfo.UserCampaignRequest> linkPriceAgencyMemberList(List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> linkPriceMerchantList){
+		List<CpsMemberPacket.UserInfo.UserCampaignRequest> memberRequestList = new ArrayList<>();
 
 		linkPriceMerchantList.forEach(linkPrice -> {
-			CpsUserPacket.UserInfo.UserCampaignRequest userRequest = new CpsUserPacket.UserInfo.UserCampaignRequest();
+			CpsMemberPacket.UserInfo.UserCampaignRequest userRequest = new CpsMemberPacket.UserInfo.UserCampaignRequest();
 			userRequest.setAgencyId("linkprice");
 			userRequest.setMemberId(linkPrice.getMerchantId());
 			userRequest.setMemberName(linkPrice.getMerchantName());
