@@ -40,6 +40,10 @@ public class CpsRewardService {
 
 	@Value("${linkPrice.domain.reward.url}") String linkPriceReward;
 
+	@Value("${linkPrice.authKey}") String linkPriceAuthKey;
+
+	@Value("${linkPrice.site.code}") String linkPriceSiteCode;
+
 	private final HttpService httpService;
 
 	private final CpsClickRepository cpsClickRepository;
@@ -169,16 +173,18 @@ public class CpsRewardService {
 	 * 링크프라이스 실적조회 호출
 	 * @date 2024-09-25
 	 */
-	public GenericBaseResponse<DotPitchRewardDto> linkPriceReward(CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
+	public GenericBaseResponse<DotPitchRewardDto> linkPriceReward(CpsRewardPacket.RewardInfo.LinkPriceRequest request, String rewardYn) throws Exception {
 		CpsRewardPacket.RewardInfo.DotPitchResponse response = new CpsRewardPacket.RewardInfo.DotPitchResponse();
 		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
 		String domain = linkPriceDomain + linkPriceReward;
 
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
-
+		request.setAuth_key(linkPriceAuthKey);
+		request.setA_id(linkPriceSiteCode);
 		try {
 			for (int i = 1; i <= 20; i++) {
+				request.setPage(i);
 				CpsRewardPacket.RewardInfo.LinkPriceListResponse dotPitchResponseList = httpService.SendLinkPriceReward(domain, request);
 				if (dotPitchResponseList.getOrder_list() != null) {
 
@@ -211,7 +217,7 @@ public class CpsRewardService {
 							if (null != link.getYyyymmdd()) {
 								cpsRewardEntity.setRegDay(Integer.parseInt(link.getYyyymmdd()));
 								cpsRewardEntity.setRegYm(Integer.parseInt(link.getYyyymmdd().substring(0, 6)));
-								cpsRewardEntity.setRegHour(link.getYyyymmdd().substring(0, 2));
+								cpsRewardEntity.setRegHour(link.getHhmiss().substring(0, 2));
 							} else {
 								cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
 								cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
@@ -259,7 +265,7 @@ public class CpsRewardService {
 								cpsRewardRepository.saveAll(cpsRewardEntityList);
 
 								//링크프라이스 CLICK REWARD 업데이트
-								cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+								cpsClickRepository.updateRewardYnByClickNumList(rewardYn, cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
 								response.setSuccess();
 
 								cpsRewardEntityList.clear();
@@ -271,7 +277,7 @@ public class CpsRewardService {
 						//링크프라이스 리워드 저장
 						cpsRewardRepository.saveAll(cpsRewardEntityList);
 						//링크프라이스 CLICK 업데이트
-						cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+						cpsClickRepository.updateRewardYnByClickNumList(rewardYn, cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
 						response.setSuccess();
 					}
 

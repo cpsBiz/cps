@@ -3,7 +3,10 @@ package com.cps.cpsApi.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
+import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.cpsApi.dto.CpsCampaignCategoryDto;
 import com.cps.cpsApi.dto.CpsCampaignDto;
+import com.cps.cpsApi.dto.CpsCampaignSearchDto;
 import com.cps.cpsApi.entity.CpsCampaignEntity;
 import com.cps.cpsApi.packet.CpsCampaignPacket;
 import com.cps.cpsApi.packet.CpsMemberPacket;
@@ -83,24 +86,44 @@ public class CpsCampaignService {
 	 * 캠페인 조회
 	 * @date 2024-09-10
 	 */
-	public GenericBaseResponse<CpsCampaignEntity> campaignSearch(CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request) throws Exception {
+	public GenericPageBaseResponse<CpsCampaignSearchDto> campaignList(CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request) throws Exception {
 		CpsCampaignPacket.CampaignInfo.CampaignSearchResponse response = new CpsCampaignPacket.CampaignInfo.CampaignSearchResponse();
-		List<CpsCampaignEntity> cpsCampaignList = new ArrayList<>();
 
 		try {
-			cpsCampaignList = searchService.campaignSearch(request);
-
-			if (cpsCampaignList.size() > 0) {
-				response.setSuccess();
-			} else {
+			response = searchService.campaignSearch(request);
+			if (null == response) {
 				response.setApiMessage(Constants.CAMPAIGN_BLANK.getCode(), Constants.CAMPAIGN_BLANK.getValue());
+			} else {
+				response.setSuccess(response.getTotalPage());
 			}
-			response.setDatas(cpsCampaignList);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CAMPAIGN_SEARCH_EXCEPTION.getCode(), Constants.CAMPAIGN_SEARCH_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + "campaignList api request : {}, exception : {}", request, e);
 
 		}
+		return response;
+	}
+
+	/**
+	 * 캠페인 카테고리 일괄 수정
+	 * @date 2024-10-01
+	 */
+	public GenericBaseResponse<CpsCampaignCategoryDto> campaignCategory(CpsCampaignPacket.CampaignInfo.CampaignCategoryListRequest request) throws Exception {
+		CpsCampaignPacket.CampaignInfo.CampaignCategoryResponse response = new CpsCampaignPacket.CampaignInfo.CampaignCategoryResponse();
+		List<CpsCampaignCategoryDto> cpsCampaignList = new ArrayList<>();
+
+		request.getCampaignCategoryList().forEach(campaign -> {
+			cpsCampaignRepository.updateCategoryByCampaignNum(campaign.getCategory(), campaign.getCampaignNum());
+
+			CpsCampaignCategoryDto cpsCampaignCategoryDto = new CpsCampaignCategoryDto();
+			cpsCampaignCategoryDto.setCampaignName(campaign.getCampaignName());
+			cpsCampaignCategoryDto.setCampaignNum(campaign.getCampaignNum());
+			cpsCampaignCategoryDto.setCategory(campaign.getCategory());
+			cpsCampaignList.add(cpsCampaignCategoryDto);
+		});
+
+		response.setSuccess();
+		response.setDatas(cpsCampaignList);
 
 		return response;
 	}
@@ -136,7 +159,7 @@ public class CpsCampaignService {
 		return cpsCampaignEntity;
 	}
 
-	public CpsCampaignEntity cpsUserCampaign(CpsMemberPacket.UserInfo.UserCampaignRequest request) throws Exception {
+	public CpsCampaignEntity cpsMemberCampaign(CpsMemberPacket.MemberInfo.MemberCampaignRequest request) throws Exception {
 		CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
 		cpsCampaignEntity.setAgencyId(request.getAgencyId());
 		cpsCampaignEntity.setMemberId(request.getMemberId());

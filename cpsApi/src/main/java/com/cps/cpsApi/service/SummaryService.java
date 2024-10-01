@@ -2,7 +2,7 @@ package com.cps.cpsApi.service;
 
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
-import com.cps.common.model.GenericBaseResponse;
+import com.cps.common.model.GenericPageBaseResponse;
 import com.cps.cpsApi.dto.SummaryDto;
 import com.cps.cpsApi.packet.SummaryPacket;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,18 +23,15 @@ public class SummaryService {
 	 * 리포트 조회
 	 * @date 2024-09-19
 	 */
-	public GenericBaseResponse<SummaryDto> summaryCount(SummaryPacket.SummaryInfo.SummaryRequest request) throws Exception {
+	public GenericPageBaseResponse<SummaryDto> summaryCount(SummaryPacket.SummaryInfo.SummaryRequest request) throws Exception {
 		SummaryPacket.SummaryInfo.SummaryResponse response = new SummaryPacket.SummaryInfo.SummaryResponse();
-
 		try {
 			//노출
-			List<SummaryDto> summaryDayList = searchService.summarySearch(request);
-			if (summaryDayList.size() > 0) {
-				response.setSuccess();
-
-				response.setDatas(summaryDayList);
-			} else {
+			response = searchService.summarySearch(request);
+			if (null == response) {
 				response.setApiMessage(Constants.VIEW_BLANK.getCode(), Constants.VIEW_BLANK.getValue());
+			} else {
+				response.setSuccess(response.getTotalPage());
 			}
 		}catch (Exception e){
 			response.setApiMessage(Constants.VIEW_SEARCH_EXCEPTION.getCode(), Constants.VIEW_SEARCH_EXCEPTION.getValue());

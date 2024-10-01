@@ -34,13 +34,12 @@ public class CpsRewardPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class LinkPriceRequest {
             @NotBlank(message = "a_id 확인")
-            private String a_id ;
+            private String a_id;
             @NotBlank(message = "auth_key 확인")
             private String auth_key;
             @NotBlank(message = "yyyymmdd 확인")
             private String yyyymmdd;
             private String cancel_flag;
-            private String currency;
             private int page;
         }
 

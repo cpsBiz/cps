@@ -28,7 +28,7 @@ public class UserService {
 		return cpsMemberDto;
 	}
 
-	public CpsMemberEntity cpsUser(CpsMemberPacket.UserInfo.UserRequest request){
+	public CpsMemberEntity cpsUser(CpsMemberPacket.MemberInfo.MemberRequest request){
 		CpsMemberEntity cpsMemberEntity = new CpsMemberEntity();
 		cpsMemberEntity.setMemberId(request.getMemberId());
 		if (null != request.getMemberPw()) {
@@ -60,7 +60,7 @@ public class UserService {
 		return cpsMemberEntity;
 	}
 
-	public CpsAgencyEntity cpsAgency(CpsMemberPacket.UserInfo.UserCampaignRequest request){
+	public CpsAgencyEntity cpsAgency(CpsMemberPacket.MemberInfo.MemberCampaignRequest request){
 		CpsAgencyEntity cpsAgencyEntity = new CpsAgencyEntity();
 		cpsAgencyEntity.setAgencyId(request.getAgencyId());
 		cpsAgencyEntity.setMemberId("link_"+request.getMemberId());
@@ -79,11 +79,11 @@ public class UserService {
 		return cpsAgencyEntity;
 	}
 
-	public List<CpsMemberPacket.UserInfo.UserCampaignRequest> linkPriceAgencyMemberList(List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> linkPriceMerchantList){
-		List<CpsMemberPacket.UserInfo.UserCampaignRequest> memberRequestList = new ArrayList<>();
+	public List<CpsMemberPacket.MemberInfo.MemberCampaignRequest> linkPriceAgencyMemberList(List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> linkPriceMerchantList){
+		List<CpsMemberPacket.MemberInfo.MemberCampaignRequest> memberRequestList = new ArrayList<>();
 
 		linkPriceMerchantList.forEach(linkPrice -> {
-			CpsMemberPacket.UserInfo.UserCampaignRequest userRequest = new CpsMemberPacket.UserInfo.UserCampaignRequest();
+			CpsMemberPacket.MemberInfo.MemberCampaignRequest userRequest = new CpsMemberPacket.MemberInfo.MemberCampaignRequest();
 			userRequest.setAgencyId("linkprice");
 			userRequest.setMemberId(linkPrice.getMerchantId());
 			userRequest.setMemberName(linkPrice.getMerchantName());

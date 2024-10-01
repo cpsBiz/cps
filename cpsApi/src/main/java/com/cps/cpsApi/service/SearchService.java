@@ -1,5 +1,7 @@
 package com.cps.cpsApi.service;
 
+import com.cps.common.constant.Constants;
+import com.cps.cpsApi.dto.CpsCampaignSearchDto;
 import com.cps.cpsApi.dto.SummaryDto;
 import com.cps.cpsApi.entity.CpsCampaignEntity;
 import com.cps.cpsApi.entity.SummaryDayEntity;
@@ -22,46 +24,91 @@ public class SearchService {
 
 	private final EntityManager em;
 
-	public List<CpsCampaignEntity> campaignSearch(CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request){
+	public CpsCampaignPacket.CampaignInfo.CampaignSearchResponse campaignSearch(CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request){
+		CpsCampaignPacket.CampaignInfo.CampaignSearchResponse response = new CpsCampaignPacket.CampaignInfo.CampaignSearchResponse();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<CpsCampaignEntity> cq = cb.createQuery(CpsCampaignEntity.class);
-		Root<CpsCampaignEntity> member = cq.from(CpsCampaignEntity.class);
+		List<CpsCampaignSearchDto> campaignSearchList = new ArrayList<>();
+		CpsCampaignSearchDto cpsCampaignSearchDto = new CpsCampaignSearchDto();
+		Root<?> root = cq.from(CpsCampaignEntity.class);
 
 		List<Predicate> predicates = new ArrayList<>();
 
 		if (request.getCampaignNum() > 0) {
-			predicates.add(cb.equal(member.get("campaignNum"), request.getCampaignNum()));
+			predicates.add(cb.equal(root.get("campaignNum"), request.getCampaignNum()));
 		}
 		if (request.getMemberId() != null && !request.getMemberId().equals("")) {
-			predicates.add(cb.like(member.get("memberId"), "%" + request.getMemberId() + "%"));
+			predicates.add(cb.like(root.get("memberId"), "%" + request.getMemberId() + "%"));
 		}
-		if (request.getManagerId() != null && !request.getManagerId().equals("")) {
-			predicates.add(cb.like(member.get("managerId"), "%" + request.getManagerId() + "%"));
+		if (request.getAgencyId() != null && !request.getAgencyId().equals("")) {
+			predicates.add(cb.like(root.get("agencyId"), "%" + request.getAgencyId () + "%"));
 		}
 		if (request.getCampaignName() != null && !request.getCampaignName().equals("")) {
-			predicates.add(cb.like(member.get("campaignName"), "%" + request.getCampaignName() + "%"));
+			predicates.add(cb.like(root.get("campaignName"), "%" + request.getCampaignName() + "%"));
 		}
 		if (request.getCampaignStart() != null && !request.getCampaignStart().equals("")) {
-			predicates.add(cb.equal(member.get("campaignStart"), request.getCampaignStart()));
+			predicates.add(cb.equal(root.get("campaignStart"), request.getCampaignStart()));
 		}
 		if (request.getCampaignEnd() != null && !request.getCampaignEnd().equals("")) {
-			predicates.add(cb.equal(member.get("campaignEnd"), request.getCampaignEnd()));
+			predicates.add(cb.equal(root.get("campaignEnd"), request.getCampaignEnd()));
 		}
 		if (request.getClickUrl() != null && !request.getClickUrl().equals("")) {
-			predicates.add(cb.like(member.get("clickUrl"), "%" + request.getClickUrl() + "%"));
+			predicates.add(cb.like(root.get("clickUrl"), "%" + request.getClickUrl() + "%"));
 		}
 		if (request.getCategory() != null && !request.getCategory().equals("")) {
-			predicates.add(cb.equal(member.get("category"), request.getCategory()));
+			predicates.add(cb.equal(root.get("category"), request.getCategory()));
 		}
 
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
-		return em.createQuery(cq).getResultList();
+		TypedQuery<CpsCampaignEntity> query = em.createQuery(cq);
+		//전체 개수
+		response.setTotalPage(query.getResultList().size());
+
+		// 페이징 처리
+		if (request.getSize() == 0)request.setSize(10);
+		query = em.createQuery(cq);
+		query.setFirstResult(request.getPage() * request.getSize());
+		query.setMaxResults(request.getSize());
+
+		query.getResultList().forEach(campaign -> {
+			CpsCampaignSearchDto campaignSearch = new CpsCampaignSearchDto();
+			campaignSearch.setCampaignNum(campaign.getCampaignNum());
+			campaignSearch.setCampaignName(campaign.getCampaignName());
+			campaignSearch.setMemberId(campaign.getMemberId());
+			campaignSearch.setAgencyId(campaign.getAgencyId());
+			campaignSearch.setCampaignStart(campaign.getCampaignStart());
+			campaignSearch.setCampaignEnd(campaign.getCampaignEnd());
+			campaignSearch.setUrl(campaign.getUrl());
+			campaignSearch.setClickUrl(campaign.getClickUrl());
+			campaignSearch.setCategory(campaign.getCategory());
+			campaignSearch.setLogo(campaign.getLogo());
+			campaignSearch.setIcon(campaign.getIcon());
+			campaignSearch.setCampaignAuto(campaign.getCampaignAuto());
+			campaignSearch.setRewardYn(campaign.getRewardYn());
+			campaignSearch.setAosYn(campaign.getAosYn());
+			campaignSearch.setIosYn(campaign.getIosYn());
+			campaignSearch.setReturnDay(campaign.getReturnDay());
+			campaignSearch.setCommissionSendYn(campaign.getCommissionSendYn());
+			campaignSearch.setWhenTrans(campaign.getWhenTrans());
+			campaignSearch.setTransReposition(campaign.getTransReposition());
+			campaignSearch.setCommissionPaymentStandard(campaign.getCommissionPaymentStandard());
+			campaignSearch.setDenyAd(campaign.getDenyAd());
+			campaignSearch.setDenyProduct(campaign.getDenyProduct());
+			campaignSearch.setNotice(campaign.getNotice());
+			campaignSearch.setCampaignStatus(campaign.getCampaignStatus());
+			campaignSearchList.add(campaignSearch);
+		});
+
+		response.setDatas(campaignSearchList);
+		return response;
 	}
 
-	public List<SummaryDto> summarySearch(SummaryPacket.SummaryInfo.SummaryRequest request) {
+	public SummaryPacket.SummaryInfo.SummaryResponse summarySearch(SummaryPacket.SummaryInfo.SummaryRequest request) {
+		SummaryPacket.SummaryInfo.SummaryResponse response = new SummaryPacket.SummaryInfo.SummaryResponse();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<SummaryDto> cq = cb.createQuery(SummaryDto.class);
 		Root<?> root = cq.from(SummaryDayEntity.class);
+		String orderByName = "regDay";
 
 		List<Predicate> predicates = new ArrayList<>();
 
@@ -115,24 +162,48 @@ public class SearchService {
 		if ("DAY".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "regDay", root.get("regDay"), root.get("regDay"));
 		} else if ("MONTH".equals(request.getSearchType())) {
-			cq = createSummaryQuery(cb, cq, root,  "regDay", root.get("regYm"), root.get("regYm"));
+			cq = createSummaryQuery(cb, cq, root,  "regYm", root.get("regYm"), root.get("regYm"));
+			orderByName = "regYm";
 		} else if ("MEMBER".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "memberId", root.get("memberId"), root.get("memberName"));
+			orderByName = "memberName";
 		} else if ("CAMPAIGN".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "campaignNum", root.get("campaignNum"), root.get("campaignName"));
+			orderByName = "campaignName";
 		} else if ("AFFLIATE".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "affliateId", root.get("affliateId"), root.get("affliateName"));
+			orderByName = "affliateName";
 		} else if ("SITE".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root, "site", root.get("site"), root.get("site"));
+			orderByName = "site";
 		} else if ("MEMBERAGC".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "agencyId", root.get("agencyId"), root.get("agencyName"));
+			orderByName = "agencyName";
 		} else if ("MEMBERAFF".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "agencyId", root.get("agencyId"), root.get("agencyName"));
+			orderByName = "agencyName";
 		}
 
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
+
 		TypedQuery<SummaryDto> query = em.createQuery(cq);
-		return query.getResultList();
+		//전체 개수
+		response.setTotalPage(query.getResultList().size());
+
+		if ("ASC".equals(request.getOrderBy())) {
+			cq.orderBy(cb.asc(root.get(orderByName)));
+		} else if ("DESC".equals(request.getOrderBy())) {
+			cq.orderBy(cb.desc(root.get(orderByName)));
+		}
+
+		// 페이징 처리
+		if (request.getSize() == 0)request.setSize(10);
+		query = em.createQuery(cq);
+		query.setFirstResult(request.getPage() * request.getSize());
+		query.setMaxResults(request.getSize());
+		response.setDatas(query.getResultList());
+
+		return response;
 	}
 
 	private <T> CriteriaQuery<SummaryDto> createSummaryQuery(CriteriaBuilder cb, CriteriaQuery<SummaryDto> cq, Root<T> root, String groupByField, Expression<?>... additionalFields) {

@@ -19,20 +19,20 @@ public enum Constants {
     AGENCY_BLANK("2001", "존재하지 않은 Aagency 입니다."),
     AGENCY_NOT_SEARCH("2010", "등록 할 광고주가 없습니다."),
 
-    MEMBER_EXCEPTION("3000", "회원정보 등록 오류"),
-    MEMBER_BLANK("3001", "회원정보가 없습니다."),
-    MEMBER_UPDATE_EXCEPTION("3002", "회원정보 수정 오류"),
-    MEMBER_DELETE_EXCEPTION("3003", "회원정보 삭제 오류"),
+    MEMBER_EXCEPTION("3000", "회원 정보 등록 오류"),
+    MEMBER_BLANK("3001", "회원 정보가 없습니다."),
+    MEMBER_UPDATE_EXCEPTION("3002", "회원 정보 수정 오류"),
+    MEMBER_DELETE_EXCEPTION("3003", "회원 정보 삭제 오류"),
     MEMBER_DUPLICATION("3004", "등록되어 있는 회원 입니다."),
     MEMBER_SEARCH_EXCEPTION("3005", "회원 조회 오류"),
 
     CLICK_EXCEPTION("4000", "클릭 캠페인 등록 오류"),
     CLICK_PFCODE_EXCEPTION("4011", "PF_CODE 오류"),
 
-    CAMPAIGN_EXCEPTION("5000", "캠페인정보 등록 오류"),
-    CAMPAIGN_BLANK("5001", "캠페인정보가 없습니다."),
-    CAMPAIGN_UPDATE_EXCEPTION("5002", "캠페인정보 수정 오류"),
-    CAMPAIGN_DELETE_EXCEPTION("5003", "캠페인정보 삭제 오류"),
+    CAMPAIGN_EXCEPTION("5000", "캠페인 정보 등록 오류"),
+    CAMPAIGN_BLANK("5001", "캠페인 정보가 없습니다."),
+    CAMPAIGN_UPDATE_EXCEPTION("5002", "캠페인 정보 수정 오류"),
+    CAMPAIGN_DELETE_EXCEPTION("5003", "캠페인 정보 삭제 오류"),
     CAMPAIGN_DUPLICATION("5004", "등록되어 있는 캠페인 입니다."),
     CAMPAIGN_SEARCH_EXCEPTION("5005", "캠페인 조회 오류"),
 
@@ -43,6 +43,9 @@ public enum Constants {
     AFFILIATE_CAMPAIGN_EXCEPTION("5200", "매체 캠페인 승인 등록 오류"),
 
     CATEGORY_EXCEPTION("7000", "카테고리 등록 오류"),
+    CATEGORY_BLANK("7001", "카테고리 정보가 없습니다."),
+    CATEGORY_DUPLICATION("7004", "등록되어 있는 카테고리 입니다."),
+    CATEGORY_SEARCH_EXCEPTION("7005", "카테고리 조회 오류"),
 
     VIEW_EXCEPTION("8000", "실적 데이터 등록 오류"),
     VIEW_BLANK("8001", "실적 캠페인 정보가 없습니다."),
@@ -57,7 +60,15 @@ public enum Constants {
 
     LINKPRICE_EXCEPTION("9100", "링크프라이스 리워드 데이터 등록 오류"),
     LINKPRICE_BLANK("9101", "링크프라이스 정보가 없습니다."),
-    LINKPRICE_NOT_SEARCH("9110", "등록 할 링크프라이스 정보가 없습니다.");
+    LINKPRICE_NOT_SEARCH("9110", "등록 할 링크프라이스 정보가 없습니다."),
+
+    INQUIRY_EXCEPTION("9200", "1:1 문의 등록 오류"),
+    INQUIRY_BLANK("9201", "1:1 문의 정보가 없습니다."),
+    INQUIRY_SEARCH_EXCEPTION("9205", "1:1 문의 조회 오류"),
+
+    ANSWER_EXCEPTION("9200", "1:1 문의 답변 등록 오류"),
+    ANSWER_BLANK("9201", "1:1 문의 답변  정보가 없습니다."),
+    ANSWER_SEARCH_EXCEPTION("9205", "1:1 문의 답변  조회 오류");
 
     private String code;
     private String value;

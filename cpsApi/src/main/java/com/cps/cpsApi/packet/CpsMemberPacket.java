@@ -1,12 +1,17 @@
 package com.cps.cpsApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
+import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.cpsApi.dto.CpsMemberDetailDto;
 import com.cps.cpsApi.dto.CpsMemberDto;
+import com.cps.cpsApi.dto.CpsMemberListDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 /**
  * 회원 가입
@@ -16,13 +21,18 @@ import lombok.EqualsAndHashCode;
 @Data
 public class CpsMemberPacket {
 
-    public static class UserInfo {
+    public static class MemberInfo {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class UserRequest {
+        public static class MemberDetail {
             @NotBlank(message = "memberId 확인")
             private String memberId;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberRequest extends MemberDetail {
             @NotBlank(message = "memberPw 확인")
             private String memberPw;
             private String memberName;
@@ -49,9 +59,41 @@ public class CpsMemberPacket {
             private String apiType;
         }
 
+
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class UserCampaignRequest extends UserRequest {
+        public static class MemberDetailResponse extends GenericBaseResponse<CpsMemberDetailDto> {}
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberListRequest {
+            public String searchKeyword;
+            public int page;
+            public int size;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberListResponse extends GenericPageBaseResponse<CpsMemberListDto> {}
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberSiteListRequest extends MemberRequest {
+            List<MemberSite> memberSiteList;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberSite {
+            private String siteName;
+            private String site;
+            private String category;
+        }
+
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberCampaignRequest extends MemberRequest {
             private String agencyId;
             private String rewardYn;
             private String mobileYn;
@@ -90,7 +132,7 @@ public class CpsMemberPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class MemberSearcgRequest {
             private String memberId;
-            private String managerId;
+            private String agencyId;
             private String memberName;
             private String type;
             private String status;
@@ -104,10 +146,6 @@ public class CpsMemberPacket {
             private String rewardYn;
             private String mobileYn;
         }
-
-        @Data
-        @EqualsAndHashCode(callSuper = false)
-        public static class UserSearchResponse extends GenericBaseResponse<CpsMemberPacket> {}
 
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)

@@ -11,6 +11,7 @@ public interface CpsViewScheduleRepository extends JpaRepository<CpsViewEntity, 
             "       CAMPAIGN_NUM, MEMBER_ID, AGENCY_ID, AFFLIATE_ID, ZONE_ID, SITE, OS, COUNT(1) AS CNT, TYPE  " +
             "  FROM CPS_VIEW " +
             " WHERE REG_DAY = DATE_FORMAT(DATE_SUB(NOW(), INTERVAL :minutes MINUTE), '%Y%m%d') " +
+            "   AND REG_HOUR = DATE_FORMAT(DATE_SUB(NOW(), INTERVAL :minutes MINUTE), '%H') " +
             " GROUP BY CAMPAIGN_NUM, MEMBER_ID, AGENCY_ID, AFFLIATE_ID, ZONE_ID, SITE, OS " +
             "    ON DUPLICATE KEY UPDATE CNT = VALUES(CNT), MOD_DATE = NOW() ", nativeQuery = true)
     void insertSummaryViewHour(@Param("minutes") int minutes);
@@ -21,6 +22,7 @@ public interface CpsViewScheduleRepository extends JpaRepository<CpsViewEntity, 
             "       CAMPAIGN_NUM, MEMBER_ID, AGENCY_ID, AFFLIATE_ID, ZONE_ID, SITE, OS, COUNT(1) AS CLICK_CNT, TYPE  " +
             "  FROM CPS_CLICK " +
             " WHERE REG_DAY = DATE_FORMAT(DATE_SUB(NOW(), INTERVAL :minutes MINUTE), '%Y%m%d') " +
+            "   AND REG_HOUR = DATE_FORMAT(DATE_SUB(NOW(), INTERVAL :minutes MINUTE), '%H') " +
             " GROUP BY CAMPAIGN_NUM, MEMBER_ID, AGENCY_ID, AFFLIATE_ID, ZONE_ID, SITE, OS " +
             "    ON DUPLICATE KEY UPDATE CLICK_CNT = VALUES(CLICK_CNT), MOD_DATE = NOW() ", nativeQuery = true)
     void insertSummaryClickHour(@Param("minutes") int minutes);
@@ -63,7 +65,8 @@ public interface CpsViewScheduleRepository extends JpaRepository<CpsViewEntity, 
             "               TYPE" +
             "          FROM CPS_REWARD " +
             "         WHERE REG_DAY = DATE_FORMAT(DATE_SUB(NOW(), INTERVAL :minutes MINUTE), '%Y%m%d') " +
-            "         GROUP BY CAMPAIGN_NUM, MEMBER_ID, AGENCY_ID, AFFLIATE_ID, ZONE_ID, SITE, OS, STATUS  )A " +
+            "           AND REG_HOUR = DATE_FORMAT(DATE_SUB(NOW(), INTERVAL :minutes MINUTE), '%H') " +
+            "           GROUP BY CAMPAIGN_NUM, MEMBER_ID, AGENCY_ID, AFFLIATE_ID, ZONE_ID, SITE, OS, STATUS  )A " +
             " GROUP BY A.REG_DAY, A.REG_HOUR, A.CAMPAIGN_NUM, A.MEMBER_ID, A.AGENCY_ID, A.AFFLIATE_ID, A.ZONE_ID, A.SITE, A.OS" +
             "    ON DUPLICATE KEY UPDATE REWARD_CNT = VALUES(REWARD_CNT), CONFIRM_REWARD_CNT = VALUES(CONFIRM_REWARD_CNT), CANCEL_REWARD_CNT = VALUES(CANCEL_REWARD_CNT) " +
             "     ,  COMMISSION = VALUES(COMMISSION), COMFIRM_COMMISSION = VALUES(COMFIRM_COMMISSION), CANCEL_COMMISSION = VALUES(CANCEL_COMMISSION) " +

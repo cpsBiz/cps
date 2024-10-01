@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 카테고리 등록
  *
@@ -20,12 +22,18 @@ public class CpsCategoryPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class CategoryRequest {
+            private String apiType;
+            List<Category> categoryList;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class Category {
             @NotBlank(message = "category 확인")
             private String category;
             @NotBlank(message = "categoryName 확인")
             private String categoryName;
             private int categoryRank;
-            private String apiType;
         }
 
         @Data

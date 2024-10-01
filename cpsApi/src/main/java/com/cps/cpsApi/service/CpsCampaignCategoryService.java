@@ -55,7 +55,7 @@ public class CpsCampaignCategoryService {
 	 * 캠페인 카테고리 상세 조회
 	 * @date 2024-09-10
 	 */
-	public GenericBaseResponse<CpsCampaignCategoryEntity> campaignCategorySearch(CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchRequest request) throws Exception {
+	public GenericBaseResponse<CpsCampaignCategoryEntity> campaignCategoryList(CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchRequest request) throws Exception {
 		CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchResponse response = new CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchResponse();
 		List<CpsCampaignCategoryEntity> cpsCampaignCategoryEntityList = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class CpsCampaignCategoryService {
 			response.setDatas(cpsCampaignCategoryEntityList);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CAMPAIGN_CATEGORY_SEARCH_EXCEPTION.getCode(), Constants.CAMPAIGN_CATEGORY_SEARCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + "campaignCategorySearch api request : {}, exception : {}", request, e);
+			log.error(Constant.EXCEPTION_MESSAGE + "campaignCategoryList api request : {}, exception : {}", request, e);
 		}
 
 		return response;
@@ -102,8 +102,8 @@ public class CpsCampaignCategoryService {
 			CpsCampaignCategoryDto cpsCampaignCategoryDto = new CpsCampaignCategoryDto();
 			cpsCampaignCategoryDto.setCampaignNum(campaignCategory.getCampaignNum());
 			cpsCampaignCategoryDto.setCategory(campaignCategory.getCategory());
-			cpsCampaignCategoryDto.setRs(campaignCategory.getRs());
-			cpsCampaignCategoryDto.setDenyYn(campaignCategory.getDenyYn());
+		/*	cpsCampaignCategoryDto.setRs(campaignCategory.getRs());
+			cpsCampaignCategoryDto.setDenyYn(campaignCategory.getDenyYn());*/
 			cpsCampaignDtoList.add(cpsCampaignCategoryDto);
 		});
 

@@ -73,7 +73,7 @@ public class CpsViewService {
 			cpsViewDto.setSite((String) result[12]);
 			cpsViewDto.setUserId((String) result[13]);
 			cpsViewDto.setAdId((String) result[14]);
-			cpsViewDto.setOs(Character.toString((Character) result[15]));
+			cpsViewDto.setOs((String) result[15]);
 			return cpsViewDto;
 		}).collect(Collectors.toList());
 	}

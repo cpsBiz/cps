@@ -51,12 +51,37 @@ public class CpsCampaignController {
      * @date 2024-09-10
      */
     @Operation(summary = "캠페인 조회")
-    @PostMapping(value = "/campaignSearch")
-    public ResponseEntity<CpsCampaignPacket.CampaignInfo.CampaignSearchResponse> campaignSearch(@Valid @RequestBody CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request) throws Exception {
+    @PostMapping(value = "/campaignList")
+    public ResponseEntity<CpsCampaignPacket.CampaignInfo.CampaignSearchResponse> campaignList(@Valid @RequestBody CpsCampaignPacket.CampaignInfo.CampaignSearchRequest request) throws Exception {
         var result = new CpsCampaignPacket.CampaignInfo.CampaignSearchResponse();
 
         try {
-            var campaign = cpsCampaignService.campaignSearch(request);
+            var campaign = cpsCampaignService.campaignList(request);
+            if (Constant.RESULT_CODE_SUCCESS.equals(campaign.getResultCode())) {
+                result.setSuccess(campaign.getTotalPage());
+            } else {
+                result.setApiMessage(campaign.getResultCode(), campaign.getResultMessage());
+            }
+            result.setDatas(campaign.getDatas());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("campaignSearch Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 캠페인 카테고리 일괄 수정
+     *
+     * @date 2024-10-01
+     */
+    @Operation(summary = "캠페인 카테고리 일괄 수정")
+    @PostMapping(value = "/campaignCategory")
+    public ResponseEntity<CpsCampaignPacket.CampaignInfo.CampaignCategoryResponse> campaignCategory(@Valid @RequestBody CpsCampaignPacket.CampaignInfo.CampaignCategoryListRequest request) throws Exception {
+        var result = new CpsCampaignPacket.CampaignInfo.CampaignCategoryResponse();
+
+        try {
+            var campaign = cpsCampaignService.campaignCategory(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(campaign.getResultCode())) {
                 result.setSuccess();
             } else {
@@ -65,7 +90,7 @@ public class CpsCampaignController {
             result.setDatas(campaign.getDatas());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            result.setError("campaignSearch Controller Error");
+            result.setError("campaignCategory Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

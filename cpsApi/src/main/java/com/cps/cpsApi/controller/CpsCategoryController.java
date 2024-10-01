@@ -44,4 +44,29 @@ public class CpsCategoryController {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * 카테고리 리스트
+     *
+     * @date 2024-09-30
+     */
+    @Operation(summary = "카테고리 리스트")
+    @PostMapping(value = "/categoryList")
+    public ResponseEntity<CpsCategoryPacket.CategoryInfo.Response> categoryList() throws Exception {
+        var result = new CpsCategoryPacket.CategoryInfo.Response();
+
+        try {
+            var category = cpsCategoryService.categoryList();
+            if (Constant.RESULT_CODE_SUCCESS.equals(category.getResultCode())) {
+                result.setSuccess();
+            } else {
+                result.setApiMessage(category.getResultCode(), category.getResultMessage());
+            }
+            result.setDatas(category.getDatas());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("categorySearch Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class CpsCampaignCategoryController {
      * @date 2024-09-10
      */
     @Operation(summary = "캠페인 카테고리 등록, 수정")
-    @PostMapping(value = "/campaignCategory")
+    @PostMapping(value = "/campaignCategory1")
     public ResponseEntity<CpsCampaignCategoryPacket.CampaignCategoryInfo.Response> campaignCategory(@Valid @RequestBody List<CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategoryRequest> request) throws Exception {
         var result = new CpsCampaignCategoryPacket.CampaignCategoryInfo.Response();
 
@@ -54,12 +54,12 @@ public class CpsCampaignCategoryController {
      * @date 2024-09-10
      */
     @Operation(summary = "캠페인 카테고리 조회")
-    @PostMapping(value = "/campaignCategorySearch")
-    public ResponseEntity<CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchResponse> campaignCategorySearch(@Valid @RequestBody CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchRequest request) throws Exception {
+    @PostMapping(value = "/campaignCategoryList")
+    public ResponseEntity<CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchResponse> campaignCategoryList(@Valid @RequestBody CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchRequest request) throws Exception {
         var result = new CpsCampaignCategoryPacket.CampaignCategoryInfo.CampaignCategorySearchResponse();
 
         try {
-            var campaign = cpsCampaignCategoryService.campaignCategorySearch(request);
+            var campaign = cpsCampaignCategoryService.campaignCategoryList(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(campaign.getResultCode())) {
                 result.setSuccess();
             } else {

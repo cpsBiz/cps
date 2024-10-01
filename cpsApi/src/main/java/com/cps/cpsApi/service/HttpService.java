@@ -143,15 +143,15 @@ public class HttpService extends BaseHttpService {
         }
     }
 
-    public List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsMemberPacket.UserInfo.Domain request) {
+    public List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsMemberPacket.MemberInfo.Domain request) {
         try{
             var result = linkPriceDetail(request.getDomain());
             //var result = this.PostAsync(request.getDomain(), request, String.class);
-            List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse>>() {});
+            List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse>>() {});
             return responseObj;
         } catch (Exception ex) {
             log.error(Constant.EXCEPTION_MESSAGE + " SendUserLinkPriceMerchant request : {}, exception : {}", request, ex);
-            List<CpsMemberPacket.UserInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
+            List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
             return errorResult;
         }
     }
@@ -186,58 +186,9 @@ public class HttpService extends BaseHttpService {
     public CpsRewardPacket.RewardInfo.LinkPriceListResponse SendLinkPriceReward(String domain, CpsRewardPacket.RewardInfo.LinkPriceRequest request) {
         CpsRewardPacket.RewardInfo.LinkPriceListResponse responseObj = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
         try{
-            var result = this.PostAsync(domain, request, String.class);
-            String json = "{"
-                    + "\"result\": \"0\","
-                    + "\"list_count\": 2,"
-                    + "\"order_list\": ["
-                    + "    {"
-                    + "        \"trlog_id\": \"18000406750585\","
-                    + "        \"m_id\": \"clickbuy\","
-                    + "        \"o_cd\": \"recover_231019_182249\","
-                    + "        \"p_cd\": \"recover_231019_182249\","
-                    + "        \"p_nm\": \"pn_recover_5\","
-                    + "        \"it_cnt\": \"1\","
-                    + "        \"user_id\": \"u_id_recover_5\","
-                    + "        \"status\": \"100\","
-                    + "        \"c_cd\": \"test_c_cd\","
-                    + "        \"create_time_stamp\": \"20231020\","
-                    + "        \"applied_pgm_id\": \"0038\","
-                    + "        \"yyyymmdd\": \"20231017\","
-                    + "        \"hhmiss\": \"000000\","
-                    + "        \"trans_comment\": \"\","
-                    + "        \"sales\": 39900,"
-                    + "        \"commission\": 1,"
-                    + "        \"pgm_name\": \"tt_mo\","
-                    + "        \"is_pc\": \"mobile\","
-                    + "        \"pur_rate\": \"1원\""
-                    + "    },"
-                    + "    {"
-                    + "        \"trlog_id\": \"18000406750586\","
-                    + "        \"m_id\": \"clickbuy\","
-                    + "        \"o_cd\": \"recover_231019_182243\","
-                    + "        \"p_cd\": \"recover_231019_182243\","
-                    + "        \"p_nm\": \"pn_recover_4\","
-                    + "        \"it_cnt\": \"1\","
-                    + "        \"user_id\": \"u_id_recover_4\","
-                    + "        \"status\": \"100\","
-                    + "        \"c_cd\": \"test_c_cd\","
-                    + "        \"create_time_stamp\": \"20231020\","
-                    + "        \"applied_pgm_id\": \"0038\","
-                    + "        \"yyyymmdd\": \"20231017\","
-                    + "        \"hhmiss\": \"000000\","
-                    + "        \"trans_comment\": \"\","
-                    + "        \"sales\": 39900,"
-                    + "        \"commission\": 1,"
-                    + "        \"pgm_name\": \"tt_mo\","
-                    + "        \"is_pc\": \"mobile\","
-                    + "        \"pur_rate\": \"1원\""
-                    + "    }"
-                    + "]"
-                    + "}";
-
+            var result = this.GetAsync(domain, request, String.class);
             // order_list 유무 체크
-            Map<String, Object> responseMap = new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("order_list")) {
                 Object orderList = responseMap.get("order_list");
                 if (orderList instanceof List && !((List<?>) orderList).isEmpty()) {
@@ -245,8 +196,8 @@ public class HttpService extends BaseHttpService {
                     List<CpsRewardPacket.RewardInfo.LinkData> linkDataList = new ObjectMapper().convertValue(orderList, new TypeReference<List<CpsRewardPacket.RewardInfo.LinkData>>() {});
                     // LinkPriceListResponse 객체 생성
                     responseObj = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
-                    responseObj.setList_count((String) responseMap.get("list_count"));
-                    responseObj.setResult((String) responseMap.get("result"));
+                    responseObj.setList_count(String.valueOf(responseMap.get("list_count")));
+                    responseObj.setResult(String.valueOf(responseMap.get("result")));
                     responseObj.setOrder_list(linkDataList);
                 }
             }

@@ -12,7 +12,7 @@ public class AES256Utils {
 
     private static final String AES_ALGORITHM = "AES";
     private static final String AES_CIPHER_MODE = "AES/ECB/PKCS5Padding"; // ECB 모드 사용 (보안적으로는 CBC 모드 권장)
-
+    private static final String SECRET_KEY = "CPS_REWORDSECRET";
     private SecretKey secretKey;
 
     /**
@@ -46,6 +46,7 @@ public class AES256Utils {
      */
     public String encrypt(String plainText) {
         try {
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), AES_ALGORITHM);
             Cipher cipher = Cipher.getInstance(AES_CIPHER_MODE);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
@@ -64,6 +65,7 @@ public class AES256Utils {
      */
     public String decrypt(String encryptedText) {
         try {
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), AES_ALGORITHM);
             byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
             Cipher cipher = Cipher.getInstance(AES_CIPHER_MODE);
             cipher.init(Cipher.DECRYPT_MODE, secretKey);

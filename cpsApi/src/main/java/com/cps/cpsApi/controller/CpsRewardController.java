@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.print.DocFlavor;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class CpsRewardController {
             result.setData(member.getData());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            result.setError("userSignIn Controller Error");
+            result.setError("dotPitchReward Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -81,7 +82,37 @@ public class CpsRewardController {
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            result.setError("userSignIn Controller Error");
+            result.setError("dotPitchRewardMonth Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    /**
+     * 링크프라이스 익일 호출
+     *
+     * @date 2024-09-30
+     */
+    @Operation(summary = "링크프라이스 익일 호출")
+    @PostMapping(value = "/linkPrice/reward")
+    public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> linkPriceReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+
+        try {
+            List<String> depthList = Arrays.asList("N", "Y");
+            for (String depth : depthList) {
+                request.setCancel_flag(depth);
+                var reward = cpsRewardService.linkPriceReward(request, "R");
+                if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                    result.setSuccess();
+                } else {
+                    result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                }
+                result.setData(reward.getData());
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("linkPriceReward Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -106,7 +137,7 @@ public class CpsRewardController {
                 for (String depth : depthList) {
                     request.setCancel_flag(depth);
                     request.setYyyymmdd(date.format(formatter));
-                    var reward = cpsRewardService.linkPriceReward(request);
+                    var reward = cpsRewardService.linkPriceReward(request,"Y");
                     if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                         result.setSuccess();
                     } else {
@@ -117,7 +148,7 @@ public class CpsRewardController {
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            result.setError("userSignIn Controller Error");
+            result.setError("linkPriceRewardMonth Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

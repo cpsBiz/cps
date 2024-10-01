@@ -55,6 +55,7 @@ public class CpsClickLinkPriceService {
 			cpsClickEntity.setClickUrl(request.getClickUrl());
 			cpsClickEntity.setOs(request.getOs());
 			cpsClickEntity.setUserId(request.getUserId());
+			cpsClickEntity.setAdId(request.getAdId());
 			cpsClickEntity.setRewardYn("N");
 			cpsClickEntity.setIpAddress(ipAddress);
 

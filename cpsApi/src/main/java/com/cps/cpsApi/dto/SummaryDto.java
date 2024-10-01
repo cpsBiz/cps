@@ -21,7 +21,7 @@ public class SummaryDto {
     private int commissionProfit;
     private int confirmCommissionProfit;
     private int cancelCommissionProfit;
-    private int memberCommissionShare;
+    private int affliateCommission;
     private int confirmAffliateCommission;
     private int cancelAffliateCommission;
     private int userCommission;
@@ -45,7 +45,7 @@ public class SummaryDto {
         this.commissionProfit = commissionProfit;
         this.confirmCommissionProfit = confirmCommissionProfit;
         this.cancelCommissionProfit = cancelCommissionProfit;
-        this.memberCommissionShare = memberCommissionShare;
+        this.affliateCommission = affliateCommission;
         this.confirmAffliateCommission = confirmAffliateCommission;
         this.cancelAffliateCommission = cancelAffliateCommission;
         this.userCommission = userCommission;
@@ -53,7 +53,7 @@ public class SummaryDto {
         this.cancelUserCommission = cancelUserCommission;
     }
 
-    public SummaryDto(int keyWord, String keyWordName, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int memberCommissionShare, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
+    public SummaryDto(int keyWord, String keyWordName, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int affliateCommission, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
         this.keyWord = String.valueOf(keyWord);
         this.keyWordName = keyWordName;
         this.cnt = cnt;
@@ -70,7 +70,7 @@ public class SummaryDto {
         this.commissionProfit = commissionProfit;
         this.confirmCommissionProfit = confirmCommissionProfit;
         this.cancelCommissionProfit = cancelCommissionProfit;
-        this.memberCommissionShare = memberCommissionShare;
+        this.affliateCommission = affliateCommission;
         this.confirmAffliateCommission = confirmAffliateCommission;
         this.cancelAffliateCommission = cancelAffliateCommission;
         this.userCommission = userCommission;

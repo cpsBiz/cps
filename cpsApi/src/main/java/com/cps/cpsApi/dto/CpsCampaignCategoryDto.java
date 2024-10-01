@@ -5,8 +5,7 @@ import lombok.Data;
 @Data
 public class CpsCampaignCategoryDto {
     int campaignNum;
+    String campaignName;
     String category;
-    int rs;
-    String denyYn;
 }
 

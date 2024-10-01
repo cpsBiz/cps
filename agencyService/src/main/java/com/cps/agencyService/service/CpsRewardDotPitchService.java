@@ -29,7 +29,7 @@ public class CpsRewardDotPitchService {
 	private final CpsRewardRepository cpsRewardRepository;
 
 	/**
-	 * 클릭정보 실시간 저장
+	 * 리워드 정보 실시간 저장
 	 * @date 2024-09-23
 	 */
 	public GenericBaseResponse<RewardDto> realTime(CpsRewardDotPitchPacket.RewardInfo.RealTimeRequest request) throws Exception {

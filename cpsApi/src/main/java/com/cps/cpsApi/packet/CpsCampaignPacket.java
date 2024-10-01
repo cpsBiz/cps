@@ -1,11 +1,15 @@
 package com.cps.cpsApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
+import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.cpsApi.dto.CpsCampaignCategoryDto;
 import com.cps.cpsApi.dto.CpsCampaignDto;
-import com.cps.cpsApi.entity.CpsCampaignEntity;
+import com.cps.cpsApi.dto.CpsCampaignSearchDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 /**
  * 캠페인
@@ -61,17 +65,37 @@ public class CpsCampaignPacket {
         public static class CampaignSearchRequest {
             private int campaignNum;
             private String memberId;
-            private String managerId;
+            private String agencyId;
             private String campaignName;
             private String campaignStart;
             private String campaignEnd;
             private String clickUrl;
             private String category;
+            private int page;
+            private int size;
         }
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class CampaignSearchResponse extends GenericBaseResponse<CpsCampaignEntity> {}
+        public static class CampaignSearchResponse extends GenericPageBaseResponse<CpsCampaignSearchDto> {}
 
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CampaignCategoryListRequest {
+            List<CampaignCategoryRequest> campaignCategoryList;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CampaignCategoryRequest {
+            private int campaignNum;
+            private String campaignName;
+            @NotBlank(message = "category 확인")
+            private String category;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CampaignCategoryResponse extends GenericBaseResponse<CpsCampaignCategoryDto> {}
     }
 }

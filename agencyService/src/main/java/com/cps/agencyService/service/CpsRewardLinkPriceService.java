@@ -28,7 +28,7 @@ public class CpsRewardLinkPriceService {
 	private final CpsRewardRepository cpsRewardRepository;
 
 	/**
-	 * 클릭정보 실시간 저장
+	 * 리워드 정보 실시간 저장
 	 * @date 2024-09-25
 	 */
 	public GenericBaseResponse<RewardDto> realTime(CpsRewardLinkPricePacket.RewardInfo.RealTimeRequest request) throws Exception {
