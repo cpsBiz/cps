@@ -163,7 +163,7 @@ public class CpsMemberService {
 				if (null == cpsMemberRepository.findByMemberId("link_"+member.getMemberId())) {
 					member.setMemberId("link_"+member.getMemberId());
 					member.setMemberPw(member.getMemberId());
-					member.setType("MEMBER"); member.setStatus("N");member.setBusinessType("B");
+					member.setType("MERCHANT"); member.setStatus("N");member.setBusinessType("B");
 					member.setAgencyId("linkprice");
 					CpsMemberEntity cpsMemberEntity =  new CpsMemberEntity();
 					CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();

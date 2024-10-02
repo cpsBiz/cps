@@ -1,10 +1,8 @@
-package com.cps.cpsApi.controller;
+package com.cps.cpsViewApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsApi.packet.CpsCategoryPacket;
-import com.cps.cpsApi.packet.CpsOnetoOnePacket;
-import com.cps.cpsApi.service.CpsCategoryService;
-import com.cps.cpsApi.service.CpsOneToOneService;
+import com.cps.cpsViewApi.packet.CpsOnetoOnePacket;
+import com.cps.cpsViewApi.service.CpsOneToOneService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +83,7 @@ public class CpsOneToOneController {
         try {
             var inquiry = cpsOneToOneService.inquiryList(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(inquiry.getResultCode())) {
-                result.setSuccess(inquiry.getTotalPage());
+                result.setSuccess(inquiry.getTotalCount());
             } else {
                 result.setApiMessage(inquiry.getResultCode(), inquiry.getResultMessage());
             }

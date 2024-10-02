@@ -1,4 +1,4 @@
-package com.cps.cpsApi.entity;
+package com.cps.cpsViewApi.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

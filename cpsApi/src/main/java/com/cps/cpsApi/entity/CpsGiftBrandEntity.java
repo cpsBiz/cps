@@ -11,14 +11,25 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "CPS_ANSWER")
-public class CpsAnswerEntity {
+@Table(name = "CPS_GIFT_BRAND")
+@IdClass(CpsGiftBrandPk.class)
+public class CpsGiftBrandEntity {
     @Id
-    @Column(name = "INQUIRY_NUM", updatable = false, nullable = false)
-    private int inquiryNum;
+    @Column(name = "BRAND_ID", updatable = false, nullable = false)
+    private String brandId;
 
-    @Column(name = "NOTE")
-    private String note;
+    @Id
+    @Column(name = "MEMBER_ID", updatable = false, nullable = false)
+    private String memberId;
+
+    @Column(name = "BRAND_NAME")
+    private String brandName;
+
+    @Column(name = "MIN_CNT")
+    private int minCnt;
+
+    @Column(name = "BRAND_YN")
+    private String brandYn;
 
     @CreatedDate
     @Column(name = "REG_DATE", updatable = false)

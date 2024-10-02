@@ -31,7 +31,7 @@ public class SummaryService {
 			if (null == response) {
 				response.setApiMessage(Constants.VIEW_BLANK.getCode(), Constants.VIEW_BLANK.getValue());
 			} else {
-				response.setSuccess(response.getTotalPage());
+				response.setSuccess(response.getTotalCount());
 			}
 		}catch (Exception e){
 			response.setApiMessage(Constants.VIEW_SEARCH_EXCEPTION.getCode(), Constants.VIEW_SEARCH_EXCEPTION.getValue());

@@ -33,7 +33,7 @@ public class SummaryController {
         try {
             var member = summaryService.summaryCount(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
-                result.setSuccess(member.getTotalPage());
+                result.setSuccess(member.getTotalCount());
             } else {
                 result.setApiMessage(member.getResultCode(), member.getResultMessage());
             }

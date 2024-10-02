@@ -25,6 +25,7 @@ public class CpsViewPacket {
             private String userId;
             private String adId;
             private String os;
+            private String category;
         }
 
         @Data

@@ -27,9 +27,13 @@ public class CpsViewService {
 	 */
 	public CpsViewPacket.ViewInfo.ViewResponse campaignView(CpsViewPacket.ViewInfo.ViewRequest request) throws Exception {
 		CpsViewPacket.ViewInfo.ViewResponse response = new CpsViewPacket.ViewInfo.ViewResponse();
+		List<CpsViewDto> CpsViewDtoList = null;
 		try {
-			List<CpsViewDto> CpsViewDtoList = cpsViewDtoList(cpsViewRepository.findActiveCampaigns(request.getAffliateId(), request.getZoneId(), request.getSite(), request.getUserId(), request.getAdId(), request.getOs()));
-
+			if (request.getCategory().equals("favorites")) {
+				CpsViewDtoList = cpsViewDtoList(cpsViewRepository.findActiveFavoritesCampaigns(request.getAffliateId(), request.getZoneId(), request.getSite(), request.getUserId(), request.getAdId(), request.getOs()));
+			} else {
+				CpsViewDtoList = cpsViewDtoList(cpsViewRepository.findActiveCampaigns(request.getAffliateId(), request.getZoneId(), request.getSite(), request.getUserId(), request.getAdId(), request.getOs(), request.getCategory()));
+			}
 			List<CpsViewEntity> cpsViewEntityList = cpsViewEntityList(CpsViewDtoList);
 
 			if (cpsViewEntityList.size() > 0) {
@@ -42,7 +46,7 @@ public class CpsViewService {
 			}
 		}catch (Exception e){
 			response.setApiMessage(Constants.VIEW_EXCEPTION.getCode(), Constants.VIEW_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " view api  {}", e);
+			log.error(Constant.EXCEPTION_MESSAGE + " campaignView api request : {}, exception :  {}", request, e);
 		}
 		return response;
 	}

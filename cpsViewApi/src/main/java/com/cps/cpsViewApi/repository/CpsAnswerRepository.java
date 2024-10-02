@@ -1,7 +1,6 @@
-package com.cps.cpsApi.repository;
+package com.cps.cpsViewApi.repository;
 
-import com.cps.cpsApi.entity.CpsAnswerEntity;
-import com.cps.cpsApi.entity.CpsInquiryEntity;
+import com.cps.cpsViewApi.entity.CpsAnswerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CpsAnswerRepository extends JpaRepository<CpsAnswerEntity, String> {

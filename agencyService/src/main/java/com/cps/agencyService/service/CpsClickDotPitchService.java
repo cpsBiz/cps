@@ -69,7 +69,6 @@ public class CpsClickDotPitchService {
 						CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest clickRequest = new CpsDotPitchClickPacket.DotPitchClickInfo.DotPitchClickRequest();
 						clickRequest.setPf_code(pfCode(request.getClickUrl()));
 						clickRequest.setKeyid(String.valueOf(cpsClickEntity.getClickNum()));
-						//clickRequest.setTurl(site("https://www.11st.co.kr/products/2744617875?trTypeCd=03&trCtgrNo=2151825", request.getMemberId()));
 						String outputUrl = String.format("?pf_code=%s&keyid=%s", clickRequest.getPf_code(), clickRequest.getKeyid());
 
 						ClickDto clickDto = new ClickDto();

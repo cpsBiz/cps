@@ -1,17 +1,15 @@
-package com.cps.cpsApi.service;
+package com.cps.cpsViewApi.service;
 
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.common.model.GenericPageBaseResponse;
-import com.cps.cpsApi.dto.CpsMemberListDto;
-import com.cps.cpsApi.dto.CpsOneToOneDto;
-import com.cps.cpsApi.entity.CpsAnswerEntity;
-import com.cps.cpsApi.entity.CpsInquiryEntity;
-import com.cps.cpsApi.entity.CpsMemberEntity;
-import com.cps.cpsApi.packet.CpsOnetoOnePacket;
-import com.cps.cpsApi.repository.CpsAnswerRepository;
-import com.cps.cpsApi.repository.CpsInquiryRepository;
+import com.cps.cpsViewApi.dto.CpsOneToOneDto;
+import com.cps.cpsViewApi.entity.CpsAnswerEntity;
+import com.cps.cpsViewApi.entity.CpsInquiryEntity;
+import com.cps.cpsViewApi.packet.CpsOnetoOnePacket;
+import com.cps.cpsViewApi.repository.CpsAnswerRepository;
+import com.cps.cpsViewApi.repository.CpsInquiryRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

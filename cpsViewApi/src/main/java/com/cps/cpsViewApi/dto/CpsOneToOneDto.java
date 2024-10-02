@@ -1,4 +1,4 @@
-package com.cps.cpsApi.dto;
+package com.cps.cpsViewApi.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

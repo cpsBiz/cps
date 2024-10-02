@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -113,8 +115,14 @@ public class CpsRewardService {
 							rewardYn.set("Y"); //구매 확정 취소 여부 확인 완료
 						}
 
-						cpsRewardEntity.setMemberName(dot.getM_name());
-						cpsRewardEntity.setProductName(dot.getP_name());
+						cpsRewardEntity.setMemberName(commissionDto.getMemberName());
+
+						//지마켓 경우 인코딩
+						if (dot.getM_name().equals("G마켓_PC") || dot.getM_name().equals("G마켓_모바일")) {
+							cpsRewardEntity.setProductName(URLDecoder.decode(dot.getP_name(), StandardCharsets.UTF_8));
+						} else {
+							cpsRewardEntity.setProductName(dot.getP_name());
+						}
 						cpsRewardEntity.setProductCnt(Integer.parseInt(dot.getQuantity()));
 						cpsRewardEntity.setProductPrice(Integer.parseInt(dot.getPrice()));
 

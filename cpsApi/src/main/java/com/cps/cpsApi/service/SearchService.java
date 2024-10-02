@@ -62,7 +62,7 @@ public class SearchService {
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
 		TypedQuery<CpsCampaignEntity> query = em.createQuery(cq);
 		//전체 개수
-		response.setTotalPage(query.getResultList().size());
+		response.setTotalCount(query.getResultList().size());
 
 		// 페이징 처리
 		if (request.getSize() == 0)request.setSize(10);
@@ -130,7 +130,7 @@ public class SearchService {
 
 		// 검색어 조회
 		if (request.getKeyword() != null && !request.getKeyword().equals("")) {
-			if ("MEMBER".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
+			if ("MERCHANT".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
 				Predicate memberName = cb.like(root.get("memberName"), "%" + request.getKeyword() + "%");
 				Predicate memberId = cb.like(root.get("memberId"), "%" + request.getKeyword() + "%");
 				predicates.add(cb.or(memberName, memberId));
@@ -164,7 +164,7 @@ public class SearchService {
 		} else if ("MONTH".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "regYm", root.get("regYm"), root.get("regYm"));
 			orderByName = "regYm";
-		} else if ("MEMBER".equals(request.getSearchType())) {
+		} else if ("MERCHANT".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "memberId", root.get("memberId"), root.get("memberName"));
 			orderByName = "memberName";
 		} else if ("CAMPAIGN".equals(request.getSearchType())) {
@@ -188,7 +188,7 @@ public class SearchService {
 
 		TypedQuery<SummaryDto> query = em.createQuery(cq);
 		//전체 개수
-		response.setTotalPage(query.getResultList().size());
+		response.setTotalCount(query.getResultList().size());
 
 		if ("ASC".equals(request.getOrderBy())) {
 			cq.orderBy(cb.asc(root.get(orderByName)));

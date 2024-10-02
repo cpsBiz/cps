@@ -58,7 +58,7 @@ public class CpsCampaignController {
         try {
             var campaign = cpsCampaignService.campaignList(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(campaign.getResultCode())) {
-                result.setSuccess(campaign.getTotalPage());
+                result.setSuccess(campaign.getTotalCount());
             } else {
                 result.setApiMessage(campaign.getResultCode(), campaign.getResultMessage());
             }

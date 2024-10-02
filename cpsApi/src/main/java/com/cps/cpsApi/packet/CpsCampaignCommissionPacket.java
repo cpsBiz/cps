@@ -14,11 +14,11 @@ import lombok.EqualsAndHashCode;
 @Data
 public class CpsCampaignCommissionPacket {
 
-    public static class CpsAffiliateCampaignInfo {
+    public static class AffiliateCampaignInfo {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class CpsAffiliateCampaignRequest {
+        public static class AffiliateCampaignRequest {
             private int campaignNum;
             @NotBlank(message = "affiliateId 확인")
             private String memberId;

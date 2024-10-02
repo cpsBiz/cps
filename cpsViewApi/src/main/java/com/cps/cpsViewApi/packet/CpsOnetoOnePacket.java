@@ -1,8 +1,8 @@
-package com.cps.cpsApi.packet;
+package com.cps.cpsViewApi.packet;
 
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.common.model.GenericPageBaseResponse;
-import com.cps.cpsApi.dto.CpsOneToOneDto;
+import com.cps.cpsViewApi.dto.CpsOneToOneDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

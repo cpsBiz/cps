@@ -1,13 +1,11 @@
-package com.cps.cpsApi.repository;
+package com.cps.cpsViewApi.repository;
 
-import com.cps.cpsApi.entity.CpsInquiryEntity;
+import com.cps.cpsViewApi.entity.CpsInquiryEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 public interface CpsInquiryRepository extends JpaRepository<CpsInquiryEntity, String> {
 

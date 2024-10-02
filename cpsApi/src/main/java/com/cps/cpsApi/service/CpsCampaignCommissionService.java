@@ -22,8 +22,8 @@ public class CpsCampaignCommissionService {
 	 * 매체 캠페인 승인
 	 * @date 2024-09-12
 	 */
-	public GenericBaseResponse<CpsCampaignCommissionDto> campaignCommission(CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.CpsAffiliateCampaignRequest request) throws Exception {
-		CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.Response response = new CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.Response();
+	public GenericBaseResponse<CpsCampaignCommissionDto> campaignCommission(CpsCampaignCommissionPacket.AffiliateCampaignInfo.AffiliateCampaignRequest request) throws Exception {
+		CpsCampaignCommissionPacket.AffiliateCampaignInfo.Response response = new CpsCampaignCommissionPacket.AffiliateCampaignInfo.Response();
 		CpsCampaignCommissionEntity cpsCampaignCommissionEntity = new CpsCampaignCommissionEntity();
 
 		try {

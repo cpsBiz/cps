@@ -94,7 +94,7 @@ public class CpsCampaignService {
 			if (null == response) {
 				response.setApiMessage(Constants.CAMPAIGN_BLANK.getCode(), Constants.CAMPAIGN_BLANK.getValue());
 			} else {
-				response.setSuccess(response.getTotalPage());
+				response.setSuccess(response.getTotalCount());
 			}
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CAMPAIGN_SEARCH_EXCEPTION.getCode(), Constants.CAMPAIGN_SEARCH_EXCEPTION.getValue());

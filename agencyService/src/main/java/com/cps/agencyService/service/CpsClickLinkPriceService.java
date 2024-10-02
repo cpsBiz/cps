@@ -64,7 +64,7 @@ public class CpsClickLinkPriceService {
 				return response;
 			} else {
 				String domain = domain(request.getClickUrl());
-				CpsLinkPriceClickPacket.CpsLinkPriceClickInfo.CpsLinkPriceClickRequest clickRequest = new CpsLinkPriceClickPacket.CpsLinkPriceClickInfo.CpsLinkPriceClickRequest();
+				CpsLinkPriceClickPacket.LinkPriceClickInfo.LinkPriceClickRequest clickRequest = new CpsLinkPriceClickPacket.LinkPriceClickInfo.LinkPriceClickRequest();
 				clickRequest.setU_id(String.valueOf(cpsClickEntity.getClickNum()));
 				clickRequest.setM(cpsClickEntity.getMemberId().replace("link_",""));
 				clickRequest.setA("A100692601"); //인라이플 코드

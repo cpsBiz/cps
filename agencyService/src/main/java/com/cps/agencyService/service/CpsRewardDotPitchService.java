@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -77,7 +79,13 @@ public class CpsRewardDotPitchService {
 					cpsRewardEntity.setStatus(300);
 				}
 				cpsRewardEntity.setMemberName(request.getR_Mid());
-				cpsRewardEntity.setProductName(request.getR_ProdNm());
+
+				//지마켓 경우 인코딩
+				if (request.getR_Mid().equals("G마켓_PC") || request.getR_Mid().equals("G마켓_모바일")) {
+					cpsRewardEntity.setProductName(URLDecoder.decode(request.getR_Mid(), StandardCharsets.UTF_8));
+				} else {
+					cpsRewardEntity.setProductName(request.getR_ProdNm());
+				}
 				cpsRewardEntity.setProductCnt(request.getR_Quantity());
 				cpsRewardEntity.setProductPrice(request.getR_OrdPrice());
 

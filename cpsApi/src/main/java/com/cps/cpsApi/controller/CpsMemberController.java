@@ -4,6 +4,7 @@ import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.utils.AES256Utils;
 import com.cps.cpsApi.packet.CpsMemberPacket;
+import com.cps.cpsApi.packet.CpsRewardPacket;
 import com.cps.cpsApi.service.CpsMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -14,6 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -91,7 +97,7 @@ public class CpsMemberController {
         try {
             var member = cpsMemberService.memberList(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
-                result.setSuccess(member.getTotalPage());
+                result.setSuccess(member.getTotalCount());
             } else {
                 result.setApiMessage(member.getResultCode(), member.getResultMessage());
             }

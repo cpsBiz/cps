@@ -7,12 +7,12 @@ import lombok.Data;
 public class BasePageResponse implements IBaseResponse{
     private String resultCode;
     private String resultMessage;
-    private long totalPage;
+    private long totalCount;
 
     public void setSuccess(long totalPage){
         this.resultCode = ResultCode.SUCCESS.getResultCode();
         this.resultMessage = ResultCode.SUCCESS.getResultMessage();
-        this.totalPage = totalPage;
+        this.totalCount = totalCount;
     }
 
     public void setError(String errorMsg){

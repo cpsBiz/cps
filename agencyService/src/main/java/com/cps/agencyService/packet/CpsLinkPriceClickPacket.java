@@ -15,11 +15,11 @@ import lombok.EqualsAndHashCode;
 @Data
 public class CpsLinkPriceClickPacket {
 
-    public static class CpsLinkPriceClickInfo {
+    public static class LinkPriceClickInfo {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class CpsLinkPriceClickRequest {
+        public static class LinkPriceClickRequest {
             private String m;
             private String a;
             private String l;

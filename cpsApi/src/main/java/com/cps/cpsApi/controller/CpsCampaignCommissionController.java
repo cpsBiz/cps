@@ -27,8 +27,8 @@ public class CpsCampaignCommissionController {
      */
     @Operation(summary = "매체 캠페인 승인")
     @PostMapping(value = "/campaignCommission")
-    public ResponseEntity<CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.Response> campaignCommission(@Valid @RequestBody CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.CpsAffiliateCampaignRequest request) throws Exception {
-        var result = new CpsCampaignCommissionPacket.CpsAffiliateCampaignInfo.Response();
+    public ResponseEntity<CpsCampaignCommissionPacket.AffiliateCampaignInfo.Response> campaignCommission(@Valid @RequestBody CpsCampaignCommissionPacket.AffiliateCampaignInfo.AffiliateCampaignRequest request) throws Exception {
+        var result = new CpsCampaignCommissionPacket.AffiliateCampaignInfo.Response();
 
         try {
             var commission = cpsCampaignCommissionService.campaignCommission(request);
