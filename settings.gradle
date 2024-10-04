@@ -7,4 +7,6 @@ include 'agencyApi:dotPitch:dotPitchClick'
 include 'agencyApi:dotPitch:dotPitchReward'
 include 'agencyApi:linkPrice:linkPriceClick'
 include 'agencyApi:linkPrice:linkPriceReward'
+include 'viewApi:common'
+include 'viewService'
 
