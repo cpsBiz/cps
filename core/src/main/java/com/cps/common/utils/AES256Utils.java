@@ -1,13 +1,14 @@
 package com.cps.common.utils;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
 import java.util.Base64;
-@Configuration
+@Component
 public class AES256Utils {
 
     private static final String AES_ALGORITHM = "AES";

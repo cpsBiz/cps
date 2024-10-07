@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="PATH" value="/home/cps/LOGS/api/view/common"/>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] log - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="PERFORMANCE_TIME_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${PATH}/logback.performance.time.log</File>
+        <encoder>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] time-log - %msg%n</Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>performanceTime</marker>
+            </evaluator>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/bak/logback.performance.time.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="LATENCY_TIME_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${PATH}/logback.latency.log</File>
+        <encoder>
+            <Pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t] latency-log - %msg%n</Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>latencyTime</marker>
+            </evaluator>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/bak/logback.latency.time.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logback.info.log</file>
+        <encoder>
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] Sample-info-log API - %msg%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/logback.info.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="HTTP_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logback.httpLog.log</file>
+        <encoder>
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] HTTP LOG - %msg%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/logback.httpLog.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logback.error.log</file>
+        <encoder>
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] Sample-error-log - %msg%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/logback.error.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
+    <appender name="API_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logback.api.log</file>0000
+        <encoder>
+            <pattern>[%-5p] %d{yyyy/MM/dd HH:mm:ss.SSS}[%r] %logger{36}.%M[line:%L] HttpService Info - %msg%n
+            </pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/logback.api.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="SQL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/logback.sql.log</file>
+        <encoder>
+            <pattern>[%-5p] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/logback.sql.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>20</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_FILE"/>
+    </logger>
+
+    <logger name="jdbc.sqlonly" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_FILE"/>
+    </logger>
+
+    <logger name="com.cps.common.servcies.BaseHttpService" level="debug" additivity="false">
+        <appender-ref ref="API_LOG"/>
+    </logger>
+    <logger name="com.cps.common.filter.HttpLoggingFilter" level="INFO" additivity="false">
+        <appender-ref ref="HTTP_LOG"/>
+    </logger>
+    <springProfile name="!prod">
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="LATENCY_TIME_LOG"/>
+        <appender-ref ref="PERFORMANCE_TIME_LOG"/>
+    </root>
+    </springProfile>
+
+    <springProfile name = "prod">
+        <root level="INFO">
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="INFO"/>
+        </root>
+    </springProfile>
+
+</configuration>
