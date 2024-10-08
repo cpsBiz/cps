@@ -133,7 +133,7 @@ public class CpsCampaignService {
 
 		cpsCampaignEntity.setCampaignNum(request.getCampaignNum());
 		cpsCampaignEntity.setAgencyId(request.getAgencyId());
-		cpsCampaignEntity.setMemberId(request.getMemberId());
+		cpsCampaignEntity.setMerchantId(request.getMerchantId());
 		cpsCampaignEntity.setCampaignName(request.getCampaignName());
 		cpsCampaignEntity.setCampaignStart(request.getCampaignStart());
 		cpsCampaignEntity.setCampaignEnd(request.getCampaignEnd());
@@ -162,7 +162,8 @@ public class CpsCampaignService {
 	public CpsCampaignEntity cpsMemberCampaign(CpsMemberPacket.MemberInfo.MemberCampaignRequest request) throws Exception {
 		CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
 		cpsCampaignEntity.setAgencyId(request.getAgencyId());
-		cpsCampaignEntity.setMemberId(request.getMemberId());
+		//유저 등록 후 캠페인 자동 등록이여서 memberId를 사용
+		cpsCampaignEntity.setMerchantId(request.getMemberId());
 		cpsCampaignEntity.setCampaignName(request.getMemberId()+" 캠페인 자동 등록");
 		cpsCampaignEntity.setClickUrl(request.getClickUrl());
 		cpsCampaignEntity.setLogo(request.getLogo());

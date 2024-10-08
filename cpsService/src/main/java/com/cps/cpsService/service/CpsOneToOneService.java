@@ -45,7 +45,7 @@ public class CpsOneToOneService {
 			cpsInquiryEntity.setUserId(request.getUserId());
 			cpsInquiryEntity.setInquiryType(request.getInquiryType());
 			cpsInquiryEntity.setCampaignNum(request.getCampaignNum());
-			cpsInquiryEntity.setMemberId(request.getUserId());
+			cpsInquiryEntity.setMerchantId(request.getMerchantId());
 			cpsInquiryEntity.setPurpose(request.getPurpose());
 			cpsInquiryEntity.setRegDay(request.getRegDay());
 			cpsInquiryEntity.setUserName(request.getUserName());
@@ -196,7 +196,7 @@ public class CpsOneToOneService {
 		cpsInquiryDto.setInquiryNum(cpsInquiryEntity.getInquiryNum());
 		cpsInquiryDto.setUserId(cpsInquiryEntity.getUserId());
 		cpsInquiryDto.setInquiryType(cpsInquiryEntity.getInquiryType());
-		cpsInquiryDto.setMemberId(cpsInquiryEntity.getUserId());
+		cpsInquiryDto.setMerchantId(cpsInquiryEntity.getMerchantId());
 		cpsInquiryDto.setPurpose(cpsInquiryEntity.getPurpose());
 		cpsInquiryDto.setRegDay(cpsInquiryEntity.getRegDay());
 		cpsInquiryDto.setUserName(cpsInquiryEntity.getUserName());

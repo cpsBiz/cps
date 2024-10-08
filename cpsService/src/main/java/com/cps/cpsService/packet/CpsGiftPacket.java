@@ -19,7 +19,7 @@ public class CpsGiftPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class GiftRequest {
             private String brandId;
-            private String memberId;
+            private String merchantId;
             private String apiType;
         }
 

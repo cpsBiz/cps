@@ -64,7 +64,7 @@ public class CpsRewardDotPitchService {
 					cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());
 				}
 
-				cpsRewardEntity.setMemberId(commissionDto.getCpsClickEntity().getMemberId());
+				cpsRewardEntity.setMerchantId(commissionDto.getCpsClickEntity().getMerchantId());
 				cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
 				cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
 				cpsRewardEntity.setAffliateId(commissionDto.getCpsClickEntity().getAffliateId());

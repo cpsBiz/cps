@@ -33,10 +33,7 @@ public class InterceptorConfig implements WebMvcConfigurer  {
 						"http://180.67.204.119",
 						"http://180.67.204.120",
 						"http://13.125.179.218:32",
-						"http://13.124.188.166:32",
-						"http://10.251.1.161:8090",
-						"http://10.251.1.162:8090",
-						"https://api.commsad.com")
+						"http://13.124.188.166:32")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
 				.allowedHeaders("*")
 				.allowCredentials(true)

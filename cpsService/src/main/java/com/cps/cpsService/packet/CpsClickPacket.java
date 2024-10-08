@@ -26,8 +26,8 @@ public class CpsClickPacket {
             private String zoneId;
             @NotBlank(message = "agencyId 확인")
             private String agencyId;
-            @NotBlank(message = "memberId 확인")
-            private String memberId;
+            @NotBlank(message = "merchantId 확인")
+            private String merchantId;
             private String type;
             private String site;
             private String clickUrl;

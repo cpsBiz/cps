@@ -11,7 +11,7 @@ public class CpsViewDto {
     String agencyId;
     String affliateId;
     String zoneId;
-    String memberId;
+    String merchantId;
     String type;
     String site;
     String clickUrl;

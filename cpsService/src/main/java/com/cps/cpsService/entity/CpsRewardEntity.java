@@ -37,8 +37,8 @@ public class CpsRewardEntity {
     @Column(name = "REG_HOUR", updatable = false)
     private String regHour;
 
-    @Column(name = "MEMBER_ID")
-    private String memberId;
+    @Column(name = "MERCHANT_ID")
+    private String merchantId;
 
     @Column(name = "AGENCY_ID")
     private String agencyId;

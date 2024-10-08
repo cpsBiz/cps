@@ -39,8 +39,8 @@ public class CpsClickEntity {
     @Column(name = "AGENCY_ID")
     private String agencyId;
 
-    @Column(name = "MEMBER_ID")
-    private String memberId;
+    @Column(name = "MERCHANT_ID")
+    private String merchantId;
 
     @Column(name = "TYPE")
     private String type;

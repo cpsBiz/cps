@@ -5,6 +5,7 @@ import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsService.dto.CpsMemberCommissionDto;
 import com.cps.cpsService.dto.CpsMemberCommissionListDto;
+import com.cps.cpsService.dto.CpsMemberRewardUnitDto;
 import com.cps.cpsService.packet.CpsMemberCommissionPacket;
 import com.cps.cpsService.repository.CpsMemberCommissionRepository;
 import lombok.RequiredArgsConstructor;
@@ -96,12 +97,35 @@ public class CpsMemberCommissionService {
 			cpsMemberCommissionDto.setProductPrice((Integer) commission[5]);
 			cpsMemberCommissionDto.setUserCommission((Integer) commission[6]);
 			cpsMemberCommissionDto.setProductCnt((Integer) commission[7]);
-			cpsMemberCommissionDto.setMemberId((String) commission[8]);
+			cpsMemberCommissionDto.setMerchantId((String) commission[8]);
 			cpsMemberCommissionDto.setStatus((Integer) commission[9]);
 			cpsMemberCommissionDto.setCommissionPaymentStandard((String) commission[10]);
 			cpsMemberCommissionList.add(cpsMemberCommissionDto);
 		});
 
 		return cpsMemberCommissionList;
+	}
+
+	/**
+	 * 쿠팡 막대사탕 조회
+	 * @date 2024-10-08
+	 */
+	public GenericBaseResponse<CpsMemberRewardUnitDto> memberStick(CpsMemberCommissionPacket.MemberCommissionInfo.MemberCommissionRequest request) throws Exception {
+		CpsMemberCommissionPacket.MemberCommissionInfo.MemberRewardUnitResponse response = new CpsMemberCommissionPacket.MemberCommissionInfo.MemberRewardUnitResponse();
+
+		try {
+			CpsMemberRewardUnitDto result = cpsMemberCommissionRepository.findRewardsUnitByUserId(request.getUserId(), request.getAffliateId());
+
+			if (null != result) {
+				response.setSuccess();
+				response.setData(result);
+			}else{
+				response.setApiMessage(Constants.MEMBER_COMMISSION_BLANK.getCode(), Constants.MEMBER_COMMISSION_BLANK.getValue());
+			}
+		} catch (Exception e) {
+			response.setApiMessage(Constants.MEMBER_COMMISSION_SEARCH_EXCEPTION.getCode(), Constants.MEMBER_COMMISSION_SEARCH_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " memberStick api request : {}, exception :  {}", request, e);
+		}
+		return response;
 	}
 }

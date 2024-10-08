@@ -46,11 +46,11 @@ public class CpsGiftController {
     }
 
     /**
-     * 기프트 상품 등록
+     * 상품 상품 등록
      *
      * @date 2024-10-02
      */
-    @Operation(summary = "기프트 등록, 수정, 삭제")
+    @Operation(summary = "상품 등록, 수정, 삭제")
     @PostMapping(value = "/giftProduct")
     public ResponseEntity<CpsGiftPacket.GiftInfo.GiftProductResponse> giftProduct(@Valid @RequestBody CpsGiftPacket.GiftInfo.GiftProductRequest request) throws Exception {
         var result = new CpsGiftPacket.GiftInfo.GiftProductResponse();

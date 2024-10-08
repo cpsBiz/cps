@@ -23,8 +23,8 @@ public class CpsViewEntity {
     @Column(name = "REG_HOUR")
     private String regHour;
 
-    @Column(name = "MEMBER_ID")
-    private String memberId;
+    @Column(name = "MERCHANT_ID")
+    private String merchantId;
 
     @Column(name = "AGENCY_ID")
     private String agencyId;

@@ -20,8 +20,8 @@ public class CpsAgencyEntity {
     private String agencyId;
 
     @Id
-    @Column(name = "MEMBER_ID", updatable = false, nullable = false)
-    private String memberId;
+    @Column(name = "MERCHANT_ID", updatable = false, nullable = false)
+    private String merchantId;
 
     @Column(name = "REWARD_YN")
     private String rewardYn;

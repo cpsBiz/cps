@@ -28,10 +28,11 @@ public class CpsCampaignCommissionService {
 
 		try {
 			cpsCampaignCommissionEntity.setCampaignNum(request.getCampaignNum());
-			cpsCampaignCommissionEntity.setMemberId(request.getMemberId());
+			cpsCampaignCommissionEntity.setMerchantId(request.getMerchantId());
 			cpsCampaignCommissionEntity.setStatus(request.getStatus());
 			cpsCampaignCommissionEntity.setMemberCommissionShare(request.getMemberCommissionShare());
 			cpsCampaignCommissionEntity.setUserCommissionShare(request.getUserCommissionShare());
+			cpsCampaignCommissionEntity.setPointRate(request.getPointRate());
 
 			cpsAffliateCampaignRepository.save(cpsCampaignCommissionEntity);
 			response.setSuccess();
@@ -45,7 +46,7 @@ public class CpsCampaignCommissionService {
 
 	public CpsCampaignCommissionDto commonCpsAffiliateCampaignDto(CpsCampaignCommissionEntity cpsCampaignCommissionEntity){
 		CpsCampaignCommissionDto cpsCampaignCommissionDto = new CpsCampaignCommissionDto();
-		cpsCampaignCommissionDto.setMemberId(cpsCampaignCommissionEntity.getMemberId());
+		cpsCampaignCommissionDto.setMerchantId(cpsCampaignCommissionEntity.getMerchantId());
 		cpsCampaignCommissionDto.setMemberCommissionShare(cpsCampaignCommissionEntity.getMemberCommissionShare());
 		cpsCampaignCommissionDto.setUserCommissionShare(cpsCampaignCommissionEntity.getUserCommissionShare());
 		cpsCampaignCommissionDto.setStatus(cpsCampaignCommissionEntity.getStatus());

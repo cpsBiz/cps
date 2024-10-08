@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -36,8 +37,8 @@ public class SearchService {
 		if (request.getCampaignNum() > 0) {
 			predicates.add(cb.equal(root.get("campaignNum"), request.getCampaignNum()));
 		}
-		if (request.getMemberId() != null && !request.getMemberId().equals("")) {
-			predicates.add(cb.like(root.get("memberId"), "%" + request.getMemberId() + "%"));
+		if (request.getMerchantId() != null && !request.getMerchantId().equals("")) {
+			predicates.add(cb.like(root.get("merchantId"), "%" + request.getMerchantId() + "%"));
 		}
 		if (request.getAgencyId() != null && !request.getAgencyId().equals("")) {
 			predicates.add(cb.like(root.get("agencyId"), "%" + request.getAgencyId () + "%"));
@@ -73,7 +74,7 @@ public class SearchService {
 			CpsCampaignSearchDto campaignSearch = new CpsCampaignSearchDto();
 			campaignSearch.setCampaignNum(campaign.getCampaignNum());
 			campaignSearch.setCampaignName(campaign.getCampaignName());
-			campaignSearch.setMemberId(campaign.getMemberId());
+			campaignSearch.setMerchantId(campaign.getMerchantId());
 			campaignSearch.setAgencyId(campaign.getAgencyId());
 			campaignSearch.setCampaignStart(campaign.getCampaignStart());
 			campaignSearch.setCampaignEnd(campaign.getCampaignEnd());
@@ -123,16 +124,19 @@ public class SearchService {
 		}
 
 		// 영역
-		if (request.getOs() != null && !request.getOs().equals("")) {
-			predicates.add(cb.equal(root.get("os"), request.getOs()));
+		if (request.getOs().equals("P")) {
+			predicates.add(cb.equal(root.get("os"), "PC"));
+		} else if (request.getOs().equals("M")) {
+			List<String> osValues = Arrays.asList("IOS", "AOS");
+			predicates.add(root.get("os").in(osValues));
 		}
 
 		// 검색어 조회
 		if (request.getKeyword() != null && !request.getKeyword().equals("")) {
 			if ("MERCHANT".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
 				Predicate memberName = cb.like(root.get("memberName"), "%" + request.getKeyword() + "%");
-				Predicate memberId = cb.like(root.get("memberId"), "%" + request.getKeyword() + "%");
-				predicates.add(cb.or(memberName, memberId));
+				Predicate merchantId = cb.like(root.get("merchantId"), "%" + request.getKeyword() + "%");
+				predicates.add(cb.or(memberName, merchantId));
 			}
 			if ("SITE".equals(request.getKeywordType()) || "ALL".equals(request.getKeywordType())) {
 				predicates.add(cb.like(root.get("site"), "%" + request.getKeyword() + "%"));
@@ -147,7 +151,7 @@ public class SearchService {
 			}
 
 			if ("EQMEMBER".equals(request.getKeywordType())) {
-				predicates.add(cb.equal(root.get("memberId"), request.getKeyword()));
+				predicates.add(cb.equal(root.get("merchantId"), request.getKeyword()));
 			} else if ("EQSITE".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("site"), request.getKeyword()));
 			} else if ("EQCAMPAIGN".equals(request.getKeywordType())) {
@@ -164,7 +168,7 @@ public class SearchService {
 			cq = createSummaryQuery(cb, cq, root,  "regYm", root.get("regYm"), root.get("regYm"));
 			orderByName = "regYm";
 		} else if ("MERCHANT".equals(request.getSearchType())) {
-			cq = createSummaryQuery(cb, cq, root,  "memberId", root.get("memberId"), root.get("memberName"));
+			cq = createSummaryQuery(cb, cq, root,  "merchantId", root.get("merchantId"), root.get("memberName"));
 			orderByName = "memberName";
 		} else if ("CAMPAIGN".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "campaignNum", root.get("campaignNum"), root.get("campaignName"));

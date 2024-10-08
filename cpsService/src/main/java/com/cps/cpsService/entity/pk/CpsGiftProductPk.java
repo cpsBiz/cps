@@ -11,5 +11,5 @@ import java.io.Serializable;
 public class CpsGiftProductPk implements Serializable {
     @Column(name = "BRAND_ID") private String brandId;
     @Column(name = "PRODUCT_ID") private String productId;
-    @Column(name = "MEMBER_ID") private String memberId;
+    @Column(name = "MERCHANT_ID") private String merchantId;
 }

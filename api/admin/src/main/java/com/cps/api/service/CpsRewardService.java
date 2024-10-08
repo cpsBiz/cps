@@ -3,18 +3,27 @@ package com.cps.api.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
+import com.cps.common.utils.HmacGenerator;
 import com.cps.cpsService.dto.CommissionDto;
+import com.cps.cpsService.dto.CpsRewardUnitDto;
+import com.cps.cpsService.dto.CpsViewDto;
 import com.cps.cpsService.dto.DotPitchRewardDto;
 import com.cps.cpsService.entity.CpsRewardEntity;
+import com.cps.cpsService.entity.CpsRewardUnitEntity;
 import com.cps.cpsService.packet.CpsRewardPacket;
 import com.cps.cpsService.repository.CpsClickRepository;
 import com.cps.cpsService.repository.CpsRewardRepository;
+import com.cps.cpsService.repository.CpsRewardUnitRepository;
 import com.cps.cpsService.service.HttpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -45,18 +54,28 @@ public class CpsRewardService {
 
 	@Value("${linkPrice.site.code}") String linkPriceSiteCode;
 
+	@Value("${coupang.domain.url}") String coupangDomain;
+
+	@Value("${coupang.domain.order.url}") String coupangOrderDomain;
+
+	@Value("${coupang.domain.cancel.url}") String coupangCancelDomain;
+
+	@Value("${coupang.subId}") String coupangSubId;
+
 	private final HttpService httpService;
 
 	private final CpsClickRepository cpsClickRepository;
 
 	private final CpsRewardRepository cpsRewardRepository;
 
+	private final CpsRewardUnitRepository cpsRewardUnitRepository;
+
 	/**
 	 * 도트피치 익일, 취소내역 호출
 	 * @date 2024-09-23
 	 */
 	public GenericBaseResponse<DotPitchRewardDto> dotPitchReward(CpsRewardPacket.RewardInfo.DotPitchRequest request) throws Exception {
-		CpsRewardPacket.RewardInfo.DotPitchResponse response = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+		CpsRewardPacket.RewardInfo.RewardResponse response = new CpsRewardPacket.RewardInfo.RewardResponse();
 		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
 
 		String endPoint = dotPitchCpsEndPoint;
@@ -94,7 +113,7 @@ public class CpsRewardService {
 						}
 
 						cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
-						cpsRewardEntity.setMemberId(commissionDto.getCpsClickEntity().getMemberId());
+						cpsRewardEntity.setMerchantId(commissionDto.getCpsClickEntity().getMerchantId());
 						cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
 						cpsRewardEntity.setAffliateId(commissionDto.getCpsClickEntity().getAffliateId());
 						cpsRewardEntity.setZoneId(commissionDto.getCpsClickEntity().getZoneId());
@@ -128,6 +147,8 @@ public class CpsRewardService {
 						int commission = dot.getComm();
 						double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
 						double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
+						BigDecimal pointRateBigDecimal = commissionDto.getPointRate();
+						double pointRate = pointRateBigDecimal.doubleValue();
 
 						//커미션 매출
 						cpsRewardEntity.setCommission(commission);
@@ -136,7 +157,7 @@ public class CpsRewardService {
 						//매체 커미션 (커미션 매출 * 매체쉐어)
 						cpsRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
 						//유저 커미션 (매체 커미션 * 유저쉐어)
-						cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
+						cpsRewardEntity.setUserCommission((int) (((commission * memberCommissionShareDouble) * userCommissionShareDouble) * pointRate));
 						cpsRewardEntity.setCommissionRate(dot.getCommission_rate());
 
 						cpsRewardEntity.setBaseCommission("0");
@@ -182,7 +203,7 @@ public class CpsRewardService {
 	 * @date 2024-09-25
 	 */
 	public GenericBaseResponse<DotPitchRewardDto> linkPriceReward(CpsRewardPacket.RewardInfo.LinkPriceRequest request, String rewardYn) throws Exception {
-		CpsRewardPacket.RewardInfo.DotPitchResponse response = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+		CpsRewardPacket.RewardInfo.RewardResponse response = new CpsRewardPacket.RewardInfo.RewardResponse();
 		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
 		String domain = linkPriceDomain + linkPriceReward;
 
@@ -233,7 +254,7 @@ public class CpsRewardService {
 							}
 
 							cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
-							cpsRewardEntity.setMemberId(commissionDto.getCpsClickEntity().getMemberId());
+							cpsRewardEntity.setMerchantId(commissionDto.getCpsClickEntity().getMerchantId());
 							cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
 							cpsRewardEntity.setAffliateId(commissionDto.getCpsClickEntity().getAffliateId());
 							cpsRewardEntity.setZoneId(commissionDto.getCpsClickEntity().getZoneId());
@@ -252,6 +273,8 @@ public class CpsRewardService {
 							int commission = link.getCommission();
 							double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
 							double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
+							BigDecimal pointRateBigDecimal = commissionDto.getPointRate();
+							double pointRate = pointRateBigDecimal.doubleValue();
 
 							//커미션 매출
 							cpsRewardEntity.setCommission(commission);
@@ -260,7 +283,7 @@ public class CpsRewardService {
 							//매체 커미션 (커미션 매출 * 매체쉐어)
 							cpsRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
 							//유저 커미션 (매체 커미션 * 유저쉐어)
-							cpsRewardEntity.setUserCommission((int) ((commission * memberCommissionShareDouble) * userCommissionShareDouble));
+							cpsRewardEntity.setUserCommission((int) (((commission * memberCommissionShareDouble) * userCommissionShareDouble) * pointRate));
 							cpsRewardEntity.setCommissionRate("0");
 
 							cpsRewardEntity.setBaseCommission("0");
@@ -297,6 +320,185 @@ public class CpsRewardService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.LINKPRICE_EXCEPTION.getCode(), Constants.LINKPRICE_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " linkPriceReward api request : {}, entity : {}, exception : {}", request, cpsRewardEntityList, e);
+		}
+		return response;
+	}
+
+	/**
+	 * 쿠팡 실적조회 호출
+	 * @date 2024-10-07
+	 */
+	public GenericBaseResponse<DotPitchRewardDto> coupangReward(CpsRewardPacket.RewardInfo.CoupangRequest request, String cancel) throws Exception {
+		CpsRewardPacket.RewardInfo.RewardResponse response = new CpsRewardPacket.RewardInfo.RewardResponse();
+		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
+
+		String domain = coupangOrderDomain;
+		if ("Y".equals(cancel)) {
+			domain = coupangCancelDomain;
+		}
+
+		InetAddress inetAddress = InetAddress.getLocalHost();
+		String ipAddress = inetAddress.getHostAddress();
+		final List<Integer> clickNumList = new ArrayList<>();
+
+		request.setSubId(coupangSubId);
+
+		try {
+			for (int i = 0; i <= 1; i++) {
+				request.setPage(i);
+				CpsRewardPacket.RewardInfo.CoupangListResponse coupangResponseList = httpService.SendCoupangReward(coupangDomain, domain, request);
+				if (coupangResponseList.getDataList() != null) {
+
+					//if(i>0){coupangResponseList.setRCode("1");}
+
+					//조회 성공 응답 코드가 아닌 경우
+					if (!coupangResponseList.getRCode().equals("0")) {
+						break;
+					}
+
+					coupangResponseList.getDataList().forEach(coupang -> {
+						if (null != coupang.getSubParam()) {
+							int clickNum = Integer.parseInt(coupang.getSubParam());
+							clickNumList.add(clickNum);
+
+							CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(coupang.getSubParam()));
+
+							if (null != commissionDto) {
+								CpsRewardEntity cpsRewardEntity = new CpsRewardEntity();
+
+								if (null != coupang.getDate() && "N".equals(cancel)) {
+									cpsRewardEntity.setRegDay(Integer.parseInt(coupang.getDate()));
+									cpsRewardEntity.setRegYm(Integer.parseInt(coupang.getDate().substring(0, 6)));
+								} else {
+									cpsRewardEntity = cpsRewardRepository.findByClickNumAndOrderNoAndProductCode(Integer.parseInt(coupang.getSubParam()), coupang.getOrderId(), coupang.getProductId());
+									if (null != cpsRewardEntity) {
+										cpsRewardEntity.setRegDay(cpsRewardEntity.getRegDay());
+										cpsRewardEntity.setRegYm(cpsRewardEntity.getRegYm());
+									} else {
+										cpsRewardEntity = new CpsRewardEntity();
+										cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
+										cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
+									}
+								}
+
+								cpsRewardEntity.setRegHour(commissionDto.getCpsClickEntity().getRegHour());
+
+								cpsRewardEntity.setClickNum(Integer.parseInt(coupang.getSubParam()));
+								cpsRewardEntity.setOrderNo(coupang.getOrderId());
+								cpsRewardEntity.setProductCode(coupang.getProductId());
+
+								cpsRewardEntity.setCampaignNum(commissionDto.getCpsClickEntity().getCampaignNum());
+								cpsRewardEntity.setMerchantId(commissionDto.getCpsClickEntity().getMerchantId());
+								cpsRewardEntity.setAgencyId(commissionDto.getCpsClickEntity().getAgencyId());
+								cpsRewardEntity.setAffliateId(commissionDto.getCpsClickEntity().getAffliateId());
+								cpsRewardEntity.setZoneId(commissionDto.getCpsClickEntity().getZoneId());
+								cpsRewardEntity.setSite(commissionDto.getCpsClickEntity().getSite());
+								cpsRewardEntity.setOs(commissionDto.getCpsClickEntity().getOs());
+								cpsRewardEntity.setType(commissionDto.getCpsClickEntity().getType());
+								cpsRewardEntity.setUserId(commissionDto.getCpsClickEntity().getUserId());
+								cpsRewardEntity.setAdId(commissionDto.getCpsClickEntity().getAdId());
+								cpsRewardEntity.setMemberName(commissionDto.getMemberName());
+								cpsRewardEntity.setProductName(coupang.getProductName());
+								cpsRewardEntity.setStatus(210);
+
+								int commission = coupang.getCommission();
+								double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
+
+								if ("Y".equals(cancel)) {
+									//취소 건 중 기존 수량과 다른 경우 수량, 가격 계산 후 set (부분취소)
+									if(cpsRewardEntity.getProductCnt() > coupang.getQuantity()) {
+										cpsRewardEntity.setProductCnt(cpsRewardEntity.getProductCnt() - coupang.getQuantity());
+										cpsRewardEntity.setProductPrice(cpsRewardEntity.getProductPrice() - coupang.getGmv());
+										commission = cpsRewardEntity.getCommission() - commission;
+									}else{
+										cpsRewardEntity.setStatus(310);
+									}
+								} else {
+									cpsRewardEntity.setProductCnt(coupang.getQuantity());
+									cpsRewardEntity.setProductPrice(coupang.getGmv());
+								}
+
+								//커미션 매출
+								cpsRewardEntity.setCommission(commission);
+								//커미션 순이익 (커미션 매출 - 매체 커미션)
+								cpsRewardEntity.setCommissionProfit(commission - (int) (commission * memberCommissionShareDouble));
+								//매체 커미션 (커미션 매출 * 매체쉐어)
+								cpsRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
+								//유저 커미션 (매체 커미션 * 유저쉐어)
+								cpsRewardEntity.setUserCommission(0);
+								cpsRewardEntity.setCommissionRate(String.valueOf(coupang.getCommissionRate()));
+
+								cpsRewardEntity.setBaseCommission("0");
+								cpsRewardEntity.setIncentiveCommission("0");
+								cpsRewardEntity.setIpAddress(ipAddress);
+								cpsRewardEntityList.add(cpsRewardEntity);
+							}
+
+							if (cpsRewardEntityList.size() == 1000) {
+								//쿠팡 리워드 저장
+								cpsRewardRepository.saveAll(cpsRewardEntityList);
+								//쿠팡 CLICK 업데이트
+								cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+								response.setSuccess();
+
+								cpsRewardEntityList.clear();
+							}
+						}
+					});
+
+					if (cpsRewardEntityList.size() > 0) {
+						//쿠팡 리워드 저장
+						cpsRewardRepository.saveAll(cpsRewardEntityList);
+						//쿠팡 CLICK 업데이트
+						cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+						response.setSuccess();
+					}
+				} else {
+					response.setApiMessage(Constants.COUPANG_BLANK.getCode(), Constants.COUPANG_BLANK.getValue());
+					return response;
+				}
+			}
+
+			List<Integer> rewordUnitList = new ArrayList<>();
+			List<CpsRewardUnitEntity> cpsRewardUnitList = new ArrayList<>();
+
+			if (clickNumList.size() > 0) {
+				rewordUnitList = clickNumList.stream().distinct().collect(Collectors.toList());
+				rewordUnitList.forEach(clickNum -> {
+					CpsRewardUnitDto cpsRewardUnitDto = cpsRewardRepository.findByRewardClickNum(clickNum);
+					CpsRewardUnitEntity cpsRewardUnitEntity = new CpsRewardUnitEntity();
+					cpsRewardUnitEntity.setClickNum(clickNum);
+					cpsRewardUnitEntity.setRewardCnt(cpsRewardUnitDto.getRewardCnt());
+					cpsRewardUnitEntity.setRegDay(cpsRewardUnitDto.getRegDay());
+					cpsRewardUnitEntity.setRegYm(cpsRewardUnitDto.getRegYm());
+					cpsRewardUnitEntity.setUserId(cpsRewardUnitDto.getUserId());
+					cpsRewardUnitEntity.setMerchantId(cpsRewardUnitDto.getMerchantId());
+					cpsRewardUnitEntity.setAffliateId(cpsRewardUnitDto.getAffliateId());
+					cpsRewardUnitEntity.setProductName(cpsRewardUnitDto.getProductName());
+					cpsRewardUnitEntity.setRewardCnt(cpsRewardUnitDto.getRewardCnt());
+					cpsRewardUnitEntity.setCnt(cpsRewardUnitDto.getCnt());
+					cpsRewardUnitEntity.setTotalPrice(cpsRewardUnitDto.getTotalPrice());
+					cpsRewardUnitEntity.setStockCnt(0);
+					cpsRewardUnitEntity.setStatus(100);
+					cpsRewardUnitEntity.setIpAddress(ipAddress);
+					cpsRewardUnitList.add(cpsRewardUnitEntity);
+
+					if (cpsRewardUnitList.size() == 1000) {
+						//쿠팡 막대사탕 저장
+						cpsRewardUnitRepository.saveAll(cpsRewardUnitList);
+						cpsRewardEntityList.clear();
+					}
+				});
+
+				if (cpsRewardUnitList.size() > 0) {
+					//쿠팡 막대사탕 저장
+					cpsRewardUnitRepository.saveAll(cpsRewardUnitList);
+					cpsRewardEntityList.clear();
+				}
+			}
+		} catch (Exception e) {
+			response.setApiMessage(Constants.COUPANG_EXCEPTION.getCode(), Constants.COUPANG_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " coupangReward api request : {}, entity : {}, exception : {}", request, cpsRewardEntityList, e);
 		}
 		return response;
 	}

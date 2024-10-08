@@ -32,8 +32,8 @@ public class CpsRewardController {
      */
     @Operation(summary = "도트피치 익일 호출")
     @PostMapping(value = "/dotPitch/reward")
-    public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> dotPitchReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.DotPitchRequest request) throws Exception {
-        var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+    public ResponseEntity<CpsRewardPacket.RewardInfo.RewardResponse> dotPitchReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.DotPitchRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.RewardResponse();
 
         try {
             var member = cpsRewardService.dotPitchReward(request);
@@ -57,8 +57,8 @@ public class CpsRewardController {
      */
     @Operation(summary = "도트피치 확정, 취소내역 호출 (6일)")
     @PostMapping(value = "/dotPitch/rewardMonth")
-    public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> dotPitchRewardMonth(@Valid @RequestBody CpsRewardPacket.RewardInfo.DotPitchRequest request) throws Exception {
-        var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+    public ResponseEntity<CpsRewardPacket.RewardInfo.RewardResponse> dotPitchRewardMonth(@Valid @RequestBody CpsRewardPacket.RewardInfo.DotPitchRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.RewardResponse();
         LocalDate today = LocalDate.parse(request.getSearch_date(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate startDate = today.minusMonths(2).withDayOfMonth(6);
         LocalDate endDate = today.minusMonths(1).withDayOfMonth(6);
@@ -93,8 +93,8 @@ public class CpsRewardController {
      */
     @Operation(summary = "링크프라이스 익일 호출")
     @PostMapping(value = "/linkPrice/reward")
-    public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> linkPriceReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
-        var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+    public ResponseEntity<CpsRewardPacket.RewardInfo.RewardResponse> linkPriceReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.RewardResponse();
 
         try {
             List<String> depthList = Arrays.asList("N", "Y");
@@ -122,8 +122,8 @@ public class CpsRewardController {
      */
     @Operation(summary = "링크프라이스 확정, 취소내역 호출 (6일)")
     @PostMapping(value = "/linkPrice/rewardMonth")
-    public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> linkPriceRewardMonth(@Valid @RequestBody CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
-        var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
+    public ResponseEntity<CpsRewardPacket.RewardInfo.RewardResponse> linkPriceRewardMonth(@Valid @RequestBody CpsRewardPacket.RewardInfo.LinkPriceRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.RewardResponse();
         LocalDate today = LocalDate.parse(request.getYyyymmdd(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate startDate = today.minusMonths(2).withDayOfMonth(6);
         LocalDate endDate = today.minusMonths(1).withDayOfMonth(6);
@@ -147,6 +147,34 @@ public class CpsRewardController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             result.setError("linkPriceRewardMonth Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 쿠팡 익일 호출
+     *
+     * @date 2024-10-07
+     */
+    @Operation(summary = "쿠팡 익일 호출 및 스틱지급")
+    @PostMapping(value = "/coupang/reward")
+    public ResponseEntity<CpsRewardPacket.RewardInfo.RewardResponse> coupangReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.CoupangRequest request) throws Exception {
+        var result = new CpsRewardPacket.RewardInfo.RewardResponse();
+
+        try {
+            List<String> coupangList = Arrays.asList("N", "Y");
+            for (String cancel : coupangList) {
+                var reward = cpsRewardService.coupangReward(request, cancel);
+                if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                    result.setSuccess();
+                } else {
+                    result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                }
+                result.setData(reward.getData());
+            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("coupangReward Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

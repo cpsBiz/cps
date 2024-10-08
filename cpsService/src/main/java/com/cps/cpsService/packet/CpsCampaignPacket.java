@@ -25,8 +25,8 @@ public class CpsCampaignPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class CampaignRequest {
             private int campaignNum;
-            @NotBlank(message = "memberId 확인")
-            private String memberId;
+            @NotBlank(message = "merchantId 확인")
+            private String merchantId;
             @NotBlank(message = "agencyId 확인")
             private String agencyId;
             private String campaignName;
@@ -64,7 +64,7 @@ public class CpsCampaignPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class CampaignSearchRequest {
             private int campaignNum;
-            private String memberId;
+            private String merchantId;
             private String agencyId;
             private String campaignName;
             private String campaignStart;

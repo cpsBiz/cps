@@ -48,6 +48,19 @@ public class CpsRewardPacket {
         public static class DotPitchResponse extends GenericBaseResponse<DotPitchRewardDto> {}
 
         @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CoupangRequest {
+            private int startDate;
+            private int endDate;
+            private String subId;
+            private int page;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class RewardResponse extends GenericBaseResponse<DotPitchRewardDto> {}
+
+        @Data
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class DotPitchListResponse{
             @JsonProperty("searchDate")
@@ -135,6 +148,51 @@ public class CpsRewardPacket {
             String is_pc;
             @JsonProperty("pur_rate")
             String pur_rate;
+        }
+
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class CoupangListResponse{
+            private String result;
+            @JsonProperty("rCode")
+            private String rCode;
+            @JsonProperty("rMessage")
+            private String rMessage;
+            @JsonProperty("listData")
+            private List<CoupangData> dataList;
+        }
+
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class CoupangData {
+            @JsonProperty("orderDate")
+            String orderDate;
+            @JsonProperty("date")
+            String date;
+            @JsonProperty("trackingCode")
+            String trackingCode;
+            @JsonProperty("subId")
+            String subId;
+            @JsonProperty("addtag")
+            String addtag;
+            @JsonProperty("ctag")
+            String ctag;
+            @JsonProperty("orderId")
+            String orderId;
+            @JsonProperty("productId")
+            String productId;
+            @JsonProperty("productName")
+            String productName;
+            @JsonProperty("quantity")
+            int quantity;
+            @JsonProperty("gmv")
+            int gmv;
+            @JsonProperty("commissionRate")
+            int commissionRate;
+            @JsonProperty("commission")
+            int commission;
+            @JsonProperty("subParam")
+            String subParam;
         }
     }
 }

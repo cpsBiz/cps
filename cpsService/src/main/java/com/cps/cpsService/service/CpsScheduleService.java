@@ -25,13 +25,13 @@ public class CpsScheduleService {
 		CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse response = new CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse();
 		try {
 			//노출 전체 데이터 시간별 합계
-			cpsViewScheduleRepository.insertSummaryViewHour(request.getMinute());
+			cpsViewScheduleRepository.insertSummaryViewHour(request.getDayMinute(),request.getHourMinute());
 			//클릭 전체 데이터 시간별 합계
-			cpsViewScheduleRepository.insertSummaryClickHour(request.getMinute());
+			cpsViewScheduleRepository.insertSummaryClickHour(request.getDayMinute(),request.getHourMinute());
 			//리워드 전체 데이터 시간별 합계
-			cpsViewScheduleRepository.insertSummaryRewardHour(request.getMinute());
+			cpsViewScheduleRepository.insertSummaryRewardHour(request.getDayMinute(),request.getHourMinute());
 			//노출 전체 데이터 일별 합계
-			cpsViewScheduleRepository.insertSummaryViewDay(request.getMinute());
+			cpsViewScheduleRepository.insertSummaryViewDay(request.getDayMinute());
 			//클릭 전체 데이터 일별 합계
 			//cpsViewScheduleRepository.insertSummaryClickDay(request.getMinute());
 

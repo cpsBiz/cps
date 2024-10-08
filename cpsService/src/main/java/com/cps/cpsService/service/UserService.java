@@ -63,7 +63,7 @@ public class UserService {
 	public CpsAgencyEntity cpsAgency(CpsMemberPacket.MemberInfo.MemberCampaignRequest request){
 		CpsAgencyEntity cpsAgencyEntity = new CpsAgencyEntity();
 		cpsAgencyEntity.setAgencyId(request.getAgencyId());
-		cpsAgencyEntity.setMemberId("link_"+request.getMemberId());
+		cpsAgencyEntity.setMerchantId("link_"+request.getMemberId());
 		cpsAgencyEntity.setRewardYn(request.getRewardYn());
 		cpsAgencyEntity.setMobileYn(request.getMobileYn());
 		cpsAgencyEntity.setReturnDay(request.getReturnDay());

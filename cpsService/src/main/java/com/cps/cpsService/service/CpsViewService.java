@@ -67,7 +67,7 @@ public class CpsViewService {
 			cpsViewDto.setCampaignNum(((Number) result[2]).intValue());
 			cpsViewDto.setCampaignName((String) result[3]);
 			cpsViewDto.setAgencyId((String) result[4]);
-			cpsViewDto.setMemberId((String) result[5]);
+			cpsViewDto.setMerchantId((String) result[5]);
 			cpsViewDto.setClickUrl((String) result[6]);
 			cpsViewDto.setIcon((String) result[7]);
 			cpsViewDto.setLogo((String) result[8]);
@@ -100,7 +100,7 @@ public class CpsViewService {
 			cpsViewEntity.setCampaignNum(result.getCampaignNum());
 			cpsViewEntity.setCampaignName(result.getCampaignName());
 			cpsViewEntity.setAgencyId(result.getAgencyId());
-			cpsViewEntity.setMemberId(result.getMemberId());
+			cpsViewEntity.setMerchantId(result.getMerchantId());
 			cpsViewEntity.setClickUrl(result.getClickUrl());
 			cpsViewEntity.setType(result.getType());
 			cpsViewEntity.setAffliateId(result.getAffliateId());

@@ -51,7 +51,7 @@ public class CpsClickDotPitchService {
 			cpsClickEntity.setAffliateId(request.getAffliateId());
 			cpsClickEntity.setZoneId(request.getZoneId());
 			cpsClickEntity.setAgencyId(request.getAgencyId());
-			cpsClickEntity.setMemberId(request.getMemberId());
+			cpsClickEntity.setMerchantId(request.getMerchantId());
 			cpsClickEntity.setType(request.getType());
 			cpsClickEntity.setSite(request.getSite());
 			cpsClickEntity.setClickUrl(request.getClickUrl());

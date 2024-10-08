@@ -30,7 +30,7 @@ public class CpsOnetoOnePacket {
             private String userId;
             private String inquiryType;
             private int campaignNum;
-            private String memberId;
+            private String merchantId;
             private String purpose;
             private int regDay;
             private String userName;

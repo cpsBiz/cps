@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,8 +21,8 @@ public class CpsCampaignCommissionEntity {
     private int campaignNum;
 
     @Id
-    @Column(name = "MEMBER_ID", updatable = false, nullable = false)
-    private String memberId;
+    @Column(name = "MERCHANT_ID", updatable = false, nullable = false)
+    private String merchantId;
 
     @Column(name = "STATUS")
     private String status;
@@ -31,6 +32,9 @@ public class CpsCampaignCommissionEntity {
 
     @Column(name = "USER_COMMISSION_SHARE")
     private int userCommissionShare;
+
+    @Column(name = "POINT_RATE")
+    private BigDecimal pointRate;
 
     @CreatedDate
     @Column(name = "REG_DATE", updatable = false)

@@ -17,7 +17,8 @@ public class CpsViewSchedulePacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class ViewScheduleRequest {
-            private int minute;
+            private int dayMinute;
+            private int hourMinute;
         }
 
         @Data

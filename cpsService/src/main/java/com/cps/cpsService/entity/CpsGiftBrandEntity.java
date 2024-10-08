@@ -20,8 +20,8 @@ public class CpsGiftBrandEntity {
     private String brandId;
 
     @Id
-    @Column(name = "MEMBER_ID", updatable = false, nullable = false)
-    private String memberId;
+    @Column(name = "MERCHANT_ID", updatable = false, nullable = false)
+    private String merchantId;
 
     @Column(name = "BRAND_NAME")
     private String brandName;

@@ -29,8 +29,8 @@ public class CpsInquiryEntity {
     @Column(name = "CAMPAIGN_NUM")
     private int campaignNum;
 
-    @Column(name = "MEMBER_ID")
-    private String memberId;
+    @Column(name = "MERCHANT_ID")
+    private String merchantId;
 
     @Column(name = "PURPOSE")
     private String purpose;

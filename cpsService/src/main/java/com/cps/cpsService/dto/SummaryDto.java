@@ -78,6 +78,32 @@ public class SummaryDto {
         this.cancelUserCommission = cancelUserCommission;
     }
 
+
+
+    public SummaryDto(String keyWord, String keyWordName, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int affliateCommission, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
+        this.keyWord = keyWord;
+        this.keyWordName = keyWordName;
+        this.cnt = cnt;
+        this.clickCnt = clickCnt;
+        this.rewardCnt = rewardCnt;
+        this.confirmRewardCnt = confirmRewardCnt;
+        this.cancelRewardCnt = cancelRewardCnt;
+        this.productPrice = productPrice;
+        this.confirmProductPrice = confirmProductPrice;
+        this.cancelProductPrice = cancelProductPrice;
+        this.commission = commission;
+        this.confirmCommission = confirmCommission;
+        this.cancelCommission = cancelCommission;
+        this.commissionProfit = commissionProfit;
+        this.confirmCommissionProfit = confirmCommissionProfit;
+        this.cancelCommissionProfit = cancelCommissionProfit;
+        this.affliateCommission = affliateCommission;
+        this.confirmAffliateCommission = confirmAffliateCommission;
+        this.cancelAffliateCommission = cancelAffliateCommission;
+        this.userCommission = userCommission;
+        this.confirmUserCommission = confirmUserCommission;
+        this.cancelUserCommission = cancelUserCommission;
+    }
     public SummaryDto() {
     }
 }

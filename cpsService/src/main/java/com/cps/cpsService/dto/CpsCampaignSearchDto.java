@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CpsCampaignSearchDto {
         int campaignNum;
-        String memberId;
+        String merchantId;
         String agencyId;
         String campaignName;
         String campaignStart;

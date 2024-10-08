@@ -3,6 +3,7 @@ package com.cps.cpsService.packet;
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsService.dto.CpsMemberCommissionDto;
 import com.cps.cpsService.dto.CpsMemberCommissionListDto;
+import com.cps.cpsService.dto.CpsMemberRewardUnitDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,5 +39,9 @@ public class CpsMemberCommissionPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class MemberCommissionResponse extends GenericBaseResponse<CpsMemberCommissionDto> {}
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class MemberRewardUnitResponse extends GenericBaseResponse<CpsMemberRewardUnitDto> {}
     }
 }

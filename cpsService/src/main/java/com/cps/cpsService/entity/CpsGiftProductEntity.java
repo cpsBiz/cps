@@ -24,8 +24,8 @@ public class CpsGiftProductEntity {
     private String productId;
 
     @Id
-    @Column(name = "MEMBER_ID", updatable = false, nullable = false)
-    private String memberId;
+    @Column(name = "MERCHANT_ID", updatable = false, nullable = false)
+    private String merchantId;
 
     @Column(name = "PRODUCT_NAME")
     private String productName;

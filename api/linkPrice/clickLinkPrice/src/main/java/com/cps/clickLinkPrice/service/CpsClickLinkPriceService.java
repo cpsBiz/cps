@@ -49,7 +49,7 @@ public class CpsClickLinkPriceService {
 			cpsClickEntity.setAffliateId(request.getAffliateId());
 			cpsClickEntity.setZoneId(request.getZoneId());
 			cpsClickEntity.setAgencyId(request.getAgencyId());
-			cpsClickEntity.setMemberId(request.getMemberId());
+			cpsClickEntity.setMerchantId(request.getMerchantId());
 			cpsClickEntity.setType(request.getType());
 			cpsClickEntity.setSite(request.getSite());
 			cpsClickEntity.setClickUrl(request.getClickUrl());
@@ -66,7 +66,7 @@ public class CpsClickLinkPriceService {
 				String domain = domain(request.getClickUrl());
 				CpsLinkPriceClickPacket.LinkPriceClickInfo.LinkPriceClickRequest clickRequest = new CpsLinkPriceClickPacket.LinkPriceClickInfo.LinkPriceClickRequest();
 				clickRequest.setU_id(String.valueOf(cpsClickEntity.getClickNum()));
-				clickRequest.setM(cpsClickEntity.getMemberId().replace("link_",""));
+				clickRequest.setM(cpsClickEntity.getMerchantId().replace("link_",""));
 				clickRequest.setA("A100692601"); //인라이플 코드
 				clickRequest.setL("0000"); //광고주 매인 화면
 

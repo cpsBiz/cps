@@ -69,4 +69,30 @@ public class CpsMemberCommissionController {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * 쿠팡 막대사탕 개수 조회
+     *
+     * @date 2024-10-08
+     *
+     */
+    @Operation(summary = "쿠팡 막대사탕 개수 조회")
+    @PostMapping(value = "/memberStick")
+    public ResponseEntity<CpsMemberCommissionPacket.MemberCommissionInfo.MemberRewardUnitResponse> memberStick(@Valid @RequestBody CpsMemberCommissionPacket.MemberCommissionInfo.MemberCommissionRequest request) throws Exception {
+        var result = new CpsMemberCommissionPacket.MemberCommissionInfo.MemberRewardUnitResponse();
+
+        try {
+            var member = cpsMemberCommissionService.memberStick(request);
+            if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
+                result.setSuccess();
+            } else {
+                result.setApiMessage(member.getResultCode(), member.getResultMessage());
+            }
+            result.setData(member.getData());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("memberStick Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -27,7 +27,7 @@ public class CpsOneToOneDto {
     public static class CpsInquiry extends CpsAnswer{
         String userId;
         String inquiryType;
-        String memberId;
+        String merchantId;
         String purpose;
         int regDay;
         String userName;

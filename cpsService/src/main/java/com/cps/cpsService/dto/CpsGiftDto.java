@@ -9,7 +9,7 @@ public class CpsGiftDto {
     @EqualsAndHashCode(callSuper = false)
     public static class GiftDtoResponse {
         String brandId;
-        String memberId;
+        String merchantId;
     }
 
     @Data

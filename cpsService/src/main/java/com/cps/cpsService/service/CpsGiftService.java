@@ -22,7 +22,7 @@ public class CpsGiftService {
 	private final CpsGiftProductRepository cpsGiftProductRepository;
 
 	/**
-	 * 캠페인 카테고리 등록, 수정
+	 * 기프트 브랜드 등록, 수정, 삭제
 	 * @date 2024-10-02
 	 */
 	public GenericBaseResponse<CpsGiftDto.GiftBrandResponse> giftBrand(CpsGiftPacket.GiftInfo.GiftBrandRequest request) throws Exception {
@@ -30,14 +30,14 @@ public class CpsGiftService {
 
 		CpsGiftBrandEntity cpsGiftBrandEntity = new CpsGiftBrandEntity();
 		cpsGiftBrandEntity.setBrandId(request.getBrandId());
-		cpsGiftBrandEntity.setMemberId(request.getMemberId());
+		cpsGiftBrandEntity.setMerchantId(request.getMerchantId());
 		cpsGiftBrandEntity.setBrandName(request.getBrandName());
 		cpsGiftBrandEntity.setMinCnt(request.getMinCnt());
 		cpsGiftBrandEntity.setBrandYn(request.getBrandYn());
 
 		CpsGiftDto.GiftBrandResponse giftBrandDto = new CpsGiftDto.GiftBrandResponse();
 		giftBrandDto.setBrandId(request.getBrandId());
-		giftBrandDto.setMemberId(request.getMemberId());
+		giftBrandDto.setMerchantId(request.getMerchantId());
 		giftBrandDto.setBrandName(request.getBrandName());
 		giftBrandDto.setMinCnt(request.getMinCnt());
 		giftBrandDto.setBrandYn(request.getBrandYn());
@@ -65,7 +65,7 @@ public class CpsGiftService {
 	}
 
 	/**
-	 * 캠페인 카테고리 등록, 수정
+	 * 상품 등록, 수정, 삭제
 	 * @date 2024-10-02
 	 */
 	public GenericBaseResponse<CpsGiftDto.GiftProductResponse> giftProduct(CpsGiftPacket.GiftInfo.GiftProductRequest request) throws Exception {
@@ -74,14 +74,14 @@ public class CpsGiftService {
 		CpsGiftProductEntity cpsGiftProductEntity = new CpsGiftProductEntity();
 		cpsGiftProductEntity.setBrandId(request.getBrandId());
 		cpsGiftProductEntity.setProductId(request.getProductId());
-		cpsGiftProductEntity.setMemberId(request.getMemberId());
+		cpsGiftProductEntity.setMerchantId(request.getMerchantId());
 		cpsGiftProductEntity.setProductName(request.getProductName());
 		cpsGiftProductEntity.setProductYn(request.getProductYn());
 
 		CpsGiftDto.GiftProductResponse giftProductDto = new CpsGiftDto.GiftProductResponse();
 		giftProductDto.setBrandId(request.getBrandId());
 		giftProductDto.setProductId(request.getProductId());
-		giftProductDto.setMemberId(request.getMemberId());
+		giftProductDto.setMerchantId(request.getMerchantId());
 		giftProductDto.setProductName(request.getProductName());
 		giftProductDto.setProductId(request.getProductId());
 

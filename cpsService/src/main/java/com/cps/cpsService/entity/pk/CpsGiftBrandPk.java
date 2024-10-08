@@ -10,5 +10,5 @@ import java.io.Serializable;
 @Embeddable
 public class CpsGiftBrandPk implements Serializable {
     @Column(name = "BRAND_ID") private String brandId;
-    @Column(name = "MEMBER_ID") private String memberId;
+    @Column(name = "MERCHANT_ID") private String merchantId;
 }

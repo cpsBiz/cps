@@ -18,8 +18,8 @@ public class CpsCampaignEntity {
     @Column(name = "CAMPAIGN_NUM", updatable = false, nullable = false)
     private int campaignNum;
 
-    @Column(name = "MEMBER_ID", updatable = false, nullable = false)
-    private String memberId;
+    @Column(name = "MERCHANT_ID", updatable = false, nullable = false)
+    private String merchantId;
 
     @Column(name = "AGENCY_ID", updatable = false, nullable = false)
     private String agencyId;

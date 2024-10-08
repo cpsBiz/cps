@@ -17,7 +17,7 @@ public class CpsMemberCommissionListDto {
         int productPrice;
         int userCommission;
         int productCnt;
-        String memberId;
+        String merchantId;
         int status;
         String commissionPaymentStandard;
     }
