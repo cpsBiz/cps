@@ -11,7 +11,8 @@ public interface CpsRewardRepository extends JpaRepository<CpsRewardEntity, Stri
 
     CpsRewardEntity findByClickNum(int clickNum);
 
-    CpsRewardEntity findByClickNumAndOrderNoAndProductCode(int clickNum, String orderNo, String productCode);
+    @Query("SELECT e FROM CpsRewardEntity e WHERE e.clickNum = ?1 AND e.orderNo = ?2 AND e.productCode = ?3 AND e.status = 100")
+    CpsRewardEntity findByClickNumAndOrderNoAndProductCodeExcludingStatus(int clickNum, String orderNo, String productCode);
 
     @Query("SELECT new com.cps.cpsService.dto.CpsRewardUnitDto(c.clickNum, c.userId, c.regDay, c.regYm, "
             + "MAX(CASE WHEN c.status != 310 THEN c.productName ELSE '' END), "

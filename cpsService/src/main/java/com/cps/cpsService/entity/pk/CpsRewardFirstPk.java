@@ -8,8 +8,7 @@ import java.io.Serializable;
 
 @Data
 @Embeddable
-public class CpsRewardPk implements Serializable {
-    @Column(name = "REWARD_NUM")private int rewardNum;
+public class CpsRewardFirstPk implements Serializable {
     @Column(name = "CLICK_NUM")private int clickNum;
     @Column(name = "ORDER_NO")private String orderNo;
     @Column(name = "PRODUCT_CODE")private String productCode;

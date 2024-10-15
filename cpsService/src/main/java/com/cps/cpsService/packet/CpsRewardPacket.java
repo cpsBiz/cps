@@ -50,10 +50,16 @@ public class CpsRewardPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class CoupangRequest {
-            private int startDate;
-            private int endDate;
+            private String startDate;
+            private String endDate;
             private String subId;
             private int page;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CoupangStickRequest {
+            private int regDay;
         }
 
         @Data

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CpsCampaignCommissionDto {
     int campaignNum;
-    String merchantId;
+    String affliateId;
     int memberCommissionShare;
     int userCommissionShare;
     String status;

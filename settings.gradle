@@ -7,6 +7,5 @@ include 'api:dotPitch:rewardDotpitch'
 include 'api:linkPrice:clickLinkPrice'
 include 'api:linkPrice:rewardLinkPrice'
 include 'api:coupang:clickCoupang'
-include 'api:coupang:rewardCoupang'
 include 'cpsService'
 

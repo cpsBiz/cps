@@ -2,7 +2,9 @@ package com.cps.cpsService.service;
 
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
+import com.cps.common.model.BaseReportPageResponse;
 import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.common.model.GenericReportPageBaseResponse;
 import com.cps.cpsService.dto.SummaryDto;
 import com.cps.cpsService.packet.SummaryPacket;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class SummaryService {
 	 * 리포트 조회
 	 * @date 2024-09-19
 	 */
-	public GenericPageBaseResponse<SummaryDto> summaryCount(SummaryPacket.SummaryInfo.SummaryRequest request) throws Exception {
+	public GenericReportPageBaseResponse<SummaryDto> summaryCount(SummaryPacket.SummaryInfo.SummaryRequest request) throws Exception {
 		SummaryPacket.SummaryInfo.SummaryResponse response = new SummaryPacket.SummaryInfo.SummaryResponse();
 		try {
 			//노출
@@ -28,7 +30,7 @@ public class SummaryService {
 			if (null == response) {
 				response.setApiMessage(Constants.VIEW_BLANK.getCode(), Constants.VIEW_BLANK.getValue());
 			} else {
-				response.setSuccess(response.getTotalCount());
+				response.setSuccess(response.getTotalCount(), response.getCnt(), response.getClickCnt(), response.getRewardCnt(), response.getProductPrice(), response.getCommission(), response.getCommissionProfit(), response.getAffliateCommission(), response.getUserCommission());
 			}
 		}catch (Exception e){
 			response.setApiMessage(Constants.VIEW_SEARCH_EXCEPTION.getCode(), Constants.VIEW_SEARCH_EXCEPTION.getValue());

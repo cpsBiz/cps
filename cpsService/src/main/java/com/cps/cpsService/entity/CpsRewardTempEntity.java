@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "CPS_REWARD")
+@Table(name = "CPS_REWARD_TEMP")
 @IdClass(CpsRewardPk.class)
-public class CpsRewardEntity {
+public class CpsRewardTempEntity {
     @Id
     @Column(name = "REWARD_NUM")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

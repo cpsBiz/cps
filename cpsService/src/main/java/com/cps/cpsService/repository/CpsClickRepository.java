@@ -22,7 +22,7 @@ public interface CpsClickRepository extends JpaRepository<CpsClickEntity, String
     @Query("SELECT new com.cps.cpsService.dto.CommissionDto(a, COALESCE(c.memberCommissionShare, 7), COALESCE(c.userCommissionShare, 3), COALESCE(c.pointRate, 1.00), b.memberName) " +
             "FROM CpsClickEntity a " +
             "JOIN CpsMemberEntity b ON b.memberId = a.merchantId " +
-            "LEFT JOIN CpsCampaignCommissionEntity c ON c.campaignNum = a.campaignNum " +
+            "LEFT JOIN CpsCampaignCommissionEntity c ON c.campaignNum = a.campaignNum AND c.affliateId = a.affliateId " +
             "WHERE a.clickNum = :clickNum")
     CommissionDto findClickCommission(@Param("clickNum") int clickNum);
 

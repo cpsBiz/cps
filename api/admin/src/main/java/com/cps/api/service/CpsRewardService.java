@@ -3,26 +3,25 @@ package com.cps.api.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.common.utils.HmacGenerator;
+import com.cps.common.utils.CommonUtil;
 import com.cps.cpsService.dto.CommissionDto;
 import com.cps.cpsService.dto.CpsRewardUnitDto;
-import com.cps.cpsService.dto.CpsViewDto;
 import com.cps.cpsService.dto.DotPitchRewardDto;
 import com.cps.cpsService.entity.CpsRewardEntity;
+import com.cps.cpsService.entity.CpsRewardFirstEntity;
+import com.cps.cpsService.entity.CpsRewardTempEntity;
 import com.cps.cpsService.entity.CpsRewardUnitEntity;
 import com.cps.cpsService.packet.CpsRewardPacket;
 import com.cps.cpsService.repository.CpsClickRepository;
+import com.cps.cpsService.repository.CpsRewardFirstRepository;
 import com.cps.cpsService.repository.CpsRewardRepository;
 import com.cps.cpsService.repository.CpsRewardUnitRepository;
 import com.cps.cpsService.service.HttpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.URLDecoder;
@@ -67,6 +66,8 @@ public class CpsRewardService {
 	private final CpsClickRepository cpsClickRepository;
 
 	private final CpsRewardRepository cpsRewardRepository;
+
+	private final CpsRewardFirstRepository cpsRewardFirstRepository;
 
 	private final CpsRewardUnitRepository cpsRewardUnitRepository;
 
@@ -331,11 +332,7 @@ public class CpsRewardService {
 	public GenericBaseResponse<DotPitchRewardDto> coupangReward(CpsRewardPacket.RewardInfo.CoupangRequest request, String cancel) throws Exception {
 		CpsRewardPacket.RewardInfo.RewardResponse response = new CpsRewardPacket.RewardInfo.RewardResponse();
 		List<CpsRewardEntity> cpsRewardEntityList = new ArrayList<>();
-
-		String domain = coupangOrderDomain;
-		if ("Y".equals(cancel)) {
-			domain = coupangCancelDomain;
-		}
+		List<CpsRewardFirstEntity> cpsRewardFirstEntityList = new ArrayList<>();
 
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
@@ -345,11 +342,17 @@ public class CpsRewardService {
 
 		try {
 			for (int i = 0; i <= 1; i++) {
+				String domain = coupangOrderDomain;
+				if ("Y".equals(cancel)) {
+					domain = coupangCancelDomain;
+				}
 				request.setPage(i);
+				domain = domain + "?" + CommonUtil.objectToQueryString(request);
+
 				CpsRewardPacket.RewardInfo.CoupangListResponse coupangResponseList = httpService.SendCoupangReward(coupangDomain, domain, request);
 				if (coupangResponseList.getDataList() != null) {
 
-					//if(i>0){coupangResponseList.setRCode("1");}
+					if(i>0){coupangResponseList.setRCode("1");}
 
 					//조회 성공 응답 코드가 아닌 경우
 					if (!coupangResponseList.getRCode().equals("0")) {
@@ -357,6 +360,7 @@ public class CpsRewardService {
 					}
 
 					coupangResponseList.getDataList().forEach(coupang -> {
+
 						if (null != coupang.getSubParam()) {
 							int clickNum = Integer.parseInt(coupang.getSubParam());
 							clickNumList.add(clickNum);
@@ -370,11 +374,8 @@ public class CpsRewardService {
 									cpsRewardEntity.setRegDay(Integer.parseInt(coupang.getDate()));
 									cpsRewardEntity.setRegYm(Integer.parseInt(coupang.getDate().substring(0, 6)));
 								} else {
-									cpsRewardEntity = cpsRewardRepository.findByClickNumAndOrderNoAndProductCode(Integer.parseInt(coupang.getSubParam()), coupang.getOrderId(), coupang.getProductId());
-									if (null != cpsRewardEntity) {
-										cpsRewardEntity.setRegDay(cpsRewardEntity.getRegDay());
-										cpsRewardEntity.setRegYm(cpsRewardEntity.getRegYm());
-									} else {
+									cpsRewardEntity = cpsRewardRepository.findByClickNumAndOrderNoAndProductCodeExcludingStatus(Integer.parseInt(coupang.getSubParam()), coupang.getOrderId(), coupang.getProductId());
+									if (null == cpsRewardEntity) {
 										cpsRewardEntity = new CpsRewardEntity();
 										cpsRewardEntity.setRegDay(commissionDto.getCpsClickEntity().getRegDay());
 										cpsRewardEntity.setRegYm(commissionDto.getCpsClickEntity().getRegYm());
@@ -399,19 +400,18 @@ public class CpsRewardService {
 								cpsRewardEntity.setAdId(commissionDto.getCpsClickEntity().getAdId());
 								cpsRewardEntity.setMemberName(commissionDto.getMemberName());
 								cpsRewardEntity.setProductName(coupang.getProductName());
-								cpsRewardEntity.setStatus(210);
+								cpsRewardEntity.setStatus(100);
 
 								int commission = coupang.getCommission();
+								int productCnt = cpsRewardEntity.getProductCnt();
 								double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
 
 								if ("Y".equals(cancel)) {
 									//취소 건 중 기존 수량과 다른 경우 수량, 가격 계산 후 set (부분취소)
-									if(cpsRewardEntity.getProductCnt() > coupang.getQuantity()) {
+									if (cpsRewardEntity.getProductCnt() > coupang.getQuantity()) {
 										cpsRewardEntity.setProductCnt(cpsRewardEntity.getProductCnt() - coupang.getQuantity());
 										cpsRewardEntity.setProductPrice(cpsRewardEntity.getProductPrice() - coupang.getGmv());
 										commission = cpsRewardEntity.getCommission() - commission;
-									}else{
-										cpsRewardEntity.setStatus(310);
 									}
 								} else {
 									cpsRewardEntity.setProductCnt(coupang.getQuantity());
@@ -432,11 +432,58 @@ public class CpsRewardService {
 								cpsRewardEntity.setIncentiveCommission("0");
 								cpsRewardEntity.setIpAddress(ipAddress);
 								cpsRewardEntityList.add(cpsRewardEntity);
+
+								if ("N".equals(cancel)) {
+									cpsRewardFirstEntityList.add(cpsRewardEntityList(cpsRewardEntity));
+								}
+
+								//취소 건 중 기존 수량과 다른 경우 취소 데이터 따로 저장
+								if ("Y".equals(cancel)) {
+									if (productCnt > coupang.getQuantity()) {
+										CpsRewardEntity cancelRewardEntity = new CpsRewardEntity();
+										cancelRewardEntity = cancelRewardEntity(cpsRewardEntity);
+										cpsRewardEntity.setProductCnt(coupang.getQuantity());
+										cpsRewardEntity.setProductPrice(coupang.getGmv());
+										commission = coupang.getCommission();
+										//커미션 매출
+										cancelRewardEntity.setCommission(commission);
+										//커미션 순이익 (커미션 매출 - 매체 커미션)
+										cancelRewardEntity.setCommissionProfit(coupang.getCommission() - (int) (commission * memberCommissionShareDouble));
+										//매체 커미션 (커미션 매출 * 매체쉐어)
+										cancelRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
+										//유저 커미션 (매체 커미션 * 유저쉐어)
+										cancelRewardEntity.setUserCommission(0);
+										cancelRewardEntity.setCommissionRate(String.valueOf(coupang.getCommissionRate()));
+										cancelRewardEntity.setStatus(310);
+										cpsRewardEntityList.add(cancelRewardEntity);
+									}
+								} else {
+
+									CpsRewardEntity cancelRewardEntity = new CpsRewardEntity();
+									cancelRewardEntity = cancelRewardEntity(cpsRewardEntity);
+									cpsRewardEntity.setProductCnt(coupang.getQuantity());
+									cpsRewardEntity.setProductPrice(coupang.getGmv());
+									commission = coupang.getCommission();
+									//커미션 매출
+									cancelRewardEntity.setCommission(commission);
+									//커미션 순이익 (커미션 매출 - 매체 커미션)
+									cancelRewardEntity.setCommissionProfit(coupang.getCommission() - (int) (commission * memberCommissionShareDouble));
+									//매체 커미션 (커미션 매출 * 매체쉐어)
+									cancelRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
+									//유저 커미션 (매체 커미션 * 유저쉐어)
+									cancelRewardEntity.setUserCommission(0);
+									cancelRewardEntity.setCommissionRate(String.valueOf(coupang.getCommissionRate()));
+									cancelRewardEntity.setStatus(310);
+									cpsRewardEntityList.add(cancelRewardEntity);
+								}
 							}
 
-							if (cpsRewardEntityList.size() == 1000) {
+							if (cpsRewardEntityList.size() > 1000) {
 								//쿠팡 리워드 저장
 								cpsRewardRepository.saveAll(cpsRewardEntityList);
+								if ("N".equals(cancel)) {
+									cpsRewardFirstRepository.saveAll(cpsRewardFirstEntityList);
+								}
 								//쿠팡 CLICK 업데이트
 								cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
 								response.setSuccess();
@@ -449,8 +496,11 @@ public class CpsRewardService {
 					if (cpsRewardEntityList.size() > 0) {
 						//쿠팡 리워드 저장
 						cpsRewardRepository.saveAll(cpsRewardEntityList);
+						if (cpsRewardFirstEntityList.size() > 0 ) {
+							cpsRewardFirstRepository.saveAll(cpsRewardFirstEntityList);
+						}
 						//쿠팡 CLICK 업데이트
-						cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+						cpsClickRepository.updateRewardYnByClickNumList("Y", cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).distinct().collect(Collectors.toList()));
 						response.setSuccess();
 					}
 				} else {
@@ -466,23 +516,24 @@ public class CpsRewardService {
 				rewordUnitList = clickNumList.stream().distinct().collect(Collectors.toList());
 				rewordUnitList.forEach(clickNum -> {
 					CpsRewardUnitDto cpsRewardUnitDto = cpsRewardRepository.findByRewardClickNum(clickNum);
-					CpsRewardUnitEntity cpsRewardUnitEntity = new CpsRewardUnitEntity();
-					cpsRewardUnitEntity.setClickNum(clickNum);
-					cpsRewardUnitEntity.setRewardCnt(cpsRewardUnitDto.getRewardCnt());
-					cpsRewardUnitEntity.setRegDay(cpsRewardUnitDto.getRegDay());
-					cpsRewardUnitEntity.setRegYm(cpsRewardUnitDto.getRegYm());
-					cpsRewardUnitEntity.setUserId(cpsRewardUnitDto.getUserId());
-					cpsRewardUnitEntity.setMerchantId(cpsRewardUnitDto.getMerchantId());
-					cpsRewardUnitEntity.setAffliateId(cpsRewardUnitDto.getAffliateId());
-					cpsRewardUnitEntity.setProductName(cpsRewardUnitDto.getProductName());
-					cpsRewardUnitEntity.setRewardCnt(cpsRewardUnitDto.getRewardCnt());
-					cpsRewardUnitEntity.setCnt(cpsRewardUnitDto.getCnt());
-					cpsRewardUnitEntity.setTotalPrice(cpsRewardUnitDto.getTotalPrice());
-					cpsRewardUnitEntity.setStockCnt(0);
-					cpsRewardUnitEntity.setStatus(100);
-					cpsRewardUnitEntity.setIpAddress(ipAddress);
-					cpsRewardUnitList.add(cpsRewardUnitEntity);
-
+					if (cpsRewardUnitDto != null) {
+						CpsRewardUnitEntity cpsRewardUnitEntity = new CpsRewardUnitEntity();
+						cpsRewardUnitEntity.setClickNum(clickNum);
+						cpsRewardUnitEntity.setRewardCnt(cpsRewardUnitDto.getRewardCnt());
+						cpsRewardUnitEntity.setRegDay(cpsRewardUnitDto.getRegDay());
+						cpsRewardUnitEntity.setRegYm(cpsRewardUnitDto.getRegYm());
+						cpsRewardUnitEntity.setUserId(cpsRewardUnitDto.getUserId());
+						cpsRewardUnitEntity.setMerchantId(cpsRewardUnitDto.getMerchantId());
+						cpsRewardUnitEntity.setAffliateId(cpsRewardUnitDto.getAffliateId());
+						cpsRewardUnitEntity.setProductName(cpsRewardUnitDto.getProductName());
+						cpsRewardUnitEntity.setRewardCnt(cpsRewardUnitDto.getRewardCnt());
+						cpsRewardUnitEntity.setCnt(cpsRewardUnitDto.getCnt());
+						cpsRewardUnitEntity.setTotalPrice(cpsRewardUnitDto.getTotalPrice());
+						cpsRewardUnitEntity.setStockCnt(0);
+						cpsRewardUnitEntity.setStatus(100);
+						cpsRewardUnitEntity.setIpAddress(ipAddress);
+						cpsRewardUnitList.add(cpsRewardUnitEntity);
+					}
 					if (cpsRewardUnitList.size() == 1000) {
 						//쿠팡 막대사탕 저장
 						cpsRewardUnitRepository.saveAll(cpsRewardUnitList);
@@ -501,5 +552,151 @@ public class CpsRewardService {
 			log.error(Constant.EXCEPTION_MESSAGE + " coupangReward api request : {}, entity : {}, exception : {}", request, cpsRewardEntityList, e);
 		}
 		return response;
+	}
+
+	public CpsRewardEntity cancelRewardEntity(CpsRewardEntity rewardEntity){
+		CpsRewardEntity cpsRewardEntity = new CpsRewardEntity();
+		cpsRewardEntity.setClickNum(rewardEntity.getClickNum());
+		cpsRewardEntity.setRegDay(rewardEntity.getRegDay());
+		cpsRewardEntity.setRegYm(rewardEntity.getRegYm());
+		cpsRewardEntity.setRegHour(rewardEntity.getRegHour());
+		cpsRewardEntity.setOrderNo(rewardEntity.getOrderNo());
+		cpsRewardEntity.setProductCode(rewardEntity.getProductCode());
+		cpsRewardEntity.setCampaignNum(rewardEntity.getCampaignNum());
+		cpsRewardEntity.setMerchantId(rewardEntity.getMerchantId());
+		cpsRewardEntity.setAgencyId(rewardEntity.getAgencyId());
+		cpsRewardEntity.setAffliateId(rewardEntity.getAffliateId());
+		cpsRewardEntity.setZoneId(rewardEntity.getZoneId());
+		cpsRewardEntity.setSite(rewardEntity.getSite());
+		cpsRewardEntity.setOs(rewardEntity.getOs());
+		cpsRewardEntity.setType(rewardEntity.getType());
+		cpsRewardEntity.setUserId(rewardEntity.getUserId());
+		cpsRewardEntity.setAdId(rewardEntity.getAdId());
+		cpsRewardEntity.setMemberName(rewardEntity.getMemberName());
+		cpsRewardEntity.setProductName(rewardEntity.getProductName());
+		cpsRewardEntity.setProductCnt(rewardEntity.getProductCnt());
+		cpsRewardEntity.setProductPrice(rewardEntity.getProductPrice());
+		cpsRewardEntity.setCommission(rewardEntity.getCommission());
+		cpsRewardEntity.setCommissionProfit(rewardEntity.getCommissionProfit());
+		cpsRewardEntity.setAffliateCommission(rewardEntity.getAffliateCommission());
+		cpsRewardEntity.setUserCommission(0);
+		cpsRewardEntity.setCommissionRate(rewardEntity.getCommissionRate());
+		cpsRewardEntity.setStatus(310);
+		cpsRewardEntity.setBaseCommission("0");
+		cpsRewardEntity.setIncentiveCommission("0");
+		cpsRewardEntity.setIpAddress(rewardEntity.getIpAddress());
+		return cpsRewardEntity;
+	}
+
+
+	public CpsRewardFirstEntity cpsRewardEntityList(CpsRewardEntity rewardEntity){
+		CpsRewardFirstEntity cpsRewardFirstEntity = new CpsRewardFirstEntity();
+		cpsRewardFirstEntity.setClickNum(rewardEntity.getClickNum());
+		cpsRewardFirstEntity.setRegDay(rewardEntity.getRegDay());
+		cpsRewardFirstEntity.setRegYm(rewardEntity.getRegYm());
+		cpsRewardFirstEntity.setRegHour(rewardEntity.getRegHour());
+		cpsRewardFirstEntity.setOrderNo(rewardEntity.getOrderNo());
+		cpsRewardFirstEntity.setProductCode(rewardEntity.getProductCode());
+		cpsRewardFirstEntity.setCampaignNum(rewardEntity.getCampaignNum());
+		cpsRewardFirstEntity.setMerchantId(rewardEntity.getMerchantId());
+		cpsRewardFirstEntity.setAgencyId(rewardEntity.getAgencyId());
+		cpsRewardFirstEntity.setAffliateId(rewardEntity.getAffliateId());
+		cpsRewardFirstEntity.setZoneId(rewardEntity.getZoneId());
+		cpsRewardFirstEntity.setSite(rewardEntity.getSite());
+		cpsRewardFirstEntity.setOs(rewardEntity.getOs());
+		cpsRewardFirstEntity.setType(rewardEntity.getType());
+		cpsRewardFirstEntity.setUserId(rewardEntity.getUserId());
+		cpsRewardFirstEntity.setAdId(rewardEntity.getAdId());
+		cpsRewardFirstEntity.setMemberName(rewardEntity.getMemberName());
+		cpsRewardFirstEntity.setProductName(rewardEntity.getProductName());
+		cpsRewardFirstEntity.setProductCnt(rewardEntity.getProductCnt());
+		cpsRewardFirstEntity.setProductPrice(rewardEntity.getProductPrice());
+		cpsRewardFirstEntity.setCommission(rewardEntity.getCommission());
+		cpsRewardFirstEntity.setCommissionProfit(rewardEntity.getCommissionProfit());
+		cpsRewardFirstEntity.setAffliateCommission(rewardEntity.getAffliateCommission());
+		cpsRewardFirstEntity.setUserCommission(rewardEntity.getUserCommission());
+		cpsRewardFirstEntity.setCommissionRate(rewardEntity.getCommissionRate());
+		cpsRewardFirstEntity.setStatus(rewardEntity.getStatus());
+		cpsRewardFirstEntity.setBaseCommission(rewardEntity.getBaseCommission());
+		cpsRewardFirstEntity.setIncentiveCommission(rewardEntity.getIncentiveCommission());
+		cpsRewardFirstEntity.setIpAddress(rewardEntity.getIpAddress());
+		return cpsRewardFirstEntity;
+	}
+
+	public CpsRewardTempEntity cpsRewardTempEntity (CpsRewardEntity cpsRewardEntity){
+		CpsRewardTempEntity cpsRewardTempEntity = new CpsRewardTempEntity();
+		if (cpsRewardEntity.getRewardNum() != 0) {
+			cpsRewardTempEntity.setRewardNum(cpsRewardEntity.getRewardNum());
+		}
+		cpsRewardTempEntity.setClickNum(cpsRewardEntity.getClickNum());
+		cpsRewardTempEntity.setOrderNo(cpsRewardEntity.getOrderNo());
+		cpsRewardTempEntity.setProductCode(cpsRewardEntity.getProductCode());
+		cpsRewardTempEntity.setRegDay(cpsRewardEntity.getRegDay());
+		cpsRewardTempEntity.setRegYm(cpsRewardEntity.getRegYm());
+		cpsRewardTempEntity.setRegHour(cpsRewardEntity.getRegHour());
+		cpsRewardTempEntity.setCampaignNum(cpsRewardEntity.getCampaignNum());
+		cpsRewardTempEntity.setMerchantId(cpsRewardEntity.getMerchantId());
+		cpsRewardTempEntity.setAgencyId(cpsRewardEntity.getAgencyId());
+		cpsRewardTempEntity.setAffliateId(cpsRewardEntity.getAffliateId());
+		cpsRewardTempEntity.setZoneId(cpsRewardEntity.getZoneId());
+		cpsRewardTempEntity.setSite(cpsRewardEntity.getSite());
+		cpsRewardTempEntity.setOs(cpsRewardEntity.getOs());
+		cpsRewardTempEntity.setType(cpsRewardEntity.getType());
+		cpsRewardTempEntity.setUserId(cpsRewardEntity.getUserId());
+		cpsRewardTempEntity.setAdId(cpsRewardEntity.getAdId());
+		cpsRewardTempEntity.setStatus(cpsRewardEntity.getStatus());
+		cpsRewardTempEntity.setMemberName(cpsRewardEntity.getMemberName());
+		cpsRewardTempEntity.setProductName(cpsRewardEntity.getProductName());
+		cpsRewardTempEntity.setProductCnt(cpsRewardEntity.getProductCnt());
+		cpsRewardTempEntity.setProductPrice(cpsRewardEntity.getProductPrice());
+		cpsRewardTempEntity.setTransComment(cpsRewardEntity.getTransComment());
+		cpsRewardTempEntity.setCategory(cpsRewardEntity.getCategory());
+		cpsRewardTempEntity.setCommission(cpsRewardEntity.getCommission());
+		cpsRewardTempEntity.setCommissionProfit(cpsRewardEntity.getCommissionProfit());
+		cpsRewardTempEntity.setAffliateCommission(cpsRewardEntity.getAffliateCommission());
+		cpsRewardTempEntity.setUserCommission(cpsRewardEntity.getUserCommission());
+		cpsRewardTempEntity.setCommissionRate(cpsRewardEntity.getCommissionRate());
+		cpsRewardTempEntity.setBaseCommission(cpsRewardEntity.getBaseCommission());
+		cpsRewardTempEntity.setIncentiveCommission(cpsRewardEntity.getIncentiveCommission());
+		cpsRewardTempEntity.setIpAddress(cpsRewardEntity.getIpAddress());
+
+		return cpsRewardTempEntity;
+	}
+	
+	public void cpsRewardEntityListSave (List<CpsRewardEntity> cpsRewardEntityList, List<CpsRewardFirstEntity> cpsRewardFirstEntityList){
+		int batchSize = 1000; // 한번에 저장할 배치 크기
+		List<CpsRewardEntity> cpsRewardEntityListBatch = new ArrayList<>();
+		List<CpsRewardFirstEntity> cpsRewardFirstEntityBatch = new ArrayList<>();
+		
+		//리워드 저장
+		if (cpsRewardEntityList.size() > 0) {
+			for (int i = 0; i < cpsRewardEntityList.size(); i++) {
+				cpsRewardEntityListBatch.add(cpsRewardEntityList.get(i));
+
+				if (cpsRewardEntityListBatch.size() == batchSize) {
+					cpsRewardRepository.saveAll(cpsRewardEntityListBatch);
+					cpsRewardEntityListBatch.clear();
+				}
+			}
+			if (!cpsRewardEntityListBatch.isEmpty()) {
+				cpsRewardRepository.saveAll(cpsRewardEntityListBatch); 
+			}
+		}
+
+		//첫데이터 저장
+		if (cpsRewardFirstEntityList.size() > 0) {
+			for (int i = 0; i < cpsRewardFirstEntityList.size(); i++) {
+				cpsRewardFirstEntityBatch.add(cpsRewardFirstEntityList.get(i));
+
+				if (cpsRewardFirstEntityBatch.size() == batchSize) {
+					cpsRewardFirstRepository.saveAll(cpsRewardFirstEntityBatch);
+					cpsRewardFirstEntityBatch.clear();
+				}
+			}
+			if (!cpsRewardFirstEntityBatch.isEmpty()) {
+				cpsRewardFirstRepository.saveAll(cpsRewardFirstEntityBatch);
+			}
+		}
+
 	}
 }

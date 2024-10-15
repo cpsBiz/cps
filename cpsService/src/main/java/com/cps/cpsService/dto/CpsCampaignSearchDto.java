@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class CpsCampaignSearchDto {
         int campaignNum;
         String merchantId;
-        String agencyId;
+        String adminId;
         String campaignName;
         String campaignStart;
         String campaignEnd;

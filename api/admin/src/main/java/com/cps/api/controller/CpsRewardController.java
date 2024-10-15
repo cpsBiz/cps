@@ -1,5 +1,7 @@
 package com.cps.api.controller;
 
+import com.cps.api.service.CpsRewardCoupangService;
+import com.cps.api.service.CpsRewardLinkPriceService;
 import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
 import com.cps.cpsService.packet.CpsRewardPacket;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +27,10 @@ import java.util.List;
 public class CpsRewardController {
 
     private final CpsRewardService cpsRewardService;
+
+    private final CpsRewardLinkPriceService cpsRewardLinkPriceService;
+
+    private final CpsRewardCoupangService cpsRewardCoupangService;
 
     /**
      * 도트피치 익일 호출
@@ -100,7 +107,8 @@ public class CpsRewardController {
             List<String> depthList = Arrays.asList("N", "Y");
             for (String depth : depthList) {
                 request.setCancel_flag(depth);
-                var reward = cpsRewardService.linkPriceReward(request, "R");
+                var reward = cpsRewardLinkPriceService.linkPriceReward(request, "R");
+
                 if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                     result.setSuccess();
                 } else {
@@ -135,7 +143,7 @@ public class CpsRewardController {
                 for (String depth : depthList) {
                     request.setCancel_flag(depth);
                     request.setYyyymmdd(date.format(formatter));
-                    var reward = cpsRewardService.linkPriceReward(request,"Y");
+                    var reward = cpsRewardLinkPriceService.linkPriceReward(request,"Y");
                     if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                         result.setSuccess();
                     } else {
@@ -152,19 +160,19 @@ public class CpsRewardController {
     }
 
     /**
-     * 쿠팡 익일 호출
+     * 쿠팡 익일 주문건 호출
      *
      * @date 2024-10-07
      */
-    @Operation(summary = "쿠팡 익일 호출 및 스틱지급")
+    @Operation(summary = "쿠팡 익일 주문건 호출 및 막대사탕 지급")
     @PostMapping(value = "/coupang/reward")
     public ResponseEntity<CpsRewardPacket.RewardInfo.RewardResponse> coupangReward(@Valid @RequestBody CpsRewardPacket.RewardInfo.CoupangRequest request) throws Exception {
         var result = new CpsRewardPacket.RewardInfo.RewardResponse();
 
         try {
-            List<String> coupangList = Arrays.asList("N", "Y");
-            for (String cancel : coupangList) {
-                var reward = cpsRewardService.coupangReward(request, cancel);
+            List<String> depthList = Arrays.asList("N", "Y");
+            for (String rewardYn : depthList) {
+                var reward = cpsRewardCoupangService.coupangReward(request, rewardYn);
                 if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                     result.setSuccess();
                 } else {
@@ -176,6 +184,19 @@ public class CpsRewardController {
         } catch (Exception e) {
             result.setError("coupangReward Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 쿠팡 사탕 지급 확정
+     */
+    @Operation(summary = "쿠팡 막대사탕 지급 확정")
+    @PostMapping(value = "/coupang/stick")
+    public void coupangStick(CpsRewardPacket.RewardInfo.CoupangStickRequest request) throws Exception {
+        try {
+            cpsRewardCoupangService.coupangStickSchedule(request);
+        } catch (Exception e) {
+            log.error("coupangStick Controller Error");
         }
     }
 }

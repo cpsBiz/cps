@@ -22,8 +22,8 @@ public class CpsCampaignCommissionPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class AffiliateCampaignRequest {
             private int campaignNum;
-            @NotBlank(message = "merchantId 확인")
-            private String merchantId;
+            @NotBlank(message = "affliateId 확인")
+            private String affliateId;
             private String status;
             private int memberCommissionShare;
             private int userCommissionShare;

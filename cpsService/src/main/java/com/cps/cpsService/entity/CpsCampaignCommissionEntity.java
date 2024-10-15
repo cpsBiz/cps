@@ -21,8 +21,8 @@ public class CpsCampaignCommissionEntity {
     private int campaignNum;
 
     @Id
-    @Column(name = "MERCHANT_ID", updatable = false, nullable = false)
-    private String merchantId;
+    @Column(name = "AFFLIATE_ID", updatable = false, nullable = false)
+    private String affliateId;
 
     @Column(name = "STATUS")
     private String status;

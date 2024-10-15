@@ -1,5 +1,6 @@
 package com.cps.cpsService.entity;
 
+import com.cps.cpsService.entity.pk.CpsRewardFirstPk;
 import com.cps.cpsService.entity.pk.CpsRewardPk;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,14 +13,9 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "CPS_REWARD")
-@IdClass(CpsRewardPk.class)
-public class CpsRewardEntity {
-    @Id
-    @Column(name = "REWARD_NUM")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int rewardNum;
-
+@Table(name = "CPS_REWARD_FIRST")
+@IdClass(CpsRewardFirstPk.class)
+public class CpsRewardFirstEntity {
     @Id
     @Column(name = "CLICK_NUM")
     private int clickNum;
@@ -35,6 +31,9 @@ public class CpsRewardEntity {
     @Id
     @Column(name = "REG_DAY", updatable = false)
     private int regDay;
+
+    @Column(name = "STATUS")
+    private int status;
 
     @Column(name = "REG_YM", updatable = false)
     private int regYm;
@@ -71,9 +70,6 @@ public class CpsRewardEntity {
 
     @Column(name = "ADID")
     private String adId;
-
-    @Column(name = "STATUS")
-    private int status;
 
     @Column(name = "MEMBER_NAME")
     private String memberName;

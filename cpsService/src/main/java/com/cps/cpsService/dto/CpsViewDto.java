@@ -8,13 +8,15 @@ public class CpsViewDto {
     int regDay;
     String regHour;
     String campaignName;
-    String agencyId;
+    String adminId;
     String affliateId;
     String zoneId;
     String merchantId;
     String type;
+    String memberName;
     String site;
     String clickUrl;
+    String mobileClickUrl;
     String os;
     String userId;
     String adId;

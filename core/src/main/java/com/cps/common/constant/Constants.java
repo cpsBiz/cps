@@ -56,11 +56,11 @@ public enum Constants {
 
     INQUIRY_EXCEPTION("3000", "1:1 문의 등록 오류"),
     INQUIRY_BLANK("3001", "1:1 문의 정보가 없습니다."),
-    INQUIRY_SEARCH_EXCEPTION("3010", "1:1 문의 조회 오류"),
+    INQUIRY_SEARCH_EXCEPTION("3005", "1:1 문의 조회 오류"),
 
     ANSWER_EXCEPTION("3000", "1:1 문의 답변 등록 오류"),
     ANSWER_BLANK("3001", "1:1 문의 답변  정보가 없습니다."),
-    ANSWER_SEARCH_EXCEPTION("3010", "1:1 문의 답변 조회 오류"),
+    ANSWER_SEARCH_EXCEPTION("3005", "1:1 문의 답변 조회 오류"),
 
     FAVORITES_EXCEPTION("3000", "캠페인 즐겨찾기 등록 오류"),
     FAVORITES_DELETE_EXCEPTION("3003", "캠페인 즐겨찾기 삭제 오류"),
@@ -72,13 +72,13 @@ public enum Constants {
     GIFT_BRAND_BLANK("3001", "브랜드 정보가 없습니다."),
     GIFT_BRAND_UPDATE_EXCEPTION("3002", "기프트 브랜드  정보 수정 오류"),
     GIFT_BRAND_DELETE_EXCEPTION("3003", "기프트 브랜드  정보 삭제 오류"),
-    GIFT_BRAND_SEARCH_EXCEPTION("3010", "기프트 브랜드 조회 오류"),
+    GIFT_BRAND_SEARCH_EXCEPTION("3005", "기프트 브랜드 조회 오류"),
 
     GIFT_PRODUCT_EXCEPTION("3000", "기프트 상품 등록 오류"),
     GIFT_PRODUCT_BLANK("3001", "상품 정보가 없습니다."),
     GIFT_PRODUCT_UPDATE_EXCEPTION("3002", "기프트 상품 정보 수정 오류"),
     GIFT_PRODUCT_DELETE_EXCEPTION("3003", "기프트 상품 정보 삭제 오류"),
-    GIFT_PRODUCT_SEARCH_EXCEPTION("3010", "기프트 상품 조회 오류");
+    GIFT_PRODUCT_SEARCH_EXCEPTION("3005", "기프트 상품 조회 오류");
 
     private String code;
 

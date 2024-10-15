@@ -27,76 +27,12 @@ import java.util.function.Consumer;
 public abstract class BaseHttpService {
     private WebClient webClient;
 
-    public BaseHttpService(String domain) {
-        this(domain, defaultHeadersConsumer(), defaultFiltersConsumer());
+    public BaseHttpService() {
+        this.webClient = WebClient.builder()
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .build();
     }
-
-    public BaseHttpService(String domain, Consumer<HttpHeaders> headersConsumer) {
-        this(domain, headersConsumer, defaultFiltersConsumer());
-    }
-
-    public BaseHttpService(String domain, Consumer<HttpHeaders> headersConsumer, Consumer<List<ExchangeFilterFunction>> filtersConsumer) {
-        this.webClient = createWebClientBuilder(domain, headersConsumer, filtersConsumer).build();
-    }
-
-    private WebClient.Builder createWebClientBuilder(String domain, Consumer<HttpHeaders> headersConsumer, Consumer<List<ExchangeFilterFunction>> filtersConsumer) {
-
-        //TODO ExchangeStrategies 커스텀으로 받을지는 추후 확장.
-        //codec 처리를 위한 in-memory buffer 값이 256KB로 기본설정 256KB보다 큰 HTTP 메시지를 처리하기 위한 설정 추가.
-        ExchangeStrategies exchangeStrategies =
-                ExchangeStrategies
-                        .builder()
-                        .codecs(configurer -> configurer.defaultCodecs()
-                                .maxInMemorySize(1024*1024*50))
-                        .build();
-
-        exchangeStrategies
-                .messageWriters().stream()
-                .filter(LoggingCodecSupport.class::isInstance)
-                .forEach(writer -> ((LoggingCodecSupport)writer).setEnableLoggingRequestDetails(true));
-
-        HttpClient httpClient = HttpClient.create()
-                .responseTimeout(Duration.ofSeconds(10)) // 타임아웃 설정
-                .doOnConnected(conn ->
-                        conn.addHandlerLast(new ReadTimeoutHandler(10))
-                                .addHandlerLast(new WriteTimeoutHandler(10)));
-
-        //수정
-        WebClient.Builder builder =  WebClient.builder()
-                .baseUrl(domain)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .filters(filtersConsumer);
-
-        if (headersConsumer != null) {
-            builder.defaultHeaders(headersConsumer);
-        }
-
-        return builder;
-    }
-
-    private static Consumer<HttpHeaders> defaultHeadersConsumer() {
-        return headers -> {
-            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-            headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        };
-    }
-
-    private static Consumer<List<ExchangeFilterFunction>> defaultFiltersConsumer() {
-        return filters -> {
-            filters.add(addProcessId());
-            filters.add(logRequest());
-            filters.add(logResponse());
-        };
-    }
-
-    private static ExchangeFilterFunction addProcessId() {
-        return (request, next) -> {
-            String processId = UUID.randomUUID().toString();
-            return next.exchange(request)
-                    .contextWrite(Context.of("processId", processId));
-        };
-    }
-
 
     // 요청 로깅 필터
     private static ExchangeFilterFunction logRequest() {
@@ -170,15 +106,17 @@ public abstract class BaseHttpService {
     }
 
     //Get 요청
-    public <T>Mono<T> GetAsync(String endPoint, Object requestData, Class<T> responseType,Consumer<HttpHeaders> headersConsumer) throws Exception {
+    public <T>Mono<T> GetAsync(String url, Class<T> responseType,Consumer<HttpHeaders> headersConsumer) throws Exception {
+        /*
         String endPointWithQuery = endPoint;
 
         if(requestData != null){
             endPointWithQuery = endPoint + "?" + CommonUtil.objectToQueryString(requestData);
         }
+        */
 
         return this.webClient.get()
-                .uri(endPointWithQuery)
+                .uri(url)
                 .headers(headersConsumer)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
@@ -205,7 +143,7 @@ public abstract class BaseHttpService {
     }
 
     //post 요청
-    public <T>Mono<T> PostFormAsync(String endPoint,BodyInserters.FormInserter<String> requestData, Class<T> responseType) throws Exception {
+    public <T> Mono<T> PostFormAsync(String endPoint, BodyInserters.FormInserter<String> requestData, Class<T> responseType) throws Exception {
         LogRequestData(requestData);
         Consumer<HttpHeaders> headersConsumer = headers -> {
             headers.set("Custom-Header", "HeaderValue");

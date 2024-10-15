@@ -21,16 +21,16 @@ public interface CpsMemberCommissionRepository extends JpaRepository<CpsRewardEn
     List<Object[]> findRewardsByUserIdAndRegYm(@Param("userId") String userId, @Param("regYm") Integer regYm, @Param("affliateId") String affliateId, @Param("status") List<Integer> status);
 
     @Query(value = "SELECT new com.cps.cpsService.dto.CpsMemberCommissionDto ( " +
-            "COALESCE(SUM(CASE WHEN A.status = 310 THEN A.userCommission ELSE 0 END), 0), " +
-            "COALESCE(SUM(CASE WHEN A.status IN (100, 200) THEN A.userCommission ELSE 0 END), 0)) " +
+            "COALESCE(SUM(CASE WHEN A.status = 210 THEN A.userCommission ELSE 0 END), 0), " +
+            "COALESCE(SUM(CASE WHEN A.status = 100 THEN A.userCommission ELSE 0 END), 0)) " +
             "FROM CpsRewardEntity A " +
             "WHERE A.userId = :userId " +
             "AND A.affliateId = :affliateId")
     CpsMemberCommissionDto findRewardsByUserId(@Param("userId") String userId, @Param("affliateId") String affliateId);
 
     @Query(value = "SELECT new com.cps.cpsService.dto.CpsMemberRewardUnitDto ( " +
-            "COALESCE(SUM(CASE WHEN A.status = 310 THEN A.cnt ELSE 0 END), 0), " +
-            "COALESCE(SUM(CASE WHEN A.status IN (100, 200) THEN A.cnt ELSE 0 END), 0)) " +
+            "COALESCE(SUM(CASE WHEN A.status = 210 THEN A.cnt ELSE 0 END), 0), " +
+            "COALESCE(SUM(CASE WHEN A.status = 100 THEN A.cnt ELSE 0 END), 0)) " +
             "FROM CpsRewardUnitEntity A " +
             "WHERE A.userId = :userId " +
             "AND A.affliateId = :affliateId")

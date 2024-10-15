@@ -78,8 +78,6 @@ public class SummaryDto {
         this.cancelUserCommission = cancelUserCommission;
     }
 
-
-
     public SummaryDto(String keyWord, String keyWordName, int cnt, int clickCnt, int rewardCnt, int confirmRewardCnt, int cancelRewardCnt, int productPrice, int confirmProductPrice, int cancelProductPrice, int commission, int confirmCommission, int cancelCommission, int commissionProfit, int confirmCommissionProfit, int cancelCommissionProfit, int affliateCommission, int confirmAffliateCommission, int cancelAffliateCommission, int userCommission, int confirmUserCommission, int cancelUserCommission) {
         this.keyWord = keyWord;
         this.keyWordName = keyWordName;

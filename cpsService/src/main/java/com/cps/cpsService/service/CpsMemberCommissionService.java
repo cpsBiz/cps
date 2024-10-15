@@ -56,16 +56,18 @@ public class CpsMemberCommissionService {
 		List<Integer> statusList = new ArrayList<>();
 
 		try {
-
-			if (request.getStatus() == 100) {
-				statusList.add(request.getStatus());
-				statusList.add(200);
-			} else if (request.getStatus() == 0) { //전체
+			
+			if (request.getStatus() == 0) { //전체
 				statusList.add(100);
 				statusList.add(200);
 				statusList.add(210);
+				statusList.add(300);
 				statusList.add(310);
-			} else {
+			} else if (request.getStatus() == 310) { //취소
+				statusList.add(200);
+				statusList.add(300);
+				statusList.add(310);
+			} else { //예정, 확정
 				statusList.add(request.getStatus());
 			}
 

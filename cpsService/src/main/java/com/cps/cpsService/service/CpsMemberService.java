@@ -163,6 +163,7 @@ public class CpsMemberService {
 					member.setMemberPw(member.getMemberId());
 					member.setType("MERCHANT"); member.setStatus("N");member.setBusinessType("B");
 					member.setAgencyId("linkprice");
+					member.setAdminId("linkprice");
 					CpsMemberEntity cpsMemberEntity =  new CpsMemberEntity();
 					CpsCampaignEntity cpsCampaignEntity = new CpsCampaignEntity();
 					CpsMemberPacket.MemberInfo.MemberCampaignRequest campaign = new CpsMemberPacket.MemberInfo.MemberCampaignRequest();

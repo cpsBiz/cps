@@ -66,18 +66,20 @@ public class CpsViewService {
 			cpsViewDto.setRegHour((String) result[1]);
 			cpsViewDto.setCampaignNum(((Number) result[2]).intValue());
 			cpsViewDto.setCampaignName((String) result[3]);
-			cpsViewDto.setAgencyId((String) result[4]);
+			cpsViewDto.setAdminId((String) result[4]);
 			cpsViewDto.setMerchantId((String) result[5]);
 			cpsViewDto.setClickUrl((String) result[6]);
-			cpsViewDto.setIcon((String) result[7]);
-			cpsViewDto.setLogo((String) result[8]);
-			cpsViewDto.setType((String) result[9]);
-			cpsViewDto.setAffliateId((String) result[10]);
-			cpsViewDto.setZoneId((String) result[11]);
-			cpsViewDto.setSite((String) result[12]);
-			cpsViewDto.setUserId((String) result[13]);
-			cpsViewDto.setAdId((String) result[14]);
-			cpsViewDto.setOs((String) result[15]);
+			cpsViewDto.setMobileClickUrl((String) result[7]);
+			cpsViewDto.setIcon((String) result[8]);
+			cpsViewDto.setLogo((String) result[9]);
+			cpsViewDto.setType((String) result[10]);
+			cpsViewDto.setMemberName((String) result[11]);
+			cpsViewDto.setAffliateId((String) result[12]);
+			cpsViewDto.setZoneId((String) result[13]);
+			cpsViewDto.setSite((String) result[14]);
+			cpsViewDto.setUserId((String) result[15]);
+			cpsViewDto.setAdId((String) result[16]);
+			cpsViewDto.setOs((String) result[17]);
 			return cpsViewDto;
 		}).collect(Collectors.toList());
 	}
@@ -99,9 +101,14 @@ public class CpsViewService {
 			cpsViewEntity.setRegHour(result.getRegHour());
 			cpsViewEntity.setCampaignNum(result.getCampaignNum());
 			cpsViewEntity.setCampaignName(result.getCampaignName());
-			cpsViewEntity.setAgencyId(result.getAgencyId());
+			cpsViewEntity.setAgencyId(result.getAdminId());
 			cpsViewEntity.setMerchantId(result.getMerchantId());
-			cpsViewEntity.setClickUrl(result.getClickUrl());
+			cpsViewEntity.setClickUrl(result.getMobileClickUrl());
+
+			if (result.getOs().equals("PC")) {
+				cpsViewEntity.setClickUrl(result.getClickUrl());
+			}
+
 			cpsViewEntity.setType(result.getType());
 			cpsViewEntity.setAffliateId(result.getAffliateId());
 			cpsViewEntity.setZoneId(result.getZoneId());

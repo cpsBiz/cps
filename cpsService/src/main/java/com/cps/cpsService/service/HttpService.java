@@ -31,26 +31,9 @@ import java.util.function.Consumer;
 @Slf4j
 @Service
 public class HttpService extends BaseHttpService {
-    public static final String DOMAIN = "";
 
     public static final String ACCESS_KEY = "6566d8b3-141d-4bde-8de9-606126385670";
     public static final String SECRET_KEY = "dcfcadfdd0e4cf4610fd08b886859f975fde5a8f";
-
-    public HttpService() {
-        super(DOMAIN);
-    }
-
-    public HttpService(String domain) {
-        super(domain);
-    }
-
-    public HttpService(String domain, Consumer<HttpHeaders> headersConsumer) {
-        super(domain, headersConsumer);
-    }
-
-    public HttpService(String domain, Consumer<HttpHeaders> headersConsumer, Consumer<List<ExchangeFilterFunction>> filtersConsumer) {
-        super(domain, headersConsumer, filtersConsumer);
-    }
 
     //도트피치 익일CPS, 매출 취소 내역 호출
     public CpsRewardPacket.RewardInfo.DotPitchListResponse SendDotPitchReward(String domain, CpsRewardPacket.RewardInfo.DotPitchRequest request) {
@@ -152,7 +135,6 @@ public class HttpService extends BaseHttpService {
     public List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> SendUserLinkPriceMerchant(CpsMemberPacket.MemberInfo.Domain request) {
         try{
             var result = linkPriceDetail(request.getDomain());
-            //var result = this.PostAsync(request.getDomain(), request, String.class);
             List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> responseObj = new ObjectMapper().readValue(result, new TypeReference<List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse>>() {});
             return responseObj;
         } catch (Exception ex) {
@@ -191,10 +173,59 @@ public class HttpService extends BaseHttpService {
     //링크프라이스 실적조회
     public CpsRewardPacket.RewardInfo.LinkPriceListResponse SendLinkPriceReward(String domain, CpsRewardPacket.RewardInfo.LinkPriceRequest request) {
         CpsRewardPacket.RewardInfo.LinkPriceListResponse responseObj = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
+        String jsonString = "{"
+                + "\"result\": \"0\","
+                + "\"list_count\": 2,"
+                + "\"order_list\": ["
+                + "{"
+                + "\"trlog_id\": \"18000406750585\","
+                + "\"m_id\": \"clickbuy\","
+                + "\"o_cd\": \"recover_231019_182249\","
+                + "\"p_cd\": \"recover_231019_182249\","
+                + "\"p_nm\": \"pn_recover_5\","
+                + "\"it_cnt\": \"1\","
+                + "\"user_id\": \"91\","
+                + "\"status\": \"100\","
+                + "\"c_cd\": \"test_c_cd\","
+                + "\"create_time_stamp\": \"20231020\","
+                + "\"applied_pgm_id\": \"0038\","
+                + "\"yyyymmdd\": \"20231017\","
+                + "\"hhmiss\": \"000000\","
+                + "\"trans_comment\": \"\","
+                + "\"sales\": 10000,"
+                + "\"commission\": 1000,"
+                + "\"pgm_name\": \"tt_mo\","
+                + "\"is_pc\": \"mobile\","
+                + "\"pur_rate\": \"1원\""
+                + "},"
+                + "{"
+                + "\"trlog_id\": \"18000406750586\","
+                + "\"m_id\": \"clickbuy\","
+                + "\"o_cd\": \"recover_231019_182243\","
+                + "\"p_cd\": \"recover_231019_182243\","
+                + "\"p_nm\": \"pn_recover_4\","
+                + "\"it_cnt\": \"2\","
+                + "\"user_id\": \"91\","
+                + "\"status\": \"100\","
+                + "\"c_cd\": \"test_c_cd\","
+                + "\"create_time_stamp\": \"20231020\","
+                + "\"applied_pgm_id\": \"0038\","
+                + "\"yyyymmdd\": \"20231017\","
+                + "\"hhmiss\": \"000000\","
+                + "\"trans_comment\": \"\","
+                + "\"sales\": 20000,"
+                + "\"commission\": 2000,"
+                + "\"pgm_name\": \"tt_mo\","
+                + "\"is_pc\": \"mobile\","
+                + "\"pur_rate\": \"1원\""
+                + "}"
+                + "]"
+                + "}";
+
         try{
             var result = this.GetAsync(domain, request, String.class);
             // order_list 유무 체크
-            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> responseMap = new ObjectMapper().readValue(jsonString, new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("order_list")) {
                 Object orderList = responseMap.get("order_list");
                 if (orderList instanceof List && !((List<?>) orderList).isEmpty()) {
@@ -225,33 +256,33 @@ public class HttpService extends BaseHttpService {
                 "  \"rMessage\": \"\",\n" +
                 "  \"data\": [\n" +
                 "    {\n" +
-                "      \"date\": \"20190307\",\n" +
+                "      \"date\": \"20231017\",\n" +
                 "      \"trackingCode\": \"AF1234567\",\n" +
                 "      \"subId\": \"A1234567890\",\n" +
                 "      \"addtag\": \"400\",\n" +
                 "      \"ctag\": \"Home\",\n" +
-                "      \"orderId\": 12345678901234,\n" +
+                "      \"orderId\": 123456789012343,\n" +
                 "      \"productId\": 1234567,\n" +
-                "      \"productName\": \"상품명\",\n" +
-                "      \"quantity\": 1,\n" +
-                "      \"gmv\": 4450,\n" +
+                "      \"productName\": \"상품명123\",\n" +
+                "      \"quantity\": 5,\n" +
+                "      \"gmv\": 50000,\n" +
                 "      \"commissionRate\": 3,\n" +
-                "      \"commission\": 267,\n" +
+                "      \"commission\": 5000,\n" +
                 "      \"subParam\": 91\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"date\": \"20190307\",\n" +
+                "      \"date\": \"20231017\",\n" +
                 "      \"trackingCode\": \"AF1234567\",\n" +
                 "      \"subId\": \"A1234567890\",\n" +
                 "      \"addtag\": \"400\",\n" +
                 "      \"ctag\": \"Home\",\n" +
-                "      \"orderId\": 12345678901234,\n" +
+                "      \"orderId\": 123456789012341,\n" +
                 "      \"productId\": 12345671,\n" +
-                "      \"productName\": \"상품명1\",\n" +
-                "      \"quantity\": 4,\n" +
-                "      \"gmv\": 8900,\n" +
+                "      \"productName\": \"상품명2\",\n" +
+                "      \"quantity\": 7,\n" +
+                "      \"gmv\": 70000,\n" +
                 "      \"commissionRate\": 3,\n" +
-                "      \"commission\": 267,\n" +
+                "      \"commission\": 7000,\n" +
                 "      \"subParam\": 91\n" +
                 "    }\n" +
                 "  ]\n" +
@@ -259,10 +290,8 @@ public class HttpService extends BaseHttpService {
 
         try{
             String authorization = HmacGenerator.generate("GET", domain, SECRET_KEY, ACCESS_KEY);
-            var result = this.GetAsync(url, request, String.class, httpHeaders -> {
+            var result = this.GetAsync(url+domain, String.class, httpHeaders -> {
                 httpHeaders.add("Authorization", authorization);
-                httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-                httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
             });
 
             // order_list 유무 체크

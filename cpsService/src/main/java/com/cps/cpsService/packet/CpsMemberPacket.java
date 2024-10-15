@@ -94,7 +94,7 @@ public class CpsMemberPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class MemberCampaignRequest extends MemberRequest {
-            private String agencyId;
+            private String adminId;
             private String rewardYn;
             private String mobileYn;
             private int returnDay;

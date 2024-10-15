@@ -10,7 +10,7 @@ import java.util.List;
 public interface CpsViewRepository extends JpaRepository<CpsViewEntity, String> {
     @Query(value = "SELECT DATE_FORMAT(NOW(), '%Y%m%d') AS REG_DAY, DATE_FORMAT(NOW(), '%H') AS REG_HOUR," +
             "A.CAMPAIGN_NUM, A.CAMPAIGN_NAME," +
-            "A.AGENCY_ID, A.MERCHANT_ID, A.CLICK_URL, A.ICON, A.LOGO, B.TYPE, " +
+            "A.ADMIN_ID, A.MERCHANT_ID, A.CLICK_URL, A.MOBILE_CLICK_URL, A.ICON, A.LOGO, B.TYPE, B.MEMBER_NAME, " +
             ":affliateId AS AFFLIATE_ID, :zoneId AS ZONE_ID," +
             ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, NOW() AS REG_DATE " +
             "FROM CPS_CAMPAIGN A " +
@@ -26,7 +26,7 @@ public interface CpsViewRepository extends JpaRepository<CpsViewEntity, String> 
 
     @Query(value = "SELECT DATE_FORMAT(NOW(), '%Y%m%d') AS REG_DAY, DATE_FORMAT(NOW(), '%H') AS REG_HOUR," +
             "A.CAMPAIGN_NUM, A.CAMPAIGN_NAME," +
-            "A.AGENCY_ID, A.MERCHANT_ID, A.CLICK_URL, A.ICON, A.LOGO, B.TYPE, " +
+            "A.ADMIN_ID, A.MERCHANT_ID, A.CLICK_URL, A.MOBILE_CLICK_URL, A.ICON, A.LOGO, B.TYPE, B.MEMBER_NAME, " +
             ":affliateId AS AFFLIATE_ID, :zoneId AS ZONE_ID," +
             ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, NOW() AS REG_DATE " +
             "FROM CPS_CAMPAIGN A " +

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -75,7 +76,7 @@ public class SearchService {
 			campaignSearch.setCampaignNum(campaign.getCampaignNum());
 			campaignSearch.setCampaignName(campaign.getCampaignName());
 			campaignSearch.setMerchantId(campaign.getMerchantId());
-			campaignSearch.setAgencyId(campaign.getAgencyId());
+			campaignSearch.setAdminId(campaign.getAdminId());
 			campaignSearch.setCampaignStart(campaign.getCampaignStart());
 			campaignSearch.setCampaignEnd(campaign.getCampaignEnd());
 			campaignSearch.setUrl(campaign.getUrl());
@@ -108,9 +109,17 @@ public class SearchService {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<SummaryDto> cq = cb.createQuery(SummaryDto.class);
 		Root<?> root = cq.from(SummaryDayEntity.class);
-		String orderByName = "regDay";
 
 		List<Predicate> predicates = new ArrayList<>();
+
+		AtomicInteger cnt = new AtomicInteger(0);
+		AtomicInteger clickCnt = new AtomicInteger(0);
+		AtomicInteger rewardCnt = new AtomicInteger(0);
+		AtomicInteger productPrice = new AtomicInteger(0);
+		AtomicInteger commission = new AtomicInteger(0);
+		AtomicInteger commissionProfit = new AtomicInteger(0);
+		AtomicInteger affliateCommission = new AtomicInteger(0);
+		AtomicInteger userCommission = new AtomicInteger(0);
 
 		// 날짜 조건 필수
 		if ("MONTH".equals(request.getDayType())) {
@@ -124,9 +133,9 @@ public class SearchService {
 		}
 
 		// 영역
-		if (request.getOs().equals("P")) {
-			predicates.add(cb.equal(root.get("os"), "PC"));
-		} else if (request.getOs().equals("M")) {
+		if (request.getOs().equals("PC")) {
+			predicates.add(cb.equal(root.get("os"), request.getOs()));
+		} else if (request.getOs().equals("MOBILE")) {
 			List<String> osValues = Arrays.asList("IOS", "AOS");
 			predicates.add(root.get("os").in(osValues));
 		}
@@ -150,7 +159,7 @@ public class SearchService {
 				predicates.add(cb.like(root.get("affliateId"), "%" + request.getKeyword() + "%"));
 			}
 
-			if ("EQMEMBER".equals(request.getKeywordType())) {
+			if ("EQMERCHANT".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("merchantId"), request.getKeyword()));
 			} else if ("EQSITE".equals(request.getKeywordType())) {
 				predicates.add(cb.equal(root.get("site"), request.getKeyword()));
@@ -166,41 +175,75 @@ public class SearchService {
 			cq = createSummaryQuery(cb, cq, root,  "regDay", root.get("regDay"), root.get("regDay"));
 		} else if ("MONTH".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "regYm", root.get("regYm"), root.get("regYm"));
-			orderByName = "regYm";
 		} else if ("MERCHANT".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "merchantId", root.get("merchantId"), root.get("memberName"));
-			orderByName = "memberName";
 		} else if ("CAMPAIGN".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "campaignNum", root.get("campaignNum"), root.get("campaignName"));
-			orderByName = "campaignName";
 		} else if ("AFFLIATE".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "affliateId", root.get("affliateId"), root.get("affliateName"));
-			orderByName = "affliateName";
 		} else if ("SITE".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root, "site", root.get("site"), root.get("site"));
-			orderByName = "site";
 		} else if ("MEMBERAGC".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "agencyId", root.get("agencyId"), root.get("agencyName"));
-			orderByName = "agencyName";
 		} else if ("MEMBERAFF".equals(request.getSearchType())) {
 			cq = createSummaryQuery(cb, cq, root,  "agencyId", root.get("agencyId"), root.get("agencyName"));
-			orderByName = "agencyName";
 		}
 
 		cq.where(cb.and(predicates.toArray(new Predicate[0])));
 
 		TypedQuery<SummaryDto> query = em.createQuery(cq);
+
 		//전체 개수
 		response.setTotalCount(query.getResultList().size());
+		query.getResultList().forEach(total -> {
+			response.setCnt(cnt.addAndGet(total.getCnt()));
+			response.setClickCnt(clickCnt.addAndGet(total.getClickCnt()));
+			response.setProductPrice(productPrice.addAndGet(total.getProductPrice()));
+			response.setCommission(commission.addAndGet(total.getCommission()));
+			response.setCommissionProfit(commissionProfit.addAndGet(total.getCommissionProfit()));
+			response.setAffliateCommission(affliateCommission.addAndGet(total.getAffliateCommission()));
+			response.setUserCommission(userCommission.addAndGet(total.getUserCommission()));
 
-		if ("ASC".equals(request.getOrderBy())) {
-			cq.orderBy(cb.asc(root.get(orderByName)));
-		} else if ("DESC".equals(request.getOrderBy())) {
-			cq.orderBy(cb.desc(root.get(orderByName)));
+			if(request.getCancelYn().equals("Y")) {
+				response.setRewardCnt(commission.addAndGet(total.getCancelRewardCnt()));
+				response.setProductPrice(commissionProfit.addAndGet(total.getCancelProductPrice()));
+				response.setCommission(affliateCommission.addAndGet(total.getCancelAffliateCommission()));
+				response.setCommissionProfit(userCommission.addAndGet(total.getCancelCommissionProfit()));
+				response.setAffliateCommission(affliateCommission.addAndGet(total.getCancelAffliateCommission()));
+				response.setUserCommission(userCommission.addAndGet(total.getCancelUserCommission()));
+			} else if(request.getCancelYn().equals("N")) {
+				response.setRewardCnt(commission.addAndGet(total.getConfirmRewardCnt()));
+				response.setProductPrice(commissionProfit.addAndGet(total.getConfirmProductPrice()));
+				response.setCommission(affliateCommission.addAndGet(total.getConfirmAffliateCommission()));
+				response.setCommissionProfit(userCommission.addAndGet(total.getConfirmCommissionProfit()));
+				response.setAffliateCommission(affliateCommission.addAndGet(total.getConfirmAffliateCommission()));
+				response.setUserCommission(userCommission.addAndGet(total.getUserCommission()));
+			}
+		});
+
+		if (request.getOrderByName().equals("regDay") || request.getOrderByName().equals("regYm") || request.getOrderByName().equals("memberName") || request.getOrderByName().equals("campaignName") || request.getOrderByName().equals("affliateName") || request.getOrderByName().equals("site") || request.getOrderByName().equals("agencyName")) {
+			if ("ASC".equals(request.getOrderBy())) {
+				cq.orderBy(cb.asc(root.get(request.getOrderByName())));
+			} else if ("DESC".equals(request.getOrderBy())) {
+				cq.orderBy(cb.desc(root.get(request.getOrderByName())));
+			}
+		} else if (request.getOrderByName().equals("rewardRate")){
+			Expression<Number> rewardRate = cb.quot(cb.toDouble(cb.sum(root.get("rewardCnt"))), cb.sum(root.get("clickCnt")));
+			if ("ASC".equals(request.getOrderBy())) {
+				cq.orderBy(cb.asc(rewardRate));
+			} else if ("DESC".equals(request.getOrderBy())) {
+				cq.orderBy(cb.desc(rewardRate));
+			}
+		} else {
+			if ("ASC".equals(request.getOrderBy())) {
+				cq.orderBy(cb.asc(cb.sum(root.get(request.getOrderByName()))));
+			} else if ("DESC".equals(request.getOrderBy())) {
+				cq.orderBy(cb.desc(cb.sum(root.get(request.getOrderByName()))));
+			}
 		}
 
 		// 페이징 처리
-		if (request.getSize() == 0)request.setSize(10);
+		if (request.getSize() == 0) request.setSize(40);
 		query = em.createQuery(cq);
 		query.setFirstResult(request.getPage() * request.getSize());
 		query.setMaxResults(request.getSize());
@@ -215,6 +258,10 @@ public class SearchService {
 		Expression<Long> rewardCnt = cb.sum(root.get("rewardCnt"));
 		Expression<Long> confirmRewardCnt = cb.sum(root.get("confirmRewardCnt"));
 		Expression<Long> cancelRewardCnt = cb.sum(root.get("cancelRewardCnt"));
+
+		Expression<Long> safeClickCnt = cb.nullif(sumClickCnt, 0L);
+		Expression<Number> rewardRate = cb.quot(cb.toDouble(rewardCnt), safeClickCnt);
+
 		Expression<Long> productPrice = cb.sum(root.get("productPrice"));
 		Expression<Long> confirmProductPrice = cb.sum(root.get("confirmProductPrice"));
 		Expression<Long> cancelProductPrice = cb.sum(root.get("cancelProductPrice"));

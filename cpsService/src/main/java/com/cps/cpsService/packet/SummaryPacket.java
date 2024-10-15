@@ -1,6 +1,6 @@
 package com.cps.cpsService.packet;
 
-import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.common.model.GenericReportPageBaseResponse;
 import com.cps.cpsService.dto.SummaryDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -39,10 +39,11 @@ public class SummaryPacket {
             private int page;
             private int size;
             private String orderBy;
+            private String orderByName;
         }
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class SummaryResponse extends GenericPageBaseResponse<SummaryDto> {}
+        public static class SummaryResponse extends GenericReportPageBaseResponse<SummaryDto> {}
     }
 }

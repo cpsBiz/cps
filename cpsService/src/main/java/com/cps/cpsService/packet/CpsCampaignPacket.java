@@ -27,8 +27,8 @@ public class CpsCampaignPacket {
             private int campaignNum;
             @NotBlank(message = "merchantId 확인")
             private String merchantId;
-            @NotBlank(message = "agencyId 확인")
-            private String agencyId;
+            @NotBlank(message = "adminId 확인")
+            private String adminId;
             private String campaignName;
             private String campaignStart;
             private String campaignEnd;
