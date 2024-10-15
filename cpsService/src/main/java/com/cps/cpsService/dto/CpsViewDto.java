@@ -22,5 +22,10 @@ public class CpsViewDto {
     String adId;
     String icon;
     String logo;
+    String favorites;
+    String commissionMobile;
+    String commissionPc;
+    String affliateCommissionShare;
+    String userCommissionShare;
 }
 

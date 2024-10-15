@@ -60,7 +60,7 @@ public class CoupangScheduleManager {
     /**
      * 쿠팡 사탕 지급 확정
      */
-    @Scheduled(cron = "30 6 11 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void coupangStickSchedule() throws Exception {
         CpsRewardPacket.RewardInfo.CoupangStickRequest request = new CpsRewardPacket.RewardInfo.CoupangStickRequest();
         LocalDate yesterday = LocalDate.now().minusDays(30);

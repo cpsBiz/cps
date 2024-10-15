@@ -64,11 +64,13 @@ public class CpsMemberCommissionService {
 				statusList.add(300);
 				statusList.add(310);
 			} else if (request.getStatus() == 310) { //취소
+				statusList.add(310);
+			} else if (request.getStatus() == 100) { //예정
+				statusList.add(100);
 				statusList.add(200);
 				statusList.add(300);
-				statusList.add(310);
-			} else { //예정, 확정
-				statusList.add(request.getStatus());
+			} else { //확정
+				statusList.add(210);
 			}
 
 			List<Object[]> result = cpsMemberCommissionRepository.findRewardsByUserIdAndRegYm(request.getUserId(), request.getRegYm(), request.getAffliateId(), statusList);
@@ -106,28 +108,5 @@ public class CpsMemberCommissionService {
 		});
 
 		return cpsMemberCommissionList;
-	}
-
-	/**
-	 * 쿠팡 막대사탕 조회
-	 * @date 2024-10-08
-	 */
-	public GenericBaseResponse<CpsMemberRewardUnitDto> memberStick(CpsMemberCommissionPacket.MemberCommissionInfo.MemberCommissionRequest request) throws Exception {
-		CpsMemberCommissionPacket.MemberCommissionInfo.MemberRewardUnitResponse response = new CpsMemberCommissionPacket.MemberCommissionInfo.MemberRewardUnitResponse();
-
-		try {
-			CpsMemberRewardUnitDto result = cpsMemberCommissionRepository.findRewardsUnitByUserId(request.getUserId(), request.getAffliateId());
-
-			if (null != result) {
-				response.setSuccess();
-				response.setData(result);
-			}else{
-				response.setApiMessage(Constants.MEMBER_COMMISSION_BLANK.getCode(), Constants.MEMBER_COMMISSION_BLANK.getValue());
-			}
-		} catch (Exception e) {
-			response.setApiMessage(Constants.MEMBER_COMMISSION_SEARCH_EXCEPTION.getCode(), Constants.MEMBER_COMMISSION_SEARCH_EXCEPTION.getValue());
-			log.error(Constant.EXCEPTION_MESSAGE + " memberStick api request : {}, exception :  {}", request, e);
-		}
-		return response;
 	}
 }

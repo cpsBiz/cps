@@ -1,5 +1,6 @@
 package com.cps.api.schedule;
 
+import com.cps.api.service.CpsRewardDotPitchService;
 import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
 import com.cps.cpsService.packet.CpsRewardPacket;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DotPitchScheduleManager {
     @Autowired
-    private final CpsRewardService cpsRewardService;
+    private final CpsRewardDotPitchService cpsRewardDotPitchService;
 
     /**
      * 도트피치 익일 호출 스케줄
@@ -35,7 +36,7 @@ public class DotPitchScheduleManager {
         request.setSearch_date(yesterday.format(formatter));
 
         try {
-            var member = cpsRewardService.dotPitchReward(request);
+            var member = cpsRewardDotPitchService.dotPitchReward(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
                 result.setSuccess();
             } else {
@@ -67,7 +68,7 @@ public class DotPitchScheduleManager {
                 for (String depth : depthList) {
                     request.setSearch_type(depth);
                     request.setSearch_date(date.format(formatter));
-                    var reward = cpsRewardService.dotPitchReward(request);
+                    var reward = cpsRewardDotPitchService.dotPitchReward(request);
                     if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                         result.setSuccess();
                     } else {

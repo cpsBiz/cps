@@ -80,6 +80,11 @@ public class CpsViewService {
 			cpsViewDto.setUserId((String) result[15]);
 			cpsViewDto.setAdId((String) result[16]);
 			cpsViewDto.setOs((String) result[17]);
+			cpsViewDto.setFavorites((String) result[18]);
+			cpsViewDto.setCommissionMobile((String) result[19]);
+			cpsViewDto.setCommissionPc((String) result[20]);
+			cpsViewDto.setAffliateCommissionShare((String) result[21]);
+			cpsViewDto.setUserCommissionShare((String) result[22]);
 			return cpsViewDto;
 		}).collect(Collectors.toList());
 	}

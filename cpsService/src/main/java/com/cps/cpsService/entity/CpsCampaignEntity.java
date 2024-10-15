@@ -42,6 +42,12 @@ public class CpsCampaignEntity {
     @Column(name = "CATEGORY")
     private String category;
 
+    @Column(name = "COMMISSION_MOBILE")
+    private String commissionMobile;
+
+    @Column(name = "COMMISSION_PC")
+    private String commissionPc;
+
     @Column(name = "LOGO")
     private String logo;
 
@@ -100,4 +106,8 @@ public class CpsCampaignEntity {
     @LastModifiedDate
     @Column(name = "MOD_DATE")
     private LocalDateTime modDate;
+
+    @ManyToOne
+    @JoinColumn(name = "MERCHANT_ID", referencedColumnName = "MEMBER_ID", insertable = false, updatable = false)
+    private CpsMemberEntity cpsMember;
 }

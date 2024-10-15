@@ -65,7 +65,7 @@ public class CpsCampaignPacket {
         public static class CampaignSearchRequest {
             private int campaignNum;
             private String merchantId;
-            private String agencyId;
+            private String adminId;
             private String campaignName;
             private String campaignStart;
             private String campaignEnd;

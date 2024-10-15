@@ -256,7 +256,7 @@ public class HttpService extends BaseHttpService {
                 "  \"rMessage\": \"\",\n" +
                 "  \"data\": [\n" +
                 "    {\n" +
-                "      \"date\": \"20231017\",\n" +
+                "      \"date\": \"20240930\",\n" +
                 "      \"trackingCode\": \"AF1234567\",\n" +
                 "      \"subId\": \"A1234567890\",\n" +
                 "      \"addtag\": \"400\",\n" +
@@ -264,14 +264,14 @@ public class HttpService extends BaseHttpService {
                 "      \"orderId\": 123456789012343,\n" +
                 "      \"productId\": 1234567,\n" +
                 "      \"productName\": \"상품명123\",\n" +
-                "      \"quantity\": 5,\n" +
-                "      \"gmv\": 50000,\n" +
+                "      \"quantity\": 2,\n" +
+                "      \"gmv\": 20000,\n" +
                 "      \"commissionRate\": 3,\n" +
-                "      \"commission\": 5000,\n" +
+                "      \"commission\": 2000,\n" +
                 "      \"subParam\": 91\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"date\": \"20231017\",\n" +
+                "      \"date\": \"20240930\",\n" +
                 "      \"trackingCode\": \"AF1234567\",\n" +
                 "      \"subId\": \"A1234567890\",\n" +
                 "      \"addtag\": \"400\",\n" +
@@ -279,10 +279,10 @@ public class HttpService extends BaseHttpService {
                 "      \"orderId\": 123456789012341,\n" +
                 "      \"productId\": 12345671,\n" +
                 "      \"productName\": \"상품명2\",\n" +
-                "      \"quantity\": 7,\n" +
-                "      \"gmv\": 70000,\n" +
+                "      \"quantity\": 4,\n" +
+                "      \"gmv\": 40000,\n" +
                 "      \"commissionRate\": 3,\n" +
-                "      \"commission\": 7000,\n" +
+                "      \"commission\": 4000,\n" +
                 "      \"subParam\": 91\n" +
                 "    }\n" +
                 "  ]\n" +

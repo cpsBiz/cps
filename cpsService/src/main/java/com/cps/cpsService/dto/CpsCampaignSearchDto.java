@@ -34,5 +34,6 @@ public class CpsCampaignSearchDto {
         String denyProduct;
         String notice;
         String campaignStatus;
+        String memberName;
 }
 

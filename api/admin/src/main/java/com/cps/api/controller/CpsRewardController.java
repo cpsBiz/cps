@@ -1,6 +1,7 @@
 package com.cps.api.controller;
 
 import com.cps.api.service.CpsRewardCoupangService;
+import com.cps.api.service.CpsRewardDotPitchService;
 import com.cps.api.service.CpsRewardLinkPriceService;
 import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
@@ -32,6 +33,8 @@ public class CpsRewardController {
 
     private final CpsRewardCoupangService cpsRewardCoupangService;
 
+    private final CpsRewardDotPitchService cpsRewardDotPitchService;
+
     /**
      * 도트피치 익일 호출
      *
@@ -43,7 +46,7 @@ public class CpsRewardController {
         var result = new CpsRewardPacket.RewardInfo.RewardResponse();
 
         try {
-            var member = cpsRewardService.dotPitchReward(request);
+            var member = cpsRewardDotPitchService.dotPitchReward(request);
             if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
                 result.setSuccess();
             } else {
@@ -77,7 +80,7 @@ public class CpsRewardController {
                 for (String depth : depthList) {
                     request.setSearch_type(depth);
                     request.setSearch_date(date.format(formatter));
-                    var reward = cpsRewardService.dotPitchReward(request);
+                    var reward = cpsRewardDotPitchService.dotPitchReward(request);
                     if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                         result.setSuccess();
                     } else {
@@ -170,7 +173,8 @@ public class CpsRewardController {
         var result = new CpsRewardPacket.RewardInfo.RewardResponse();
 
         try {
-            List<String> depthList = Arrays.asList("N", "Y");
+            //N 주문건, Y 취소건
+            List<String> depthList = Arrays.asList("N","Y");
             for (String rewardYn : depthList) {
                 var reward = cpsRewardCoupangService.coupangReward(request, rewardYn);
                 if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {

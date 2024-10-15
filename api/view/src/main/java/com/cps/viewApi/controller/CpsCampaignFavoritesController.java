@@ -37,7 +37,7 @@ public class CpsCampaignFavoritesController {
             } else {
                 result.setApiMessage(member.getResultCode(), member.getResultMessage());
             }
-            result.setDatas(member.getDatas());
+            result.setData(member.getData());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             result.setError("view Controller Error");

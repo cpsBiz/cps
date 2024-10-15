@@ -33,6 +33,9 @@ public class CpsGiftProductEntity {
     @Column(name = "PRODUCT_YN")
     private String productYn;
 
+    @Column(name = "CNT")
+    private int cnt;
+
     @CreatedDate
     @Column(name = "REG_DATE", updatable = false)
     private LocalDateTime regDate;

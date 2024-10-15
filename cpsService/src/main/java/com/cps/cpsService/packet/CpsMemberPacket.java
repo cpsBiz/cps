@@ -108,6 +108,8 @@ public class CpsMemberPacket {
             private String denyProduct;
             private String notice;
             private String commissionPaymentStandard;
+            private String maxCommissionMobile;
+            private String maxCommissionPc;
         }
 
         @Data

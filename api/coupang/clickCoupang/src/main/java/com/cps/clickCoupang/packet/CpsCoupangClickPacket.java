@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
-public class CpsClickCoupangClickPacket {
+public class CpsCoupangClickPacket {
 
     public static class CoupangClickInfo {
 

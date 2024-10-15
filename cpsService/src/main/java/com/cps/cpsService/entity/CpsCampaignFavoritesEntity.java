@@ -22,6 +22,10 @@ public class CpsCampaignFavoritesEntity {
     @Column(name = "USER_ID")
     private String userId;
 
+    @Id
+    @Column(name = "AFFLIATE_ID")
+    private String affliateId;
+
     @CreatedDate
     @Column(name = "REG_DATE", updatable = false)
     private LocalDateTime regDate;

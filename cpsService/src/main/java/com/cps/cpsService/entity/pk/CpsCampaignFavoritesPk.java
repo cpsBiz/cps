@@ -11,4 +11,5 @@ import java.io.Serializable;
 public class CpsCampaignFavoritesPk implements Serializable {
     @Column(name = "CAMPAIGN_NUM") private int campaignNum;
     @Column(name = "USER_ID") private String userId;
+    @Column(name = "AFFLIATE_ID") private String affliateId;
 }

@@ -18,5 +18,13 @@ public class CpsRewardUnitDto {
     long rewardCnt;
     String merchantId;
     String affliateId;
+    long unitCnt;
+    long unitPrice;
+    int rewardUnitNum;
+
+    public CpsRewardUnitDto(Long unitPrice, Long unitCnt) {
+        this.unitPrice = (unitPrice != null) ? unitPrice : 0L;
+        this.unitCnt = (unitCnt != null) ? unitCnt : 0L;
+    }
 }
 

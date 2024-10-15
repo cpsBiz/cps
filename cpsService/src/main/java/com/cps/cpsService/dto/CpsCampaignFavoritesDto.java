@@ -6,5 +6,6 @@ import lombok.Data;
 public class CpsCampaignFavoritesDto {
     int campaignNum;
     String userId;
+    String affliateId;
 }
 

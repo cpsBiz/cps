@@ -29,6 +29,7 @@ public class CpsCampaignFavoritesService {
 
 		cpsCampaignFavoritesEntity.setCampaignNum(request.getCampaignNum());
 		cpsCampaignFavoritesEntity.setUserId(request.getUserId());
+		cpsCampaignFavoritesEntity.setAffliateId(request.getAffliateId());
 
 		try {
 			if (request.getApiType().equals("I")) {
@@ -36,7 +37,12 @@ public class CpsCampaignFavoritesService {
 			} else{
 				cpsCampaignFavoritesRepository.delete(cpsCampaignFavoritesEntity);
 			}
-
+			CpsCampaignFavoritesDto cpsCampaignFavoritesDto = new CpsCampaignFavoritesDto();
+			cpsCampaignFavoritesDto.setCampaignNum(request.getCampaignNum());
+			cpsCampaignFavoritesDto.setUserId(request.getUserId());
+			cpsCampaignFavoritesDto.setAffliateId(request.getAffliateId());
+			response.setSuccess();
+			response.setData(cpsCampaignFavoritesDto);
 		}catch (Exception e){
 			response.setApiMessage(Constants.FAVORITES_EXCEPTION.getCode(), Constants.FAVORITES_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " favorites api request : {}, exception :  {}", request, e);

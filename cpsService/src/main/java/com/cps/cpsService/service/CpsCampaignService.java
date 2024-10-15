@@ -166,6 +166,8 @@ public class CpsCampaignService {
 		cpsCampaignEntity.setMerchantId(request.getMemberId());
 		cpsCampaignEntity.setCampaignName(request.getMemberId()+" 캠페인 자동 등록");
 		cpsCampaignEntity.setClickUrl(request.getClickUrl());
+		cpsCampaignEntity.setCommissionMobile(request.getMaxCommissionMobile());
+		cpsCampaignEntity.setCommissionPc(request.getMaxCommissionPc());
 		cpsCampaignEntity.setLogo(request.getLogo());
 		cpsCampaignEntity.setIcon(request.getIcon());
 		cpsCampaignEntity.setRewardYn(request.getRewardYn());

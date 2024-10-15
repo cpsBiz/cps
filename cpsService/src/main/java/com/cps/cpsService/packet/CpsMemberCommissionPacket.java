@@ -39,9 +39,5 @@ public class CpsMemberCommissionPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class MemberCommissionResponse extends GenericBaseResponse<CpsMemberCommissionDto> {}
-
-        @Data
-        @EqualsAndHashCode(callSuper = false)
-        public static class MemberRewardUnitResponse extends GenericBaseResponse<CpsMemberRewardUnitDto> {}
     }
 }

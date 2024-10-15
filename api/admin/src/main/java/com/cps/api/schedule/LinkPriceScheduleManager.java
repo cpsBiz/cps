@@ -1,5 +1,6 @@
 package com.cps.api.schedule;
 
+import com.cps.api.service.CpsRewardLinkPriceService;
 import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
 import com.cps.cpsService.packet.CpsRewardPacket;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LinkPriceScheduleManager {
     @Autowired
-    private final CpsRewardService cpsRewardService;
+    private final CpsRewardLinkPriceService cpsRewardLinkPriceService;
 
     /**
      * 링크프라이스 익일 호출 스케줄
@@ -38,7 +39,7 @@ public class LinkPriceScheduleManager {
             List<String> depthList = Arrays.asList("N", "Y");
             for (String depth : depthList) {
                 request.setCancel_flag(depth);
-                var member = cpsRewardService.linkPriceReward(request, "R");
+                var member = cpsRewardLinkPriceService.linkPriceReward(request, "R");
                 if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
                     result.setSuccess();
                 } else {
@@ -72,7 +73,7 @@ public class LinkPriceScheduleManager {
                 for (String depth : depthList) {
                     request.setCancel_flag(depth);
                     request.setYyyymmdd(date.format(formatter));
-                    var reward = cpsRewardService.linkPriceReward(request, "Y");
+                    var reward = cpsRewardLinkPriceService.linkPriceReward(request, "Y");
                     if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
                         result.setSuccess();
                     } else {

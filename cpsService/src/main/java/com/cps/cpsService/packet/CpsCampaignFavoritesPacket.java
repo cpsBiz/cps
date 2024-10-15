@@ -19,6 +19,7 @@ public class CpsCampaignFavoritesPacket {
         @EqualsAndHashCode(callSuper = false)
         public static class CampaignFavoritesRequest {
             private String userId;
+            private String affliateId;
             private int campaignNum;
             private String apiType;
         }

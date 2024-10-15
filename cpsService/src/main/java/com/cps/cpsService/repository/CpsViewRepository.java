@@ -12,10 +12,14 @@ public interface CpsViewRepository extends JpaRepository<CpsViewEntity, String> 
             "A.CAMPAIGN_NUM, A.CAMPAIGN_NAME," +
             "A.ADMIN_ID, A.MERCHANT_ID, A.CLICK_URL, A.MOBILE_CLICK_URL, A.ICON, A.LOGO, B.TYPE, B.MEMBER_NAME, " +
             ":affliateId AS AFFLIATE_ID, :zoneId AS ZONE_ID," +
-            ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, NOW() AS REG_DATE " +
+            ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, " +
+            "IFNULL((SELECT 'FAVORITE' FROM CPS_CAMPAIGN_FAVORITES C WHERE C.CAMPAIGN_NUM = A.CAMPAIGN_NUM AND C.AFFLIATE_ID = :affliateId AND C.USER_ID = :userId),'NON_FAVORITE') AS FAVORITE, " +
+            "COALESCE(A.COMMISSION_MOBILE, 2), COALESCE(A.COMMISSION_PC, 2), COALESCE(C.MEMBER_COMMISSION_SHARE, 70), COALESCE(C.USER_COMMISSION_SHARE, 30)  " +
             "FROM CPS_CAMPAIGN A " +
             "JOIN CPS_MEMBER B " +
             "  ON B.MEMBER_ID = A.MERCHANT_ID " +
+            "LEFT JOIN CPS_CAMPAIGN_COMMISSION C " +
+            "  ON C.CAMPAIGN_NUM = A.CAMPAIGN_NUM AND C.AFFLIATE_ID = :affliateId " +
             "WHERE A.CAMPAIGN_START <= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 0 DAY), '%Y%m%d') " +
             "AND A.CAMPAIGN_END >= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 0 DAY), '%Y%m%d') " +
             "AND A.REWARD_YN = 'Y' " +
@@ -28,12 +32,15 @@ public interface CpsViewRepository extends JpaRepository<CpsViewEntity, String> 
             "A.CAMPAIGN_NUM, A.CAMPAIGN_NAME," +
             "A.ADMIN_ID, A.MERCHANT_ID, A.CLICK_URL, A.MOBILE_CLICK_URL, A.ICON, A.LOGO, B.TYPE, B.MEMBER_NAME, " +
             ":affliateId AS AFFLIATE_ID, :zoneId AS ZONE_ID," +
-            ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, NOW() AS REG_DATE " +
+            ":site AS SITE, :userId AS USER_ID, :adId AS ADID, :os AS OS, 'FAVORITE' AS FAVORITE, " +
+            "COALESCE(A.COMMISSION_MOBILE, 2), COALESCE(A.COMMISSION_PC, 2), COALESCE(D.MEMBER_COMMISSION_SHARE, 70), COALESCE(D.USER_COMMISSION_SHARE, 30)  " +
             "FROM CPS_CAMPAIGN A " +
             "JOIN CPS_MEMBER B " +
             "  ON B.MEMBER_ID = A.MERCHANT_ID " +
             "JOIN CPS_CAMPAIGN_FAVORITES C " +
-            "  ON C.CAMPAIGN_NUM = A.CAMPAIGN_NUM " +
+            "  ON C.CAMPAIGN_NUM = A.CAMPAIGN_NUM AND C.AFFLIATE_ID = :affliateId AND C.USER_ID = :userId " +
+            "LEFT JOIN CPS_CAMPAIGN_COMMISSION D " +
+            "  ON D.CAMPAIGN_NUM = A.CAMPAIGN_NUM AND D.AFFLIATE_ID = :affliateId " +
             "WHERE A.CAMPAIGN_START <= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 0 DAY), '%Y%m%d') " +
             "AND A.CAMPAIGN_END >= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 0 DAY), '%Y%m%d') " +
             "AND A.REWARD_YN = 'Y' " +

@@ -128,7 +128,7 @@ public class CpsRewardLinkPriceService {
 
 								//첫 데이터 등록 시
 								if (productCnt == 0) {
-									cpsRewardFirstEntityList.add(cpsRewardEntityList(cpsRewardEntity));
+									cpsRewardFirstEntityList.add(cpsRewardService.cpsRewardEntityList(cpsRewardEntity));
 								}
 
 								//링크프라이스 리워드 TEMP 저장
@@ -170,8 +170,8 @@ public class CpsRewardLinkPriceService {
 		if(null == cpsRewardEntity) cpsRewardEntity = new CpsRewardEntity();
 
 		int commission = link.getCommission();
-		double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
-		double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
+		double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 100;
+		double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 100;
 		BigDecimal pointRateBigDecimal = commissionDto.getPointRate();
 		double pointRate = pointRateBigDecimal.doubleValue();
 
@@ -264,39 +264,5 @@ public class CpsRewardLinkPriceService {
 		cpsRewardEntity.setIncentiveCommission("0");
 
 		return cpsRewardEntity;
-	}
-
-	public CpsRewardFirstEntity cpsRewardEntityList(CpsRewardEntity rewardEntity){
-		CpsRewardFirstEntity cpsRewardFirstEntity = new CpsRewardFirstEntity();
-		cpsRewardFirstEntity.setClickNum(rewardEntity.getClickNum());
-		cpsRewardFirstEntity.setRegDay(rewardEntity.getRegDay());
-		cpsRewardFirstEntity.setRegYm(rewardEntity.getRegYm());
-		cpsRewardFirstEntity.setRegHour(rewardEntity.getRegHour());
-		cpsRewardFirstEntity.setOrderNo(rewardEntity.getOrderNo());
-		cpsRewardFirstEntity.setProductCode(rewardEntity.getProductCode());
-		cpsRewardFirstEntity.setCampaignNum(rewardEntity.getCampaignNum());
-		cpsRewardFirstEntity.setMerchantId(rewardEntity.getMerchantId());
-		cpsRewardFirstEntity.setAgencyId(rewardEntity.getAgencyId());
-		cpsRewardFirstEntity.setAffliateId(rewardEntity.getAffliateId());
-		cpsRewardFirstEntity.setZoneId(rewardEntity.getZoneId());
-		cpsRewardFirstEntity.setSite(rewardEntity.getSite());
-		cpsRewardFirstEntity.setOs(rewardEntity.getOs());
-		cpsRewardFirstEntity.setType(rewardEntity.getType());
-		cpsRewardFirstEntity.setUserId(rewardEntity.getUserId());
-		cpsRewardFirstEntity.setAdId(rewardEntity.getAdId());
-		cpsRewardFirstEntity.setMemberName(rewardEntity.getMemberName());
-		cpsRewardFirstEntity.setProductName(rewardEntity.getProductName());
-		cpsRewardFirstEntity.setProductCnt(rewardEntity.getProductCnt());
-		cpsRewardFirstEntity.setProductPrice(rewardEntity.getProductPrice());
-		cpsRewardFirstEntity.setCommission(rewardEntity.getCommission());
-		cpsRewardFirstEntity.setCommissionProfit(rewardEntity.getCommissionProfit());
-		cpsRewardFirstEntity.setAffliateCommission(rewardEntity.getAffliateCommission());
-		cpsRewardFirstEntity.setUserCommission(rewardEntity.getUserCommission());
-		cpsRewardFirstEntity.setCommissionRate(rewardEntity.getCommissionRate());
-		cpsRewardFirstEntity.setStatus(rewardEntity.getStatus());
-		cpsRewardFirstEntity.setBaseCommission(rewardEntity.getBaseCommission());
-		cpsRewardFirstEntity.setIncentiveCommission(rewardEntity.getIncentiveCommission());
-		cpsRewardFirstEntity.setIpAddress(rewardEntity.getIpAddress());
-		return cpsRewardFirstEntity;
 	}
 }

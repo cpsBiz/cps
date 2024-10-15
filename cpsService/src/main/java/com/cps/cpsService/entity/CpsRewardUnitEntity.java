@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 @Table(name = "CPS_REWARD_UNIT")
 @IdClass(CpsRewardUnitPk.class)
 public class CpsRewardUnitEntity {
+
+    @Id
+    @Column(name = "REWARD_UNIT_NUM")
+    private int rewardUnitNum;
     @Id
     @Column(name = "CLICK_NUM")
     private int clickNum;

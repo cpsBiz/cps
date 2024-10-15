@@ -87,6 +87,8 @@ public class UserService {
 			userRequest.setAgencyId("linkprice");
 			userRequest.setMemberId(linkPrice.getMerchantId());
 			userRequest.setMemberName(linkPrice.getMerchantName());
+			userRequest.setMaxCommissionPc(linkPrice.getMaxCommissionPc());
+			userRequest.setMaxCommissionMobile(linkPrice.getMaxCommissionMobile());
 			userRequest.setRewardYn(linkPrice.getRewardYn());
 			userRequest.setMobileYn(linkPrice.getMobileYn());
 			userRequest.setReturnDay(linkPrice.getReturnDay());

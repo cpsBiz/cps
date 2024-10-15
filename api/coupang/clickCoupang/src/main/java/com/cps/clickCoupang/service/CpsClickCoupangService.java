@@ -3,7 +3,7 @@ package com.cps.clickCoupang.service;
 import com.cps.cpsService.dto.ClickDto;
 import com.cps.cpsService.entity.CpsClickEntity;
 import com.cps.cpsService.packet.CpsClickPacket;
-import com.cps.clickCoupang.packet.CpsClickCoupangClickPacket;
+import com.cps.clickCoupang.packet.CpsCoupangClickPacket;
 import com.cps.cpsService.repository.CpsClickRepository;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
@@ -14,13 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 @Slf4j
 @Service
@@ -68,7 +64,7 @@ public class CpsClickCoupangService {
 					response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
 					return response;
 				} else {
-						CpsClickCoupangClickPacket.CoupangClickInfo.CoupangClickRequest clickRequest = new CpsClickCoupangClickPacket.CoupangClickInfo.CoupangClickRequest();
+						CpsCoupangClickPacket.CoupangClickInfo.CoupangClickRequest clickRequest = new CpsCoupangClickPacket.CoupangClickInfo.CoupangClickRequest();
 						clickRequest.setSubparam(String.valueOf(cpsClickEntity.getClickNum()));
 						clickRequest.setSubid(coupangSubId);
 						clickRequest.setLpttag(coupangLpTag);

@@ -73,8 +73,8 @@ public class CpsRewardLinkPriceService {
 				cpsRewardEntity.setProductPrice(request.getPrice());
 
 				int commission = request.getCommision();
-				double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 10;
-				double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 10;
+				double memberCommissionShareDouble = (double) commissionDto.getMemberCommissionShare() / 100;
+				double userCommissionShareDouble = (double) commissionDto.getUserCommissionShare() / 100;
 
 				//커미션 매출
 				cpsRewardEntity.setCommission(commission);

@@ -3,6 +3,7 @@ package com.cps.cpsService.service;
 import com.cps.cpsService.dto.CpsCampaignSearchDto;
 import com.cps.cpsService.dto.SummaryDto;
 import com.cps.cpsService.entity.CpsCampaignEntity;
+import com.cps.cpsService.entity.CpsMemberEntity;
 import com.cps.cpsService.entity.SummaryDayEntity;
 import com.cps.cpsService.packet.CpsCampaignPacket;
 import com.cps.cpsService.packet.SummaryPacket;
@@ -35,14 +36,16 @@ public class SearchService {
 
 		List<Predicate> predicates = new ArrayList<>();
 
+		Join<CpsCampaignEntity, CpsMemberEntity> memberJoin = root.join("cpsMember", JoinType.INNER);
+
 		if (request.getCampaignNum() > 0) {
 			predicates.add(cb.equal(root.get("campaignNum"), request.getCampaignNum()));
 		}
 		if (request.getMerchantId() != null && !request.getMerchantId().equals("")) {
 			predicates.add(cb.like(root.get("merchantId"), "%" + request.getMerchantId() + "%"));
 		}
-		if (request.getAgencyId() != null && !request.getAgencyId().equals("")) {
-			predicates.add(cb.like(root.get("agencyId"), "%" + request.getAgencyId () + "%"));
+		if (request.getAdminId() != null && !request.getAdminId().equals("")) {
+			predicates.add(cb.like(root.get("adminId"), "%" + request.getAdminId () + "%"));
 		}
 		if (request.getCampaignName() != null && !request.getCampaignName().equals("")) {
 			predicates.add(cb.like(root.get("campaignName"), "%" + request.getCampaignName() + "%"));
@@ -97,6 +100,7 @@ public class SearchService {
 			campaignSearch.setDenyProduct(campaign.getDenyProduct());
 			campaignSearch.setNotice(campaign.getNotice());
 			campaignSearch.setCampaignStatus(campaign.getCampaignStatus());
+			campaignSearch.setMemberName(campaign.getCpsMember().getMemberName());
 			campaignSearchList.add(campaignSearch);
 		});
 
