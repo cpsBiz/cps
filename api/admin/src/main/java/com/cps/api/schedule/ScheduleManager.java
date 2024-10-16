@@ -1,7 +1,9 @@
 package com.cps.api.schedule;
 
+import com.cps.api.service.GiftiShowService;
 import com.cps.common.constant.Constant;
 import com.cps.cpsService.packet.CpsViewSchedulePacket;
+import com.cps.cpsService.service.CpsGiftService;
 import com.cps.cpsService.service.CpsScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,9 @@ public class ScheduleManager {
 
     @Autowired
     private CpsScheduleService cpsScheduleService;
+
+    @Autowired
+    private GiftiShowService giftiShowService;
 
     /**
      * 통계 스케줄
@@ -41,6 +46,14 @@ public class ScheduleManager {
             result.setError("summarySchedule Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * 상품 등록 스케줄
+     */
+    @Scheduled(cron = "0 18 * * * *")
+    public void giftProduct() throws Exception {
+        giftiShowService.giftiShowBizProduct();
     }
 
     /**

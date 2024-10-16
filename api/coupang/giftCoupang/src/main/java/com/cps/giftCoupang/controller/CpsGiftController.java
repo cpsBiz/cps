@@ -74,12 +74,12 @@ public class CpsGiftController {
     /**
      * 쿠팡 막대사탕 구매
      *
-     * @date 2024-10-15
+     * @date 2024-10-16
      */
     @Operation(summary = "쿠팡 막대사탕 구매", description = "")
     @PostMapping(value = "/coupangGift")
-    public ResponseEntity<CpsCoupangStickPacket.CoupangStickInfo.CoupangStickListResponse> coupangGift(@Valid @RequestBody CpsCoupangStickPacket.CoupangStickInfo.CoupangStickRequest request) throws Exception {
-        var result = new CpsCoupangStickPacket.CoupangStickInfo.CoupangStickListResponse();
+    public ResponseEntity<CpsCoupangStickPacket.CoupangStickInfo.CoupangGiftResponse> coupangGift(@Valid @RequestBody CpsCoupangStickPacket.CoupangStickInfo.CoupangStickGiftRequest request) throws Exception {
+        var result = new CpsCoupangStickPacket.CoupangStickInfo.CoupangGiftResponse();
 
         try {
             var stick = cpsGiftCoupangService.coupangGift(request);
@@ -89,7 +89,7 @@ public class CpsGiftController {
             } else {
                 result.setApiMessage(stick.getResultCode(), stick.getResultMessage());
             }
-            result.setDatas(stick.getDatas());
+            result.setData(stick.getData());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);

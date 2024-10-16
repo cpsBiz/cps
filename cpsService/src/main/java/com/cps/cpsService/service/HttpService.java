@@ -3,6 +3,7 @@ package com.cps.cpsService.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.servcies.BaseHttpService;
 import com.cps.common.utils.HmacGenerator;
+import com.cps.cpsService.packet.CpsGiftPacket;
 import com.cps.cpsService.packet.CpsMemberPacket;
 import com.cps.cpsService.packet.CpsRewardPacket;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,12 +13,16 @@ import org.apache.http.entity.StringEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -144,7 +149,7 @@ public class HttpService extends BaseHttpService {
         }
     }
 
-    public  String linkPriceDetail(String Domain) {
+    public String linkPriceDetail(String Domain) {
         StringBuilder response = new StringBuilder();
         HttpURLConnection connection = null;
         String responseLine;
@@ -318,4 +323,57 @@ public class HttpService extends BaseHttpService {
             return errorResult;
         }
     }
+
+    public CpsGiftPacket.GiftInfo.ShowBizListResponse SendGiftiShowBiz(String domain, MultiValueMap<String, String> request) {
+        CpsGiftPacket.GiftInfo.ShowBizListResponse response = new CpsGiftPacket.GiftInfo.ShowBizListResponse();
+        HttpURLConnection connection = null;
+        String responseLine;
+
+        try {
+            URL url = new URL(domain);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+            connection.setDoOutput(true);
+
+            String requestBody = createRequestBody(request);
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(requestBody.getBytes(StandardCharsets.UTF_8));
+                os.flush();
+            }
+
+            // 응답 처리
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                StringBuilder responseBuilder = new StringBuilder();
+                while ((responseLine = br.readLine()) != null) {
+                    responseBuilder.append(responseLine.trim());
+                }
+                // JSON 응답을 ShowBizListResponse로 변환
+                ObjectMapper objectMapper = new ObjectMapper();
+                response = objectMapper.readValue(responseBuilder.toString(), CpsGiftPacket.GiftInfo.ShowBizListResponse.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            connection.disconnect();
+        }
+        return response;
+    }
+
+    private String createRequestBody(MultiValueMap<String, String> request) {
+        StringBuilder requestBody = new StringBuilder();
+        for (Map.Entry<String, List<String>> entry : request.entrySet()) {
+            String key = entry.getKey();
+            for (String value : entry.getValue()) {
+                if (requestBody.length() > 0) {
+                    requestBody.append("&");
+                }
+                requestBody.append(URLEncoder.encode(key, StandardCharsets.UTF_8));
+                requestBody.append("=");
+                requestBody.append(URLEncoder.encode(value, StandardCharsets.UTF_8));
+            }
+        }
+        return requestBody.toString();
+    }
+
 }

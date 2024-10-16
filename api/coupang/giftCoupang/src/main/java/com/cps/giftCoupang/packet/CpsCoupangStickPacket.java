@@ -1,6 +1,7 @@
 package com.cps.giftCoupang.packet;
 
 import com.cps.common.model.GenericBaseResponse;
+import com.cps.cpsService.dto.CpsGiftDto;
 import com.cps.cpsService.dto.UnitDto;
 import com.cps.cpsService.dto.UnitListDto;
 import lombok.Data;
@@ -30,6 +31,17 @@ public class CpsCoupangStickPacket {
             private int regYm;
             private int status;
         }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CoupangStickGiftRequest extends CoupangStickRequest {
+            private String brandId;
+            private int cnt;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class CoupangGiftResponse extends GenericBaseResponse<CpsGiftDto.GiftProductResponse> {}
 
         @Data
         @EqualsAndHashCode(callSuper = false)

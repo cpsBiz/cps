@@ -9,7 +9,7 @@ public class CpsGiftDto {
     @EqualsAndHashCode(callSuper = false)
     public static class GiftDtoResponse {
         String brandId;
-        String merchantId;
+        String affliateId;
     }
 
     @Data
@@ -24,8 +24,14 @@ public class CpsGiftDto {
     @EqualsAndHashCode(callSuper = false)
     public static class GiftProductResponse extends GiftDtoResponse {
         String productId;
-        String productName;
-        String productYn;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class GiftProbabilityResponse extends GiftProductResponse {
+        //상품당첨
+        String userId;
+        String productId;
     }
 }
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UnitListDto {
+    int rewardUnitNum;
     Long cnt;
     int stockCnt;
     Long totalPrice;

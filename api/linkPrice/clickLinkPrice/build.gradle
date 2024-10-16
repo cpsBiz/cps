@@ -1,0 +1,4 @@
+dependencies {
+    api project(':cpsService')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}

@@ -31,17 +31,28 @@ public class CpsGiftController {
         var result = new CpsGiftPacket.GiftInfo.GiftBrandResponse();
 
         try {
-            var member = gpsGiftService.giftBrandList(request);
-            if (Constant.RESULT_CODE_SUCCESS.equals(member.getResultCode())) {
-                result.setSuccess();
-            } else {
-                result.setApiMessage(member.getResultCode(), member.getResultMessage());
-            }
-            result.setDatas(member.getDatas());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             result.setError("giftBrandList Controller Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     *  선물 당첨
+     *
+     * @date 2024-10-16
+     */
+    @Operation(summary = "선물 당첨")
+    @PostMapping(value = "/giftProbability")
+    public CpsGiftPacket.GiftInfo.GiftProductResponse giftProbability(@Valid @RequestBody CpsGiftPacket.GiftInfo.GiftRequest request) throws Exception {
+        var result = new CpsGiftPacket.GiftInfo.GiftProductResponse();
+
+        try {
+            var gift = gpsGiftService.giftProbability(request);
+        } catch (Exception e) {
+            result.setError("giftProbability Controller Error");
+        }
+        return result;
     }
 }

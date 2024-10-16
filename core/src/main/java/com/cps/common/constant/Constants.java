@@ -80,8 +80,9 @@ public enum Constants {
     GIFT_PRODUCT_DELETE_EXCEPTION("3003", "기프트 상품 정보 삭제 오류"),
     GIFT_PRODUCT_SEARCH_EXCEPTION("3005", "기프트 상품 조회 오류"),
 
-    COUPANG_STICK_BLANK("3001", "막대사탕 정보가 없습니다."),
-    COUPANG_STICK_SEARCH_EXCEPTION("3005", "막대사탕 조회 오류");
+    COUPANG_STICK_BLANK("3001", "정보가 없습니다."),
+    COUPANG_STICK_SEARCH_EXCEPTION("3005", "개수 조회 오류"),
+    COUPANG_STICK_COUNT("3011", "보유 개수가 부족합니다.");
 
     private String code;
 

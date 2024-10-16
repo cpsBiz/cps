@@ -2,6 +2,7 @@ package com.cps.cpsService.entity.pk;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,5 +11,7 @@ import java.io.Serializable;
 @Embeddable
 public class CpsGiftBrandPk implements Serializable {
     @Column(name = "BRAND_ID") private String brandId;
+    @Column(name = "AFFLIATE_ID") private String affliateId;
     @Column(name = "MERCHANT_ID") private String merchantId;
+    @Column(name = "BRAND_TYPE") private String brandType;
 }
