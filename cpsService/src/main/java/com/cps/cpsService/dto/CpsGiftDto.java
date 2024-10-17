@@ -23,6 +23,7 @@ public class CpsGiftDto {
     @Data
     @EqualsAndHashCode(callSuper = false)
     public static class GiftProductResponse extends GiftDtoResponse {
+        //상품 등록 수정 삭제
         String productId;
     }
 
@@ -31,7 +32,9 @@ public class CpsGiftDto {
     public static class GiftProbabilityResponse extends GiftProductResponse {
         //상품당첨
         String userId;
-        String productId;
+        String productImageS;
+        String productImageL;
+        String brandIcon;
     }
 }
 

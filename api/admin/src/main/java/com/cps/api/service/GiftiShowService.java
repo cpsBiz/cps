@@ -2,6 +2,7 @@ package com.cps.api.service;
 
 import com.cps.cpsService.entity.CpsGiftEntity;
 import com.cps.cpsService.packet.CpsGiftPacket;
+import com.cps.cpsService.repository.CpsGiftHistoryRepository;
 import com.cps.cpsService.repository.CpsGiftRepository;
 import com.cps.cpsService.service.HttpService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +26,7 @@ import java.util.List;
 public class GiftiShowService {
 	@Value("${giftishow.domain.url}") String giftishowDomain;
 
-	@Value("${giftishow.auth.key}") String giftishowAuthKey;
+	@Value("${giftishow.auth.code}") String giftishowAuthCode;
 
 	@Value("${giftishow.auth.token}") String giftishowAuthToken;
 
@@ -36,11 +38,13 @@ public class GiftiShowService {
 
 	private final CpsGiftRepository cpsGiftRepository;
 
+	private final CpsGiftHistoryRepository cpsGiftHistoryRepository;
+
 
 	public void giftiShowBizProduct() {
 		MultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
 		requestParams.add("api_code", giftishowApiCode);
-		requestParams.add("custom_auth_code", giftishowAuthKey);
+		requestParams.add("custom_auth_code", giftishowAuthCode);
 		requestParams.add("custom_auth_token",giftishowAuthToken);
 		requestParams.add("dev_yn", "N");
 		requestParams.add("start", "1");
@@ -56,7 +60,7 @@ public class GiftiShowService {
 						showBizListResponse.getResult().getGoodsList().forEach(product->{
 							CpsGiftEntity cpsGiftEntity = new CpsGiftEntity();
 							cpsGiftEntity.setBrandId(product.getBrandCode());
-							cpsGiftEntity.setProductId(product.getGoodsNo());
+							cpsGiftEntity.setProductId(product.getGoodsCode());
 							cpsGiftEntity.setBrandName(product.getBrandName());
 							cpsGiftEntity.setProductName(product.getGoodsName());
 							cpsGiftEntity.setProductImageS(product.getGoodsImgS());
@@ -82,5 +86,10 @@ public class GiftiShowService {
 		} catch (Exception e){
 			log.error("SendGiftiShowBiz Exception :" + e);
 		}
+	}
+
+	public void giftiConEnd(int validDay){
+		System.out.println("validDay : " + validDay);
+		cpsGiftHistoryRepository.giftiConEnd(validDay);
 	}
 }

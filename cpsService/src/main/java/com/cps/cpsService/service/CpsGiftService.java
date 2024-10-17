@@ -3,12 +3,15 @@ package com.cps.cpsService.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
+import com.cps.cpsService.dto.CpsGiftBrandDto;
 import com.cps.cpsService.dto.CpsGiftDto;
-import com.cps.cpsService.entity.CpsCampaignFavoritesEntity;
+import com.cps.cpsService.dto.CpsGiftProductDto;
 import com.cps.cpsService.entity.CpsGiftBrandEntity;
 import com.cps.cpsService.entity.CpsGiftEntity;
 import com.cps.cpsService.entity.CpsGiftProductEntity;
+import com.cps.cpsService.packet.CpsGiftBrandPacket;
 import com.cps.cpsService.packet.CpsGiftPacket;
+import com.cps.cpsService.packet.CpsGiftProductPacket;
 import com.cps.cpsService.repository.CpsGiftBrandRepository;
 import com.cps.cpsService.repository.CpsGiftProductRepository;
 import com.cps.cpsService.repository.CpsGiftRepository;
@@ -16,8 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -200,5 +202,66 @@ public class CpsGiftService {
 		}
 
 		return giftProductDto;
+	}
+
+	public GenericBaseResponse<CpsGiftBrandDto> giftBrandList(CpsGiftBrandPacket.BrandInfo.BradnRequest request) throws Exception {
+		CpsGiftBrandPacket.BrandInfo.GiftBrandResponse response = new CpsGiftBrandPacket.BrandInfo.GiftBrandResponse();
+		List<CpsGiftBrandDto> cpsGiftBrandDtoList = new ArrayList<>();
+		try {
+			List<CpsGiftBrandEntity> cpsGiftBrandEntityList = cpsGiftBrandRepository.findByAffliateIdAndMerchantIdAndBrandTypeAndBrandYn(request.getAffliateId(), request.getMerchantId(), request.getBrandType(), "Y");
+			if (cpsGiftBrandEntityList.size() > 0) {
+				cpsGiftBrandEntityList.forEach(brand -> {
+					CpsGiftBrandDto cpsGiftBrandDto = new CpsGiftBrandDto();
+					cpsGiftBrandDto.setBrandId(brand.getBrandId());
+					cpsGiftBrandDto.setBrandName(brand.getBrandName());
+					cpsGiftBrandDto.setBrandLogo(brand.getBrandLogo());
+					cpsGiftBrandDto.setMinCnt(brand.getMinCnt());
+					cpsGiftBrandDtoList.add(cpsGiftBrandDto);
+				});
+				response.setSuccess();
+				response.setDatas(cpsGiftBrandDtoList);
+			} else {
+				response.setApiMessage(Constants.GIFT_BRAND_BLANK.getCode(), Constants.GIFT_BRAND_BLANK.getValue());
+				return response;
+			}
+		} catch (Exception e) {
+			log.error(Constant.EXCEPTION_MESSAGE + " giftBrandList api request : {}, exception : {}", request, e);
+			response.setApiMessage(Constants.GIFT_BRAND_SEARCH_EXCEPTION.getCode(), Constants.GIFT_BRAND_SEARCH_EXCEPTION.getValue());
+			return response;
+		}
+
+		return response;
+	}
+
+	public GenericBaseResponse<CpsGiftProductDto> giftProductList(CpsGiftProductPacket.GiftProductInfo.GiftProductRequest request) throws Exception {
+		CpsGiftProductPacket.GiftProductInfo.GiftProductResponse response = new CpsGiftProductPacket.GiftProductInfo.GiftProductResponse();
+		List<CpsGiftProductDto> cpsGiftProductDtoList = new ArrayList<>();
+		try {
+			List<CpsGiftEntity> cpsGiftEntityList = cpsGiftRepository.findByBrandIdAndProductId(request.getBrandId());
+
+			if (cpsGiftEntityList.size() > 0) {
+				cpsGiftEntityList.forEach(brand -> {
+					CpsGiftProductDto cpsGiftProductDto = new CpsGiftProductDto();
+					cpsGiftProductDto.setBrandName(brand.getBrandName());
+					cpsGiftProductDto.setProductName(brand.getProductName());
+					cpsGiftProductDto.setProductImageS(brand.getProductImageS());
+					cpsGiftProductDto.setProductImageL(brand.getProductImageL());
+					cpsGiftProductDto.setProductName(brand.getProductName());
+					cpsGiftProductDto.setProductId(brand.getProductId());
+					cpsGiftProductDtoList.add(cpsGiftProductDto);
+				});
+				response.setSuccess();
+				response.setDatas(cpsGiftProductDtoList);
+			} else {
+				response.setApiMessage(Constants.GIFT_PRODUCT_BLANK.getCode(), Constants.GIFT_PRODUCT_BLANK.getValue());
+				return response;
+			}
+		} catch (Exception e) {
+			log.error(Constant.EXCEPTION_MESSAGE + " giftProductList api request : {}, exception : {}", request, e);
+			response.setApiMessage(Constants.GIFT_PRODUCT_SEARCH_EXCEPTION.getCode(), Constants.GIFT_PRODUCT_SEARCH_EXCEPTION.getValue());
+			return response;
+		}
+
+		return response;
 	}
 }

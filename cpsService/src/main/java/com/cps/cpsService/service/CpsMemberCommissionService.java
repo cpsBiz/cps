@@ -3,18 +3,19 @@ package com.cps.cpsService.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsService.dto.CpsMemberCommissionDto;
-import com.cps.cpsService.dto.CpsMemberCommissionListDto;
-import com.cps.cpsService.dto.CpsMemberRewardUnitDto;
+import com.cps.cpsService.dto.*;
+import com.cps.cpsService.packet.CoupangStickPacket;
+import com.cps.cpsService.packet.CpsGiftHistoryPacket;
 import com.cps.cpsService.packet.CpsMemberCommissionPacket;
+import com.cps.cpsService.repository.CpsGiftHistoryRepository;
 import com.cps.cpsService.repository.CpsMemberCommissionRepository;
+import com.cps.cpsService.repository.CpsRewardUnitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,6 +23,10 @@ import java.util.Optional;
 public class CpsMemberCommissionService {
 
 	private final CpsMemberCommissionRepository cpsMemberCommissionRepository;
+
+	private final CpsRewardUnitRepository cpsRewardUnitRepository;
+
+	private final CpsGiftHistoryRepository cpsGiftHistoryRepository;
 
 	/**
 	 * 회원 적립금 조회
@@ -108,5 +113,90 @@ public class CpsMemberCommissionService {
 		});
 
 		return cpsMemberCommissionList;
+	}
+
+	/**
+	 * 쿠팡 막대사탕 개수 조회
+	 * @date 2024-10-15
+	 */
+	public GenericBaseResponse<UnitDto> coupangStick(CoupangStickPacket.CoupangStickInfo.CoupangStickRequest request) throws Exception {
+		CoupangStickPacket.CoupangStickInfo.CoupangStickResponse response = new CoupangStickPacket.CoupangStickInfo.CoupangStickResponse();
+
+		try {
+			UnitDto unitDto = cpsRewardUnitRepository.findByUserIdAndAffliateId(request.getUserId(), request.getMerchantId(), request.getAffliateId());
+			if (null != unitDto) {
+				response.setData(unitDto);
+				response.setSuccess();
+			} else {
+				response.setApiMessage(Constants.COUPANG_STICK_BLANK.getCode(), Constants.COUPANG_STICK_BLANK.getValue());
+			}
+		} catch (Exception e) {
+			response.setApiMessage(Constants.COUPANG_STICK_SEARCH_EXCEPTION.getCode(), Constants.COUPANG_STICK_SEARCH_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " coupangStick request : {}, exception : {}", request, e);
+		}
+
+		return response;
+	}
+
+	/**
+	 * 쿠팡 막대사탕 리스트 조회
+	 * @date 2024-10-15
+	 */
+	public GenericBaseResponse<UnitListDto> coupangStickList(CoupangStickPacket.CoupangStickInfo.CoupangStickListRequest request) throws Exception {
+		CoupangStickPacket.CoupangStickInfo.CoupangStickListResponse response = new CoupangStickPacket.CoupangStickInfo.CoupangStickListResponse();
+		List<Integer> statusList = new ArrayList<>();
+
+		if (request.getStatus() != 200 && request.getStatus() != 100) { //사용/취소
+			statusList.add(210); //사용
+			statusList.add(310); //취소
+		} else { //확정, 예정
+			statusList.add(request.getStatus());
+		}
+
+		try {
+			List<UnitListDto> unitListDtoList = cpsRewardUnitRepository.findByUserIdAndStatus(request.getUserId(), request.getMerchantId(), request.getAffliateId(), request.getRegYm(), statusList);
+			if (unitListDtoList.size() > 0) {
+				response.setDatas(unitListDtoList);
+				response.setSuccess();
+			} else {
+				response.setApiMessage(Constants.COUPANG_STICK_BLANK.getCode(), Constants.COUPANG_STICK_BLANK.getValue());
+			}
+		} catch (Exception e) {
+			response.setApiMessage(Constants.COUPANG_STICK_SEARCH_EXCEPTION.getCode(), Constants.COUPANG_STICK_SEARCH_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " coupangStickList request : {}, exception : {}", request, e);
+		}
+
+		return response;
+	}
+
+	/**
+	 * 기프티콘 리스트 조회
+	 * @date 2024-10-17
+	 */
+	public GenericBaseResponse<CpsGiftHistoryDto> gifticonList(CpsGiftHistoryPacket.GiftHistoryInfo.GiftHistoryRequest request) throws Exception {
+		CpsGiftHistoryPacket.GiftHistoryInfo.GiftHistoryResponse response = new CpsGiftHistoryPacket.GiftHistoryInfo.GiftHistoryResponse();
+		List<String> giftList = new ArrayList<>();
+
+		if (request.getGiftYn().equals("Y")) { //사용완료
+			giftList.add("Y"); //사용
+			giftList.add("V"); //만료
+		} else { //사용가능
+			giftList.add(request.getGiftYn());
+		}
+
+		try {
+			List<CpsGiftHistoryDto> cpsGiftHistoryDtoList = cpsGiftHistoryRepository.findGiftInfo(request.getBrandId(), request.getUserId(), request.getMerchantId(), request.getAffliateId(), request.getAwardYm(), giftList);
+			if (cpsGiftHistoryDtoList.size() > 0) {
+				response.setDatas(cpsGiftHistoryDtoList);
+				response.setSuccess();
+			} else {
+				response.setApiMessage(Constants.COUPANG_STICK_BLANK.getCode(), Constants.COUPANG_STICK_BLANK.getValue());
+			}
+		} catch (Exception e) {
+			response.setApiMessage(Constants.COUPANG_STICK_SEARCH_EXCEPTION.getCode(), Constants.COUPANG_STICK_SEARCH_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " gifticonList request : {}, exception : {}", request, e);
+		}
+
+		return response;
 	}
 }

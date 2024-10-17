@@ -2,6 +2,7 @@ package com.cps.api.schedule;
 
 import com.cps.api.service.GiftiShowService;
 import com.cps.common.constant.Constant;
+import com.cps.cpsService.packet.CpsRewardPacket;
 import com.cps.cpsService.packet.CpsViewSchedulePacket;
 import com.cps.cpsService.service.CpsGiftService;
 import com.cps.cpsService.service.CpsScheduleService;
@@ -12,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Component
@@ -54,6 +58,21 @@ public class ScheduleManager {
     @Scheduled(cron = "0 18 * * * *")
     public void giftProduct() throws Exception {
         giftiShowService.giftiShowBizProduct();
+    }
+
+    /**
+     * 기프티콘 만료
+     */
+    @Scheduled(cron = "0 0 0 * * *")
+    public void giftiConEnd() throws Exception {
+        LocalDate yesterday = LocalDate.now().minusDays(30);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        try {
+            giftiShowService.giftiConEnd(Integer.parseInt(yesterday.format(formatter)));
+        } catch (Exception e) {
+            log.error("giftiConEnd Controller Error");
+        }
     }
 
     /**

@@ -74,6 +74,7 @@ public class CpsGiftPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
+        //상품 등록 수정 삭제, 기프트 상품 등록 수정 삭제
         public static class GiftProductResponse extends GenericBaseResponse<CpsGiftDto.GiftProductResponse> {}
 
         @Data
@@ -87,6 +88,42 @@ public class CpsGiftPacket {
             private String size;
         }
 
+        //쿠폰
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class ShowBizListCouponResponse{
+            @JsonProperty("code")
+            private String code;
+            @JsonProperty("message")
+            private String message;
+            @JsonProperty("result")
+            private ShowBizCouponResult showBizCouponResult;
+        }
+
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class ShowBizCouponResult{
+            @JsonProperty("code")
+            private String code;
+            @JsonProperty("message")
+            private String message;
+            @JsonProperty("result")
+            private ShowBizCouponData result;
+        }
+
+        @Data
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class ShowBizCouponData {
+            @JsonProperty("orderNo")
+            private String orderNo;
+            @JsonProperty("pinNo")
+            private String pinNo;
+            @JsonProperty("couponImgUrl")
+            private String couponImgUrl;
+        }
+        //쿠폰
+
+        //상품 리스트
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class ShowBizListResponse{
@@ -224,5 +261,6 @@ public class CpsGiftPacket {
             @JsonProperty("realPrice")
             private int realPrice;
         }
+        //상품 리스트
     }
 }

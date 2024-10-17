@@ -9,12 +9,10 @@ import com.cps.cpsService.packet.CpsRewardPacket;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.entity.StringEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,7 +24,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * 링크프라이스 광고주 API
@@ -147,32 +144,6 @@ public class HttpService extends BaseHttpService {
             List<CpsMemberPacket.MemberInfo.LinkPriceAgencyResponse> errorResult = new ArrayList<>();
             return errorResult;
         }
-    }
-
-    public String linkPriceDetail(String Domain) {
-        StringBuilder response = new StringBuilder();
-        HttpURLConnection connection = null;
-        String responseLine;
-
-        try {
-            URL url = new URL(Domain);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json; utf-8");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            connection.disconnect();
-        }
-        return response.toString();
     }
 
     //링크프라이스 실적조회
@@ -324,56 +295,74 @@ public class HttpService extends BaseHttpService {
         }
     }
 
-    public CpsGiftPacket.GiftInfo.ShowBizListResponse SendGiftiShowBiz(String domain, MultiValueMap<String, String> request) {
-        CpsGiftPacket.GiftInfo.ShowBizListResponse response = new CpsGiftPacket.GiftInfo.ShowBizListResponse();
+    public String linkPriceDetail(String Domain) {
+        StringBuilder response = new StringBuilder();
         HttpURLConnection connection = null;
         String responseLine;
 
         try {
-            URL url = new URL(domain);
+            URL url = new URL(Domain);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
             connection.setDoOutput(true);
 
-            String requestBody = createRequestBody(request);
-            try (OutputStream os = connection.getOutputStream()) {
-                os.write(requestBody.getBytes(StandardCharsets.UTF_8));
-                os.flush();
-            }
-
-            // 응답 처리
             try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                StringBuilder responseBuilder = new StringBuilder();
                 while ((responseLine = br.readLine()) != null) {
-                    responseBuilder.append(responseLine.trim());
+                    response.append(responseLine.trim());
                 }
-                // JSON 응답을 ShowBizListResponse로 변환
-                ObjectMapper objectMapper = new ObjectMapper();
-                response = objectMapper.readValue(responseBuilder.toString(), CpsGiftPacket.GiftInfo.ShowBizListResponse.class);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             connection.disconnect();
         }
-        return response;
+        return response.toString();
     }
 
-    private String createRequestBody(MultiValueMap<String, String> request) {
-        StringBuilder requestBody = new StringBuilder();
-        for (Map.Entry<String, List<String>> entry : request.entrySet()) {
-            String key = entry.getKey();
-            for (String value : entry.getValue()) {
-                if (requestBody.length() > 0) {
-                    requestBody.append("&");
+    public CpsGiftPacket.GiftInfo.ShowBizListResponse SendGiftiShowBiz(String url, MultiValueMap<String, String> request) {
+        CpsGiftPacket.GiftInfo.ShowBizListResponse responseObj = new CpsGiftPacket.GiftInfo.ShowBizListResponse();
+
+        try{
+            var result = this.PostAsync(url, request, String.class, httpHeaders -> {
+                httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+            });
+            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> resultMap = (Map<String, Object>) responseMap.get("result");
+
+            if (resultMap.containsKey("goodsList")) {
+                Object listData = resultMap.get("goodsList");
+                if (listData instanceof List && !((List<?>) listData).isEmpty()) {
+                    List<CpsGiftPacket.GiftInfo.ShowBizData> bizDataList = new ObjectMapper().convertValue(listData, new TypeReference<List<CpsGiftPacket.GiftInfo.ShowBizData>>() {});
+                    if (responseObj.getResult() == null) {
+                        responseObj.setResult(new CpsGiftPacket.GiftInfo.Result());
+                    }
+                    responseObj.getResult().setGoodsList(bizDataList);
+                    responseObj.getResult().setListNum((int) resultMap.get("listNum"));
+                    responseObj.setCode((String) responseMap.get("code"));
                 }
-                requestBody.append(URLEncoder.encode(key, StandardCharsets.UTF_8));
-                requestBody.append("=");
-                requestBody.append(URLEncoder.encode(value, StandardCharsets.UTF_8));
             }
+            return responseObj;
+        } catch (Exception ex) {
+            log.error(Constant.EXCEPTION_MESSAGE + " SendCoupangReward request : {}, exception : {}", request, ex);
+            CpsGiftPacket.GiftInfo.ShowBizListResponse errorResult = new CpsGiftPacket.GiftInfo.ShowBizListResponse();
+            return errorResult;
         }
-        return requestBody.toString();
     }
 
+    public CpsGiftPacket.GiftInfo.ShowBizListCouponResponse SendGiftiShowBizCoupon(String url, MultiValueMap<String, String> request) {
+        try{
+            var result = this.PostAsync(url, request, CpsGiftPacket.GiftInfo.ShowBizListCouponResponse.class, httpHeaders -> {
+                httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+            });
+
+            return result.block();
+        } catch (Exception ex) {
+            log.error(Constant.EXCEPTION_MESSAGE + " SendGiftiShowBizCoupon request : {}, exception : {}", request, ex);
+            CpsGiftPacket.GiftInfo.ShowBizListCouponResponse errorResult = new CpsGiftPacket.GiftInfo.ShowBizListCouponResponse();
+            errorResult.setCode("9999");
+            return errorResult;
+        }
+    }
 }

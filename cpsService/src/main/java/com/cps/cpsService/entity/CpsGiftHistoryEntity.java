@@ -39,8 +39,20 @@ public class CpsGiftHistoryEntity {
     @Column(name = "AWARD_DAY")
     private int awardDay;
 
+    @Column(name = "AWARD_YM")
+    private int awardYm;
+
     @Column(name = "BARCODE")
     private String barcode;
+
+    @Column(name = "PIN_NO")
+    private String pinNo;
+
+    @Column(name = "ORDER_NO")
+    private String orderNo;
+
+    @Column(name = "TR_ID")
+    private String trId;
 
     @Column(name = "USE_DAY")
     private int useDay;

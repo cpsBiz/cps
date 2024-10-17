@@ -1,4 +1,4 @@
-package com.cps.giftCoupang.packet;
+package com.cps.cpsService.packet;
 
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.cpsService.dto.CpsGiftDto;
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 
 @Data
-public class CpsCoupangStickPacket {
+public class CoupangStickPacket {
 
     public static class CoupangStickInfo {
 
