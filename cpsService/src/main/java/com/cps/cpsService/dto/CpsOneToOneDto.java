@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class CpsOneToOneDto {
@@ -13,6 +14,7 @@ public class CpsOneToOneDto {
     public static class OneToOne {
         CpsInquiry cpsInquiry;
         CpsAnswer cpsAnswer;
+        CpsInquiryFile fileList;
     }
 
     @Data
@@ -20,6 +22,13 @@ public class CpsOneToOneDto {
     public static class CpsAnswer {
         int inquiryNum;
         String note;
+    }
+
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class CpsInquiryFile {
+        List<String> fileName;
     }
 
     @Data

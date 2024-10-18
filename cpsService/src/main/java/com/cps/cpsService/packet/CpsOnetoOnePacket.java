@@ -6,6 +6,8 @@ import com.cps.cpsService.dto.CpsOneToOneDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 문의 등록/답변
  *
@@ -24,6 +26,7 @@ public class CpsOnetoOnePacket {
             private String note;
         }
 
+        //문의등록
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class Inquiry extends OnetoOneRequest{
@@ -47,7 +50,21 @@ public class CpsOnetoOnePacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
+        public static class InquiryListRequest extends Inquiry {
+            List<CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryFile> inqueryFileList;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class InquiryFile {
+            private String fileName;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
         public static class InquiryResponse extends GenericBaseResponse<CpsOneToOneDto.CpsInquiry> {}
+
+        //문의등록
 
         @Data
         @EqualsAndHashCode(callSuper = false)

@@ -4,6 +4,8 @@ import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.cpsService.entity.CpsInquiryFileEntity;
+import com.cps.cpsService.repository.CpsInquiryFileRepository;
 import com.cps.cpsService.repository.CpsInquiryRepository;
 import com.cps.cpsService.dto.CpsOneToOneDto;
 import com.cps.cpsService.entity.CpsAnswerEntity;
@@ -29,6 +31,8 @@ import java.util.List;
 public class CpsOneToOneService {
 	private final CpsInquiryRepository cpsInquiryRepository;
 
+	private final CpsInquiryFileRepository cpsInquiryFileRepository;
+
 	private final CpsAnswerRepository cpsAnswerRepository;
 
 	private final EntityManager em;
@@ -37,10 +41,12 @@ public class CpsOneToOneService {
 	 * 문의 등록
 	 * @date 2024-10-01
 	 */
-	public GenericBaseResponse<CpsOneToOneDto.CpsInquiry> inquiry(CpsOnetoOnePacket.CpsOnetoOneInfo.Inquiry request) throws Exception {
+	public GenericBaseResponse<CpsOneToOneDto.CpsInquiry> inquiry(CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryListRequest request) throws Exception {
 		CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryResponse response = new CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryResponse();
 		CpsInquiryEntity cpsInquiryEntity = new CpsInquiryEntity();
+		List<CpsInquiryFileEntity> cpsInquiryFileEntityList = new ArrayList<>();
 		CpsOneToOneDto.CpsInquiry cpsInquiryDto = new CpsOneToOneDto.CpsInquiry();
+
 		try {
 			cpsInquiryEntity.setUserId(request.getUserId());
 			cpsInquiryEntity.setInquiryType(request.getInquiryType());
@@ -60,6 +66,19 @@ public class CpsOneToOneService {
 			cpsInquiryEntity.setInformation(request.getInformation());
 			cpsInquiryEntity.setAnswerYn("N");
 			cpsInquiryRepository.save(cpsInquiryEntity);
+
+			if (request.getInqueryFileList().size() > 0) {
+				request.getInqueryFileList().forEach(file -> {
+					CpsInquiryFileEntity cpsInquiryFileEntity = new CpsInquiryFileEntity();
+					cpsInquiryFileEntity.setInquiryNum(cpsInquiryEntity.getInquiryNum());
+					cpsInquiryFileEntity.setFileName(file.getFileName());
+					cpsInquiryFileEntityList.add(cpsInquiryFileEntity);
+				});
+
+				if (cpsInquiryFileEntityList.size() > 0) {
+					cpsInquiryFileRepository.saveAll(cpsInquiryFileEntityList);
+				}
+			}
 
 			cpsInquiryDto = cpsInquiryDto(cpsInquiryEntity);
 			response.setSuccess();
@@ -164,25 +183,42 @@ public class CpsOneToOneService {
 	}
 
 	/**
-	 * 답변 등록
+	 * 문의 상세 내역
 	 * @date 2024-10-01
 	 */
 	public GenericBaseResponse<CpsOneToOneDto.OneToOne> inquiryDetail(CpsOnetoOnePacket.CpsOnetoOneInfo.OnetoOneRequest request) throws Exception {
 		CpsOnetoOnePacket.CpsOnetoOneInfo.OneToOneResponse response = new CpsOnetoOnePacket.CpsOnetoOneInfo.OneToOneResponse();
 		CpsOneToOneDto.OneToOne cpsOneToOneDto = new CpsOneToOneDto.OneToOne();
+		CpsOneToOneDto.CpsInquiryFile cpsInquiryFile = new CpsOneToOneDto.CpsInquiryFile();
+		List<CpsOneToOneDto.CpsInquiryFile> cpsInquiryFileList = new ArrayList<>();
+
+		List<String> fileNameList = new ArrayList<>();
 
 		try {
 			//본문 조회
-			cpsOneToOneDto.setCpsInquiry(cpsInquiryDto(cpsInquiryRepository.findByInquiryNum(request.getInquiryNum())));
+			CpsInquiryEntity cpsInquiryEntity = cpsInquiryRepository.findByInquiryNum(request.getInquiryNum());
 
-			//답변 조회
-			CpsAnswerEntity cpsAnswerEntity = cpsAnswerRepository.findByInquiryNum(request.getInquiryNum());
-			if (null != cpsAnswerEntity) {
-				cpsOneToOneDto.setCpsAnswer(cpsAnsweryDto(cpsAnswerRepository.findByInquiryNum(request.getInquiryNum())));
+			if (null != cpsInquiryEntity) {
+				cpsOneToOneDto.setCpsInquiry(cpsInquiryDto(cpsInquiryEntity));
+
+				//답변 조회
+				CpsAnswerEntity cpsAnswerEntity = cpsAnswerRepository.findByInquiryNum(request.getInquiryNum());
+				if (null != cpsAnswerEntity) {
+					cpsOneToOneDto.setCpsAnswer(cpsAnsweryDto(cpsAnswerEntity));
+				}
+
+				//첨부파일 조회
+				List<CpsInquiryFileEntity> cpsInquiryFileEntityList = cpsInquiryFileRepository.findByInquiryNum(request.getInquiryNum());
+				if (cpsInquiryFileEntityList.size() > 0) {
+					cpsOneToOneDto.setFileList(cpsInquiryFileDto(cpsInquiryFileEntityList));
+				}
+
+				response.setSuccess();
+				response.setData(cpsOneToOneDto);
+			} else {
+				response.setApiMessage(Constants.INQUIRY_BLANK.getCode(), Constants.INQUIRY_BLANK.getValue());
+				return response;
 			}
-
-			response.setSuccess();
-			response.setData(cpsOneToOneDto);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.ANSWER_SEARCH_EXCEPTION.getCode(), Constants.ANSWER_SEARCH_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " inquiryDetail api request : {}, exception : {}", request, e);
@@ -219,5 +255,17 @@ public class CpsOneToOneService {
 		cpsAnswerDto.setInquiryNum(cpsAnswerEntity.getInquiryNum());
 		cpsAnswerDto.setNote(cpsAnswerEntity.getNote());
 		return cpsAnswerDto;
+	}
+
+	public CpsOneToOneDto.CpsInquiryFile cpsInquiryFileDto(List<CpsInquiryFileEntity> cpsInquiryFileEntityList){
+		CpsOneToOneDto.CpsInquiryFile CpsInquiryFileList = new CpsOneToOneDto.CpsInquiryFile();
+		List<String> fileNameList = new ArrayList<>();
+		if (cpsInquiryFileEntityList.size() > 0) {
+			cpsInquiryFileEntityList.forEach(file -> {
+				fileNameList.add(file.getFileName());
+			});
+		}
+		CpsInquiryFileList.setFileName(fileNameList);
+		return CpsInquiryFileList;
 	}
 }

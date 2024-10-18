@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CpsOneToOneController {
+public class CpsInquiryController {
 
     private final CpsOneToOneService cpsOneToOneService;
 
@@ -27,7 +27,7 @@ public class CpsOneToOneController {
      */
     @Operation(summary = "문의 등록")
     @PostMapping(value = "/inquiry")
-    public ResponseEntity<CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryResponse> inquiry(@Valid @RequestBody CpsOnetoOnePacket.CpsOnetoOneInfo.Inquiry request) throws Exception {
+    public ResponseEntity<CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryResponse> inquiry(@Valid @RequestBody CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryListRequest request) throws Exception {
         var result = new CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryResponse();
 
         try {

@@ -6,9 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CpsAgencyRepository extends JpaRepository<CpsAgencyEntity, String> {
     CpsAgencyEntity save(CpsAgencyEntity entity);
-
-    CpsAgencyEntity findByMerchantId(String merchantId);
-
-    @Transactional
-    void deleteByMerchantId(String merchantId);
 }

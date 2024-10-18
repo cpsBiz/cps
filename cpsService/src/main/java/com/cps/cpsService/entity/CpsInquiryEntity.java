@@ -1,6 +1,5 @@
 package com.cps.cpsService.entity;
 
-import com.cps.cpsService.entity.pk.CpsInquiryPk;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,14 +11,13 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@IdClass(CpsInquiryPk.class)
 @Table(name = "CPS_INQUIRY")
 public class CpsInquiryEntity {
     @Id
-    @Column(name = "INQUIRY_NUM", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "INQUIRY_NUM")
     private int inquiryNum;
 
-    @Id
     @Column(name = "USER_ID")
     private String userId;
 
