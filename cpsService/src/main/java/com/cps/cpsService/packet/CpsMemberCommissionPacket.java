@@ -33,7 +33,7 @@ public class CpsMemberCommissionPacket {
 
         @Data
         @EqualsAndHashCode(callSuper = false)
-        public static class MemberCommissionListResponse extends GenericBaseResponse<CpsMemberCommissionListDto.MemberCommissionList> {}
+        public static class MemberCommissionListResponse extends GenericBaseResponse<CpsMemberCommissionListDto> {}
 
 
         @Data

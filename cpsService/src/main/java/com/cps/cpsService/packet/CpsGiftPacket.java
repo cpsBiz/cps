@@ -88,7 +88,7 @@ public class CpsGiftPacket {
             private String size;
         }
 
-        //쿠폰
+        //기프티쇼 쿠폰
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class ShowBizListCouponResponse{
@@ -123,7 +123,7 @@ public class CpsGiftPacket {
         }
         //쿠폰
 
-        //상품 리스트
+        //기프티쇼 상품 리스트
         @Data
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class ShowBizListResponse{

@@ -123,7 +123,7 @@ public class CpsGiftCoupangService {
 							cpsGiftHistoryEntity.setTrId("ShowPlusTr_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_"+ cpsGiftHistoryEntity.getHistoryNum());
 							CpsGiftPacket.GiftInfo.ShowBizListCouponResponse showBizListResponse =  httpService.SendGiftiShowBizCoupon(giftishowCouponDomain, requestParams);
 
-							if(null != showBizListResponse.getShowBizCouponResult()){
+							if (null != showBizListResponse.getShowBizCouponResult()) {
 								if ("0000".equals(showBizListResponse.getShowBizCouponResult().getCode())) {
 									cpsGiftHistoryEntity.setBarcode(showBizListResponse.getShowBizCouponResult().getResult().getCouponImgUrl());
 									cpsGiftHistoryEntity.setOrderNo(showBizListResponse.getShowBizCouponResult().getResult().getOrderNo());

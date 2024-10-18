@@ -43,7 +43,7 @@ public class RewardController {
 
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-
+            log.error(Constant.EXCEPTION_MESSAGE + " realTime controller request : {}, exception : {}", request, e);
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

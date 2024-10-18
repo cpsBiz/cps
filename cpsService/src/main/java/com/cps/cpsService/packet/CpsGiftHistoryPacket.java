@@ -18,7 +18,6 @@ public class CpsGiftHistoryPacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class GiftHistoryRequest {
-            private String brandId;
             private String userId;
             private String affliateId;
             private String merchantId;

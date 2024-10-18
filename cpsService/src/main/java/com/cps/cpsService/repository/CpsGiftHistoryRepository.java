@@ -16,8 +16,8 @@ public interface CpsGiftHistoryRepository extends JpaRepository<CpsGiftHistoryEn
 
     @Query("SELECT new com.cps.cpsService.dto.CpsGiftHistoryDto(A.productId, A.barcode, A.pinNo, A.awardDay, A.validDay, A.giftYn, B.brandIcon, B.brandName, B.productImageS, B.productImageL, B.productName, B.content) " +
             " FROM CpsGiftHistoryEntity A JOIN CpsGiftEntity B ON B.brandId = A.brandId AND B.productId = A.productId " +
-            " WHERE A.brandId = :brandId AND A.userId = :userId AND A.merchantId = :merchantId AND affliateId = :affliateId AND A.awardYm =:awardYm AND A.giftYn IN :giftYn")
-    List<CpsGiftHistoryDto> findGiftInfo(@Param("brandId")String brandId, @Param("userId")String userId, @Param("merchantId")String merchantId, @Param("affliateId")String affliateId, @Param("awardYm")int awardYm, @Param("giftYn")List<String> giftYn);
+            " WHERE A.userId = :userId AND A.merchantId = :merchantId AND affliateId = :affliateId AND A.awardYm =:awardYm AND A.giftYn IN :giftYn")
+    List<CpsGiftHistoryDto> findGiftInfo(@Param("userId")String userId, @Param("merchantId")String merchantId, @Param("affliateId")String affliateId, @Param("awardYm")int awardYm, @Param("giftYn")List<String> giftYn);
 
 
     @Modifying

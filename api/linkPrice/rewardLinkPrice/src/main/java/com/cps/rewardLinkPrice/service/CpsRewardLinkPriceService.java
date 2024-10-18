@@ -37,11 +37,12 @@ public class CpsRewardLinkPriceService {
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
 		
-		List<Integer> resultList = Collections.singletonList(request.getAffiliate_user_id());
+		List<Integer> resultList = Collections.singletonList(Integer.parseInt(request.getAffiliate_user_id()));
+
 		try {
-			CommissionDto commissionDto = cpsClickRepository.findClickCommission(request.getAffiliate_user_id());
+			CommissionDto commissionDto = cpsClickRepository.findClickCommission(Integer.parseInt(request.getAffiliate_user_id()));
 			if (commissionDto != null) {
-				cpsRewardEntity.setClickNum(request.getAffiliate_user_id());
+				cpsRewardEntity.setClickNum(Integer.parseInt(request.getAffiliate_user_id()));
 				cpsRewardEntity.setOrderNo(request.getOrder_code());
 				cpsRewardEntity.setProductCode(request.getProduct_code());
 

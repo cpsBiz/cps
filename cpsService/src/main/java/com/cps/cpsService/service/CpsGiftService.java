@@ -233,23 +233,16 @@ public class CpsGiftService {
 		return response;
 	}
 
+	/**
+	 * 기프트 상품 리스트
+	 * @date 2024-10-17
+	 */
 	public GenericBaseResponse<CpsGiftProductDto> giftProductList(CpsGiftProductPacket.GiftProductInfo.GiftProductRequest request) throws Exception {
 		CpsGiftProductPacket.GiftProductInfo.GiftProductResponse response = new CpsGiftProductPacket.GiftProductInfo.GiftProductResponse();
-		List<CpsGiftProductDto> cpsGiftProductDtoList = new ArrayList<>();
 		try {
-			List<CpsGiftEntity> cpsGiftEntityList = cpsGiftRepository.findByBrandIdAndProductId(request.getBrandId());
+			List<CpsGiftProductDto> cpsGiftProductDtoList = cpsGiftRepository.findByBrandIdAndProductId(request.getBrandId(), request.getAffliateId(), request.getMerchantId());
 
-			if (cpsGiftEntityList.size() > 0) {
-				cpsGiftEntityList.forEach(brand -> {
-					CpsGiftProductDto cpsGiftProductDto = new CpsGiftProductDto();
-					cpsGiftProductDto.setBrandName(brand.getBrandName());
-					cpsGiftProductDto.setProductName(brand.getProductName());
-					cpsGiftProductDto.setProductImageS(brand.getProductImageS());
-					cpsGiftProductDto.setProductImageL(brand.getProductImageL());
-					cpsGiftProductDto.setProductName(brand.getProductName());
-					cpsGiftProductDto.setProductId(brand.getProductId());
-					cpsGiftProductDtoList.add(cpsGiftProductDto);
-				});
+			if (cpsGiftProductDtoList.size() > 0) {
 				response.setSuccess();
 				response.setDatas(cpsGiftProductDtoList);
 			} else {
