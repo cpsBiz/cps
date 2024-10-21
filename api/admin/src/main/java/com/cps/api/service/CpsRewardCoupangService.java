@@ -71,19 +71,13 @@ public class CpsRewardCoupangService {
 		request.setSubId(coupangSubId);
 
 		try {
-			for (int i = 0; i <= 1; i++) {
+			for (int i = 0; i <= 20; i++) {
 				String domain = coupangOrderDomain;
-				if (rewardYn.equals("N")) {domain = coupangCancelDomain;}
+				if (rewardYn.equals("Y")) {domain = coupangCancelDomain;}
 				request.setPage(i);
 				domain = domain + "?" + CommonUtil.objectToQueryString(request);
-
 				CpsRewardPacket.RewardInfo.CoupangListResponse coupangResponseList = httpService.SendCoupangReward(coupangDomain, domain, request);
 				if (coupangResponseList.getDataList() != null) {
-
-					if (i > 0) {
-						coupangResponseList.setRCode("1");
-					}
-
 					//조회 성공 응답 코드가 아닌 경우
 					if (!coupangResponseList.getRCode().equals("0")) {
 						break;
@@ -306,13 +300,12 @@ public class CpsRewardCoupangService {
 		cpsRewardEntity.setCommissionProfit(commission - (int) (commission * memberCommissionShareDouble));
 		//매체 커미션 (커미션 매출 * 매체쉐어)
 		cpsRewardEntity.setAffliateCommission((int) (commission * memberCommissionShareDouble));
-		//유저 커미션 (매체 커미션 * 유저쉐어)
+		//유저 커미션 (매체 커미션 * 유저쉐어), 쿠팡은 커미션이 아닌 막대사탕으로 지급
 		cpsRewardEntity.setUserCommission(0);
 		cpsRewardEntity.setCommissionRate(String.valueOf(coupang.getCommissionRate()));
 
 		cpsRewardEntity.setBaseCommission("0");
 		cpsRewardEntity.setIncentiveCommission("0");
-
 		return cpsRewardEntity;
 	}
 

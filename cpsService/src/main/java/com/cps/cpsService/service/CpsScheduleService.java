@@ -42,4 +42,29 @@ public class CpsScheduleService {
 		response.setDatas(null);
 		return response;
 	}
+
+	/**
+	 * 노출 통계
+	 * @date 2024-09-11
+	 */
+	public GenericBaseResponse<CpsViewrDto> summaryScheduleMonth(CpsViewSchedulePacket.ScheduleInfo.ViewScheduleMonthRequest request) throws Exception {
+		CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse response = new CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse();
+
+		try {
+			for (int i = 0; i < 24; i++) {
+				String hour  = String.format("%02d", i);
+				//리워드 전체 데이터 시간별 합계
+				cpsViewScheduleRepository.insertSummaryRewardMonthHour(request.getSearchDay(),hour);
+			}
+
+			//노출 전체 데이터 일별 합계
+			cpsViewScheduleRepository.insertSummaryViewMonthDay(request.getSearchDay());
+
+		} catch (Exception e) {
+			response.setApiMessage(Constants.STAT_HOUR_EXCEPTION.getCode(), Constants.STAT_HOUR_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " summaryScheduleMonth request : {}, exception : {}", request, e);
+		}
+		response.setDatas(null);
+		return response;
+	}
 }

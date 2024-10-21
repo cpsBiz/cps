@@ -24,5 +24,17 @@ public class CpsViewSchedulePacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class ViewSchduelResponse extends GenericBaseResponse<CpsViewrDto> {}
+
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class ViewScheduleMonthRequest {
+            private int searchDay;
+            private int serchHour;
+        }
+
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class ViewSchduelMonthResponse extends GenericBaseResponse<CpsViewrDto> {}
     }
 }

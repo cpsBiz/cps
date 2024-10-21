@@ -4,7 +4,10 @@ import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.cpsService.dto.CpsCampaignMerchantDto;
+import com.cps.cpsService.entity.CpsCampaignEntity;
 import com.cps.cpsService.entity.CpsInquiryFileEntity;
+import com.cps.cpsService.repository.CpsCampaignRepository;
 import com.cps.cpsService.repository.CpsInquiryFileRepository;
 import com.cps.cpsService.repository.CpsInquiryRepository;
 import com.cps.cpsService.dto.CpsOneToOneDto;
@@ -34,6 +37,8 @@ public class CpsOneToOneService {
 	private final CpsInquiryFileRepository cpsInquiryFileRepository;
 
 	private final CpsAnswerRepository cpsAnswerRepository;
+
+	private final CpsCampaignRepository cpsCampaignRepository;
 
 	private final EntityManager em;
 
@@ -86,6 +91,25 @@ public class CpsOneToOneService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.INQUIRY_EXCEPTION.getCode(), Constants.INQUIRY_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " inquiry api request : {}, exception : {}", request, e);
+		}
+
+		return response;
+	}
+
+	/**
+	 * 문의 등록 쇼핑몰 리스트
+	 * @date 2024-10-21
+	 */
+	public GenericBaseResponse<CpsCampaignMerchantDto> inquiryMerchantList() throws Exception {
+		CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryMerchantListResponse response = new CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryMerchantListResponse();
+
+		try {
+			List<CpsCampaignMerchantDto> merchantList = cpsCampaignRepository.findByMerchant();
+			response.setSuccess();
+			response.setDatas(merchantList);
+		} catch (Exception e) {
+			response.setApiMessage(Constants.INQUIRY_EXCEPTION.getCode(), Constants.INQUIRY_EXCEPTION.getValue());
+			log.error(Constant.EXCEPTION_MESSAGE + " inquiryMerchantList api exception : {}",  e);
 		}
 
 		return response;

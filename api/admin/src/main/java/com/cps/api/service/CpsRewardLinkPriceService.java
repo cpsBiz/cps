@@ -64,29 +64,24 @@ public class CpsRewardLinkPriceService {
 		request.setA_id(linkPriceSiteCode);
 
 		try {
-			//추후 수정
 			for (int i = 1; i <= 20; i++) {
 				request.setPage(i);
 				CpsRewardPacket.RewardInfo.LinkPriceListResponse dotPitchResponseList = httpService.SendLinkPriceReward(domain, request);
 				if (dotPitchResponseList.getOrder_list() != null) {
-				//추후 수정
-					if (i > 1) {
-						dotPitchResponseList.setResult("123");
-					}
 
 					//조회 성공 응답 코드가 아닌 경우
 					if (!dotPitchResponseList.getResult().equals("0")) {
 						//정상 페이지 호출이 아닌 경우
 						if (dotPitchResponseList.getResult().equals("100")) {
-							log.error("linkPriceReward 100 : {}, result : {}", i, "A코드 (사이트코드)(a_id) 없음");
+							log.error("linkPriceReward 100 : {}, result : {}", i, "A코드 (사이트코드)(a_id) 없음, page : {}", request.getPage());
 						} else if (dotPitchResponseList.getResult().equals("200")) {
-							log.error("linkPriceReward 200 : {}, result : {}", i, "조회일자(yyyymmdd) 없음");
+							log.error("linkPriceReward 200 : {}, result : {}", i, "조회일자(yyyymmdd) 없음, page : {}", request.getPage());
 						} else if (dotPitchResponseList.getResult().equals("210")) {
-							log.error("linkPriceReward 210 : {}, result : {}", i, "조회일자(yyyymmdd) 길이 오류");
+							log.error("linkPriceReward 210 : {}, result : {}", i, "조회일자(yyyymmdd) 길이 오류, page : {}", request.getPage());
 						} else if (dotPitchResponseList.getResult().equals("300")) {
-							log.error("linkPriceReward 300 : {}, result : {}", i, "인증키(auth_key)가 맞지 않음");
+							log.error("linkPriceReward 300 : {}, result : {}", i, "인증키(auth_key)가 맞지 않음, page : {}", request.getPage());
 						} else if (dotPitchResponseList.getResult().equals("400")) {
-							log.error("linkPriceReward 400 : {}, result : {}", i, "통화단위(currency)를 지원하지 않음");
+							log.error("linkPriceReward 400 : {}, result : {}", i, "통화단위(currency)를 지원하지 않음, page : {}", request.getPage());
 						}
 						break;
 					} else {
@@ -145,7 +140,7 @@ public class CpsRewardLinkPriceService {
 						}
 
 						//저장 완료 되면 CpsRewardTempEntityList 데이터 cpsRewardEntityList로 옮긴 후 1000개씩 저장 공통단
-						//첫 리워드도 1000개씩 저장 공통단
+						//첫 리워드도 1000개씩 저장 공통
 						if (cpsRewardEntityList.size() > 0) {
 							cpsRewardService.cpsRewardEntityListSave(cpsRewardEntityList, cpsRewardFirstEntityList);
 						}

@@ -27,5 +27,6 @@ public class CpsViewDto {
     String commissionPc;
     String affliateCommissionShare;
     String userCommissionShare;
+    int campaignRank;
 }
 

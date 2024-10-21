@@ -51,4 +51,12 @@ public class CpsOneToOneDto {
         String answerYn;
         private LocalDateTime regDate;
     }
+
+
+    @Data
+    @EqualsAndHashCode(callSuper = false)
+    public static class OneToOneMerchat {
+        String merchantName;
+        String merchantId;
+    }
 }

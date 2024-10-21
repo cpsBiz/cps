@@ -27,7 +27,7 @@ public class LinkPriceScheduleManager {
     /**
      * 링크프라이스 익일 호출 스케줄
      */
-    @Scheduled(cron = "0 10 * * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> linkPriceRewardSchedule() throws Exception {
         var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
         CpsRewardPacket.RewardInfo.LinkPriceRequest request = new CpsRewardPacket.RewardInfo.LinkPriceRequest();
@@ -58,7 +58,7 @@ public class LinkPriceScheduleManager {
     /**
      * 링크프라이스 매출내역 6일 호출 스케줄
      */
-    @Scheduled(cron = "0 0 9 6 * *")
+    @Scheduled(cron = "0 30 6 6 * *")
     public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> linkPriceRewardMonthSchedule() throws Exception {
         var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
         CpsRewardPacket.RewardInfo.LinkPriceRequest request = new CpsRewardPacket.RewardInfo.LinkPriceRequest();

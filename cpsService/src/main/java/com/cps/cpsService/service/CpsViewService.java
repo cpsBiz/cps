@@ -85,6 +85,7 @@ public class CpsViewService {
 			cpsViewDto.setCommissionPc((String) result[20]);
 			cpsViewDto.setAffliateCommissionShare((String) result[21]);
 			cpsViewDto.setUserCommissionShare((String) result[22]);
+			cpsViewDto.setCampaignRank(((Number) result[23]).intValue());
 			return cpsViewDto;
 		}).collect(Collectors.toList());
 	}

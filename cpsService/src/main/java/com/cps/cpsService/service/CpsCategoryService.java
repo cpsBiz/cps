@@ -35,30 +35,39 @@ public class CpsCategoryService {
 	public GenericBaseResponse<CpsCategoryDto> category(CpsCategoryPacket.CategoryInfo.CategoryRequest request) throws Exception {
 		CpsCategoryPacket.CategoryInfo.Response response = new CpsCategoryPacket.CategoryInfo.Response();
 		List<CpsCategoryDto> cpsCategoryDtoList = new ArrayList<>();
+		CpsCategoryDto cpsCategoryDto = new CpsCategoryDto();
 
 		try {
-			if(request.getApiType().equals("D")){
+			if (request.getApiType().equals("D")) {
 				request.getCategoryList().forEach(category->{
 					cpsCategoryRepository.deleteByCategory(category.getCategory());
+					cpsCategoryDto.setCategory(category.getCategory());
+					cpsCategoryDto.setCategoryName(category.getCategoryName());
+					cpsCategoryDto.setCategoryRank(category.getCategoryRank());
+					cpsCategoryDtoList.add(cpsCategoryDto);
 				});
 			} else {
 				for (CpsCategoryPacket.CategoryInfo.Category category : request.getCategoryList()) {
 					CpsCategoryEntity cpsCategoryEntity = new CpsCategoryEntity();
-					CpsCategoryDto cpsCategoryDto = new CpsCategoryDto();
 
 					if (request.getApiType().equals("I")) {
 						cpsCategoryEntity.setCategory(getMaxCategory("category", "CpsCategoryEntity"));
 						CpsCategoryEntity categoryNameChk = cpsCategoryRepository.findByCategoryName(category.getCategoryName());
 						if (null != categoryNameChk) {
 							response.setApiMessage(Constants.CATEGORY_DUPLICATION.getCode(), Constants.CATEGORY_DUPLICATION.getValue());
+							cpsCategoryDto.setCategory(category.getCategory());
 							cpsCategoryDto.setCategoryName(category.getCategoryName());
-							response.setData(cpsCategoryDto);
-							break;
+							cpsCategoryDto.setCategoryRank(category.getCategoryRank());
+							cpsCategoryDtoList.add(cpsCategoryDto);
+							response.setDatas(cpsCategoryDtoList);
+							return response;
 						}
 					} else {
 						cpsCategoryEntity.setCategory(category.getCategory());
 					}
+
 					cpsCategoryEntity.setCategoryName(category.getCategoryName());
+
 					if (category.getCategoryRank() > 0) {
 						cpsCategoryEntity.setCategoryRank(category.getCategoryRank());
 					} else {
@@ -71,6 +80,8 @@ public class CpsCategoryService {
 					cpsCategoryDtoList.add(cpsCategoryDto);
 				}
 			}
+			response.setSuccess();
+			response.setDatas(cpsCategoryDtoList);
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CATEGORY_EXCEPTION.getCode(), Constants.CATEGORY_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " category api request : {}, exception : {}", request, e);

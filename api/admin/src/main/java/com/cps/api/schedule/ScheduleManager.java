@@ -53,9 +53,42 @@ public class ScheduleManager {
     }
 
     /**
+     * 통계 월 스케줄
+     */
+    @Scheduled(cron = "0 0 7 6 * *")
+    public ResponseEntity<CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse> summaryScheduleMonth() throws Exception {
+        CpsViewSchedulePacket.ScheduleInfo.ViewScheduleMonthRequest request = new CpsViewSchedulePacket.ScheduleInfo.ViewScheduleMonthRequest();
+
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = today.minusMonths(2).withDayOfMonth(6);
+        LocalDate endDate = today.minusMonths(1).withDayOfMonth(6);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+        var result = new CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse();
+
+        try {
+            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+                request.setSearchDay(Integer.parseInt(date.format(formatter)));
+                var view = cpsScheduleService.summaryScheduleMonth(request);
+                if (Constant.RESULT_CODE_SUCCESS.equals(view.getResultCode())) {
+                    result.setSuccess();
+                } else {
+                    result.setApiMessage(view.getResultCode(), view.getResultMessage());
+                }
+                result.setDatas(view.getDatas());
+            }
+
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("summarySchedule Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
      * 상품 등록 스케줄
      */
-    @Scheduled(cron = "0 18 * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void giftProduct() throws Exception {
         giftiShowService.giftiShowBizProduct();
     }

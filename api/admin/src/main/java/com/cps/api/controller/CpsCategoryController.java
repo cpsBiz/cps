@@ -37,7 +37,7 @@ public class CpsCategoryController {
             } else {
                 result.setApiMessage(category.getResultCode(), category.getResultMessage());
             }
-            result.setData(category.getData());
+            result.setDatas(category.getDatas());
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             result.setError("category Controller Error");

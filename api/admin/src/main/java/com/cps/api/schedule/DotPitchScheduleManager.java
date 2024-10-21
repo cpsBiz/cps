@@ -27,7 +27,7 @@ public class DotPitchScheduleManager {
     /**
      * 도트피치 익일 호출 스케줄
      */
-    @Scheduled(cron = "0 10 * * * *")
+    @Scheduled(cron = "0 10 6 * * *")
     public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> dotPitchRewardSchedule() throws Exception {
         var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
         CpsRewardPacket.RewardInfo.DotPitchRequest request = new CpsRewardPacket.RewardInfo.DotPitchRequest();
@@ -53,7 +53,7 @@ public class DotPitchScheduleManager {
     /**
      * 도트피치 매출내역 호출 스케줄
      */
-    @Scheduled(cron = "0 0 9 6 * *")
+    @Scheduled(cron = "0 0 6 6 * *")
     public ResponseEntity<CpsRewardPacket.RewardInfo.DotPitchResponse> dotPitchRewardMonthSchedule() throws Exception {
         var result = new CpsRewardPacket.RewardInfo.DotPitchResponse();
         CpsRewardPacket.RewardInfo.DotPitchRequest request = new CpsRewardPacket.RewardInfo.DotPitchRequest();

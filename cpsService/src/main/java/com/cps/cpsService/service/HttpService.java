@@ -42,74 +42,6 @@ public class HttpService extends BaseHttpService {
         CpsRewardPacket.RewardInfo.DotPitchListResponse responseObj = new CpsRewardPacket.RewardInfo.DotPitchListResponse();
         try{
             var result = this.GetAsync(domain, request, String.class);
-
-            String json = "{\n" +
-                    "  \"searchDate\": \"20240101\",\n" +
-                    "  \"result\": \"OK\",\n" +
-                    "  \"listData\": [\n" +
-                    "    {\n" +
-                    "      \"orderid\": \"20240924001\",\n" +
-                    "      \"m_name\": \"11번가_PC\",\n" +
-                    "      \"aff_id\": \"test1\",\n" +
-                    "      \"p_name\": \"테스트상품1\",\n" +
-                    "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"10000\",\n" +
-                    "      \"comm\": 1000,\n" +
-                    "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"91\",\n" +
-                    "      \"order_flag\": \"확정\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"orderid\": \"20240924002\",\n" +
-                    "      \"m_name\": \"11번가_PC\",\n" +
-                    "      \"aff_id\": \"test1\",\n" +
-                    "      \"p_name\": \"테스트상품1\",\n" +
-                    "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"20000\",\n" +
-                    "      \"comm\": 2000,\n" +
-                    "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"91\",\n" +
-                    "      \"order_flag\": \"확정\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"orderid\": \"20240924003\",\n" +
-                    "      \"m_name\": \"11번가_PC\",\n" +
-                    "      \"aff_id\": \"test1\",\n" +
-                    "      \"p_name\": \"테스트상품1\",\n" +
-                    "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"30000\",\n" +
-                    "      \"comm\": 3000,\n" +
-                    "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"91\",\n" +
-                    "      \"order_flag\": \"확정\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"orderid\": \"20240924004\",\n" +
-                    "      \"m_name\": \"11번가_PC\",\n" +
-                    "      \"aff_id\": \"test1\",\n" +
-                    "      \"p_name\": \"테스트상품1\",\n" +
-                    "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"40000\",\n" +
-                    "      \"comm\": 4000,\n" +
-                    "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"91\",\n" +
-                    "      \"order_flag\": \"확정\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"orderid\": \"20240924005\",\n" +
-                    "      \"m_name\": \"11번가_PC\",\n" +
-                    "      \"aff_id\": \"test1\",\n" +
-                    "      \"p_name\": \"테스트상품1\",\n" +
-                    "      \"quantity\": \"7\",\n" +
-                    "      \"price\": \"50000\",\n" +
-                    "      \"comm\": 5000,\n" +
-                    "      \"commission_rate\": \"80\",\n" +
-                    "      \"a_info\": \"91\",\n" +
-                    "      \"order_flag\": \"확정\"\n" +
-                    "    }\n" +
-                    "  ]\n" +
-                    "}";
-
             // listData 유무 체크
             Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("listData")) {
@@ -149,59 +81,10 @@ public class HttpService extends BaseHttpService {
     //링크프라이스 실적조회
     public CpsRewardPacket.RewardInfo.LinkPriceListResponse SendLinkPriceReward(String domain, CpsRewardPacket.RewardInfo.LinkPriceRequest request) {
         CpsRewardPacket.RewardInfo.LinkPriceListResponse responseObj = new CpsRewardPacket.RewardInfo.LinkPriceListResponse();
-        String jsonString = "{"
-                + "\"result\": \"0\","
-                + "\"list_count\": 2,"
-                + "\"order_list\": ["
-                + "{"
-                + "\"trlog_id\": \"18000406750585\","
-                + "\"m_id\": \"clickbuy\","
-                + "\"o_cd\": \"recover_231019_182249\","
-                + "\"p_cd\": \"recover_231019_182249\","
-                + "\"p_nm\": \"pn_recover_5\","
-                + "\"it_cnt\": \"1\","
-                + "\"user_id\": \"91\","
-                + "\"status\": \"100\","
-                + "\"c_cd\": \"test_c_cd\","
-                + "\"create_time_stamp\": \"20231020\","
-                + "\"applied_pgm_id\": \"0038\","
-                + "\"yyyymmdd\": \"20231017\","
-                + "\"hhmiss\": \"000000\","
-                + "\"trans_comment\": \"\","
-                + "\"sales\": 10000,"
-                + "\"commission\": 1000,"
-                + "\"pgm_name\": \"tt_mo\","
-                + "\"is_pc\": \"mobile\","
-                + "\"pur_rate\": \"1원\""
-                + "},"
-                + "{"
-                + "\"trlog_id\": \"18000406750586\","
-                + "\"m_id\": \"clickbuy\","
-                + "\"o_cd\": \"recover_231019_182243\","
-                + "\"p_cd\": \"recover_231019_182243\","
-                + "\"p_nm\": \"pn_recover_4\","
-                + "\"it_cnt\": \"2\","
-                + "\"user_id\": \"91\","
-                + "\"status\": \"100\","
-                + "\"c_cd\": \"test_c_cd\","
-                + "\"create_time_stamp\": \"20231020\","
-                + "\"applied_pgm_id\": \"0038\","
-                + "\"yyyymmdd\": \"20231017\","
-                + "\"hhmiss\": \"000000\","
-                + "\"trans_comment\": \"\","
-                + "\"sales\": 20000,"
-                + "\"commission\": 2000,"
-                + "\"pgm_name\": \"tt_mo\","
-                + "\"is_pc\": \"mobile\","
-                + "\"pur_rate\": \"1원\""
-                + "}"
-                + "]"
-                + "}";
-
         try{
             var result = this.GetAsync(domain, request, String.class);
             // order_list 유무 체크
-            Map<String, Object> responseMap = new ObjectMapper().readValue(jsonString, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("order_list")) {
                 Object orderList = responseMap.get("order_list");
                 if (orderList instanceof List && !((List<?>) orderList).isEmpty()) {
@@ -227,42 +110,6 @@ public class HttpService extends BaseHttpService {
     //쿠팡 실적조회
     public CpsRewardPacket.RewardInfo.CoupangListResponse SendCoupangReward(String url, String domain, CpsRewardPacket.RewardInfo.CoupangRequest request) {
         CpsRewardPacket.RewardInfo.CoupangListResponse responseObj = new CpsRewardPacket.RewardInfo.CoupangListResponse();
-        String jsonString = "{\n" +
-                "  \"rCode\": \"0\",\n" +
-                "  \"rMessage\": \"\",\n" +
-                "  \"data\": [\n" +
-                "    {\n" +
-                "      \"date\": \"20240930\",\n" +
-                "      \"trackingCode\": \"AF1234567\",\n" +
-                "      \"subId\": \"A1234567890\",\n" +
-                "      \"addtag\": \"400\",\n" +
-                "      \"ctag\": \"Home\",\n" +
-                "      \"orderId\": 123456789012343,\n" +
-                "      \"productId\": 1234567,\n" +
-                "      \"productName\": \"상품명123\",\n" +
-                "      \"quantity\": 2,\n" +
-                "      \"gmv\": 20000,\n" +
-                "      \"commissionRate\": 3,\n" +
-                "      \"commission\": 2000,\n" +
-                "      \"subParam\": 91\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"date\": \"20240930\",\n" +
-                "      \"trackingCode\": \"AF1234567\",\n" +
-                "      \"subId\": \"A1234567890\",\n" +
-                "      \"addtag\": \"400\",\n" +
-                "      \"ctag\": \"Home\",\n" +
-                "      \"orderId\": 123456789012341,\n" +
-                "      \"productId\": 12345671,\n" +
-                "      \"productName\": \"상품명2\",\n" +
-                "      \"quantity\": 4,\n" +
-                "      \"gmv\": 40000,\n" +
-                "      \"commissionRate\": 3,\n" +
-                "      \"commission\": 4000,\n" +
-                "      \"subParam\": 91\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
 
         try{
             String authorization = HmacGenerator.generate("GET", domain, SECRET_KEY, ACCESS_KEY);
@@ -271,7 +118,7 @@ public class HttpService extends BaseHttpService {
             });
 
             // order_list 유무 체크
-            Map<String, Object> responseMap = new ObjectMapper().readValue(jsonString, new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> responseMap = new ObjectMapper().readValue(result.block(), new TypeReference<Map<String, Object>>() {});
             if (responseMap.containsKey("data")) {
                 Object data = responseMap.get("data");
                 if (data instanceof List && !((List<?>) data).isEmpty()) {

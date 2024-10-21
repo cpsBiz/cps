@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,7 +71,13 @@ public class CpsRewardLinkPriceService {
 				cpsRewardEntity.setStatus(100);
 
 				cpsRewardEntity.setMemberName(commissionDto.getMemberName());
-				cpsRewardEntity.setProductName(request.getProduct_name());
+
+				if (cpsRewardEntity.getMerchantId().equals("link_gmarket")) {
+					cpsRewardEntity.setProductName(URLDecoder.decode(request.getProduct_name(), StandardCharsets.UTF_8));
+				} else {
+					cpsRewardEntity.setProductName(request.getProduct_name());
+				}
+
 				cpsRewardEntity.setProductCnt(request.getItem_count());
 				cpsRewardEntity.setProductPrice(request.getPrice());
 

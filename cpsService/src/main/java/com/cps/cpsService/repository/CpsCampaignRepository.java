@@ -1,5 +1,8 @@
 package com.cps.cpsService.repository;
 
+import com.cps.cpsService.dto.CommissionDto;
+import com.cps.cpsService.dto.CpsCampaignMerchantDto;
+import com.cps.cpsService.dto.CpsOneToOneDto;
 import com.cps.cpsService.entity.CpsCampaignEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.transaction.Transactional;
@@ -7,10 +10,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface CpsCampaignRepository extends JpaRepository<CpsCampaignEntity, String> {
     CpsCampaignEntity save(CpsCampaignEntity entity);
 
     CpsCampaignEntity findByCampaignNum(int campaignNum);
+
+
+    @Query("SELECT new com.cps.cpsService.dto.CpsCampaignMerchantDto(MAX(a.merchantId), b.memberName) " +
+            "FROM CpsCampaignEntity a " +
+            "JOIN CpsMemberEntity b ON b.memberId = a.merchantId " +
+            " group by b.memberName ")
+    List<CpsCampaignMerchantDto> findByMerchant();
+
+
 
     @Transactional
     void deleteByCampaignNum(int campaignNum);

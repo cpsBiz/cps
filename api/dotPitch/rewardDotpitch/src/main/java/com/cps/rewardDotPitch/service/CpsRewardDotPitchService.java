@@ -81,7 +81,7 @@ public class CpsRewardDotPitchService {
 				cpsRewardEntity.setMemberName(request.getR_Mid());
 
 				//지마켓 경우 인코딩
-				if (request.getR_Mid().equals("G마켓_PC") || request.getR_Mid().equals("G마켓_모바일")) {
+				if (request.getR_Mid().equals("G마켓_PC") || request.getR_Mid().equals("G마켓_모바일") || request.getR_Mid().equals("G마켓") || request.getR_Mid().equals("지마켓")) {
 					cpsRewardEntity.setProductName(URLDecoder.decode(request.getR_Mid(), StandardCharsets.UTF_8));
 				} else {
 					cpsRewardEntity.setProductName(request.getR_ProdNm());

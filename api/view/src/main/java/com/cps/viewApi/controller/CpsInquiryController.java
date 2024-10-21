@@ -44,4 +44,29 @@ public class CpsInquiryController {
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * 문의 등록 쇼핑몰 리스트
+     *
+     * @date 2024-10-21
+     */
+    @Operation(summary = "문의 등록 쇼핑몰 리스트")
+    @PostMapping(value = "/inquiryMerchantList")
+    public ResponseEntity<CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryMerchantListResponse> inquiryMerchantList() throws Exception {
+        var result = new CpsOnetoOnePacket.CpsOnetoOneInfo.InquiryMerchantListResponse();
+
+        try {
+            var inquiry = cpsOneToOneService.inquiryMerchantList();
+            if (Constant.RESULT_CODE_SUCCESS.equals(inquiry.getResultCode())) {
+                result.setSuccess();
+            } else {
+                result.setApiMessage(inquiry.getResultCode(), inquiry.getResultMessage());
+            }
+            result.setDatas(inquiry.getDatas());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("inquiry Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

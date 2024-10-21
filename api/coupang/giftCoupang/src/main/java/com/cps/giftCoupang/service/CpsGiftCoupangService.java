@@ -110,7 +110,7 @@ public class CpsGiftCoupangService {
 							requestParams.add("custom_auth_token",giftishowAuthToken);
 							requestParams.add("dev_yn", "N");
 							requestParams.add("goods_code", giftResponse.getProductId());
-							requestParams.add("order_no", cpsGiftHistoryEntity.getHistoryNum() + "_ShowPlusOrder");
+							requestParams.add("order_no", "ShowPlusOrder_" + cpsGiftHistoryEntity.getHistoryNum());
 							requestParams.add("mms_msg", cpsGiftEntity.getProductName() + " 기프티콘 발송");
 							requestParams.add("mms_title", "기프티콘 발송");
 							requestParams.add("callback_no", "15880108");
@@ -150,7 +150,7 @@ public class CpsGiftCoupangService {
 											}
 										}
 									});
-									couponCancel(cpsGiftHistoryEntity);
+									couponCancel(cpsGiftHistoryEntity);//추후 삭제
 									response.setData(giftResponse);
 									response.setSuccess();
 								} else {
@@ -208,8 +208,7 @@ public class CpsGiftCoupangService {
 		requestParams.add("tr_id", cpsGiftHistoryEntity.getTrId());
 		requestParams.add("user_id", giftishowUserId);
 
-		CpsGiftPacket.GiftInfo.ShowBizListCouponResponse showBizListResponse =  httpService.SendGiftiShowBizCoupon(giftishowCouponCancelDomain, requestParams);
-		
+		var showBizListResponse =  httpService.SendGiftiShowBizCoupon(giftishowCouponCancelDomain, requestParams);
 	}
 
 	public String couponErrorMsg(String code) {

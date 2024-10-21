@@ -2,6 +2,7 @@ package com.cps.cpsService.packet;
 
 import com.cps.common.model.GenericBaseResponse;
 import com.cps.common.model.GenericPageBaseResponse;
+import com.cps.cpsService.dto.CpsCampaignMerchantDto;
 import com.cps.cpsService.dto.CpsOneToOneDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -63,8 +64,13 @@ public class CpsOnetoOnePacket {
         @Data
         @EqualsAndHashCode(callSuper = false)
         public static class InquiryResponse extends GenericBaseResponse<CpsOneToOneDto.CpsInquiry> {}
-
         //문의등록
+
+        //문의등록 쇼핑몰 리스트
+        @Data
+        @EqualsAndHashCode(callSuper = false)
+        public static class InquiryMerchantListResponse extends GenericBaseResponse<CpsCampaignMerchantDto> {}
+        //문의등록 쇼핑몰 리스트
 
         @Data
         @EqualsAndHashCode(callSuper = false)
