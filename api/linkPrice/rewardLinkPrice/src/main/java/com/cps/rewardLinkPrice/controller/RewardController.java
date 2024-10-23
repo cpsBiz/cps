@@ -3,7 +3,6 @@ package com.cps.rewardLinkPrice.controller;
 import com.cps.rewardLinkPrice.packet.CpsRewardLinkPricePacket;
 import com.cps.rewardLinkPrice.service.CpsRewardLinkPriceService;
 import com.cps.common.constant.Constant;
-import com.cps.rewardLinkPrice.service.CpsRewardLinkPriceService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

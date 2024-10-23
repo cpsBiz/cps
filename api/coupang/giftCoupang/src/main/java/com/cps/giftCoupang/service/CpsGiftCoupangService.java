@@ -1,18 +1,18 @@
 package com.cps.giftCoupang.service;
 
-import com.cps.cpsService.dto.CpsGiftDto;
-import com.cps.cpsService.dto.UnitDto;
-import com.cps.cpsService.dto.UnitListDto;
+import com.cps.common.dto.CpsGiftDto;
+import com.cps.common.dto.UnitDto;
+import com.cps.common.dto.UnitListDto;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsService.entity.CpsGiftEntity;
-import com.cps.cpsService.entity.CpsGiftHistoryEntity;
-import com.cps.cpsService.packet.CpsGiftPacket;
-import com.cps.cpsService.repository.CpsGiftHistoryRepository;
-import com.cps.cpsService.repository.CpsGiftRepository;
-import com.cps.cpsService.repository.CpsRewardUnitRepository;
-import com.cps.cpsService.service.HttpService;
+import com.cps.common.entity.CpsGiftEntity;
+import com.cps.common.entity.CpsGiftHistoryEntity;
+import com.cps.common.packet.CpsGiftPacket;
+import com.cps.common.repository.CpsGiftHistoryRepository;
+import com.cps.common.repository.CpsGiftRepository;
+import com.cps.common.repository.CpsRewardUnitRepository;
+import com.cps.common.service.HttpService;
 import com.cps.giftCoupang.packet.CpsCoupangStickPacket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,7 @@ public class CpsGiftCoupangService {
 
 	private final CpsGiftHistoryRepository cpsGiftHistoryRepository;
 
-	private final com.cps.cpsService.service.CpsGiftService cpsGiftService;
+	private final com.cps.common.service.CpsGiftService cpsGiftService;
 
 	private final HttpService httpService;
 

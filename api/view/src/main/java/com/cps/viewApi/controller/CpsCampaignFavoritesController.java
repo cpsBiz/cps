@@ -1,8 +1,8 @@
 package com.cps.viewApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsCampaignFavoritesPacket;
-import com.cps.cpsService.service.CpsCampaignFavoritesService;
+import com.cps.common.packet.CpsCampaignFavoritesPacket;
+import com.cps.common.service.CpsCampaignFavoritesService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

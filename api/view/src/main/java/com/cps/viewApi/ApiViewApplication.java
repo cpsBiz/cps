@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@Import(com.cps.cpsService.config.db.DataSourceConfig.class)
-@ComponentScan(basePackages = {"com.cps.viewApi", "com.cps.cpsService.service", "com.cps.common.utils"})
-@EntityScan(basePackages = "com.cps.cpsService.entity")
+@Import(com.cps.common.config.db.DataSourceConfig.class)
+@ComponentScan(basePackages = {"com.cps.viewApi", "com.cps.common.service", "com.cps.common.utils"})
+@EntityScan(basePackages = "com.cps.common.entity")
 public class ApiViewApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiViewApplication.class, args);

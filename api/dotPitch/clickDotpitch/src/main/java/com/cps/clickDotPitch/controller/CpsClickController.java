@@ -1,6 +1,6 @@
 package com.cps.clickDotPitch.controller;
 
-import com.cps.cpsService.packet.CpsClickPacket;
+import com.cps.common.packet.CpsClickPacket;
 import com.cps.clickDotPitch.service.CpsClickDotPitchService;
 import com.cps.common.constant.Constant;
 import io.swagger.v3.oas.annotations.Operation;

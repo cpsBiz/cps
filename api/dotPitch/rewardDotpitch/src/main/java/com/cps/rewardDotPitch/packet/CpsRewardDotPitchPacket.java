@@ -1,6 +1,6 @@
 package com.cps.rewardDotPitch.packet;
 
-import com.cps.cpsService.dto.RewardDto;
+import com.cps.common.dto.RewardDto;
 import com.cps.common.model.GenericBaseResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

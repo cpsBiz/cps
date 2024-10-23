@@ -2,8 +2,8 @@ package com.cps.api.controller;
 
 import com.cps.api.service.GiftiShowService;
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsGiftPacket;
-import com.cps.cpsService.service.CpsGiftService;
+import com.cps.common.packet.CpsGiftPacket;
+import com.cps.common.service.CpsGiftService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package com.cps.giftCoupang.packet;
 
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsService.dto.CpsGiftDto;
-import com.cps.cpsService.dto.UnitDto;
-import com.cps.cpsService.dto.UnitListDto;
+import com.cps.common.dto.CpsGiftDto;
+import com.cps.common.dto.UnitDto;
+import com.cps.common.dto.UnitListDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -11,9 +11,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableScheduling
-@Import(com.cps.cpsService.config.db.DataSourceConfig.class)
-@ComponentScan(basePackages = {"com.cps.api", "com.cps.cpsService.service", "com.cps.cpsService.repository", "com.cps.common.utils"})
-@EntityScan(basePackages = "com.cps.cpsService.entity")
+@Import(com.cps.common.config.db.DataSourceConfig.class)
+@ComponentScan(basePackages = {"com.cps.api", "com.cps.common.service", "com.cps.common.repository", "com.cps.common.utils"})
+@EntityScan(basePackages = "com.cps.common.entity")
 public class ApiAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiAdminApplication.class, args);

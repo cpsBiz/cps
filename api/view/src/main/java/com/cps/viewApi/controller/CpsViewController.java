@@ -1,8 +1,8 @@
 package com.cps.viewApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsViewPacket;
-import com.cps.cpsService.service.CpsViewService;
+import com.cps.common.packet.CpsViewPacket;
+import com.cps.common.service.CpsViewService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.cps.clickDotPitch.packet;
 
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsService.dto.ClickDto;
+import com.cps.common.dto.ClickDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

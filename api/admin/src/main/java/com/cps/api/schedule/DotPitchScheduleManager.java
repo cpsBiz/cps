@@ -3,7 +3,7 @@ package com.cps.api.schedule;
 import com.cps.api.service.CpsRewardDotPitchService;
 import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsRewardPacket;
+import com.cps.common.packet.CpsRewardPacket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

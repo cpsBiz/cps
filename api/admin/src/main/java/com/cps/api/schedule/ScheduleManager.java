@@ -2,10 +2,10 @@ package com.cps.api.schedule;
 
 import com.cps.api.service.GiftiShowService;
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsRewardPacket;
-import com.cps.cpsService.packet.CpsViewSchedulePacket;
-import com.cps.cpsService.service.CpsGiftService;
-import com.cps.cpsService.service.CpsScheduleService;
+import com.cps.common.packet.CpsRewardPacket;
+import com.cps.common.packet.CpsViewSchedulePacket;
+import com.cps.common.service.CpsGiftService;
+import com.cps.common.service.CpsScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

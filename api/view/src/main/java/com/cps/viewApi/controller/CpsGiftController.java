@@ -1,9 +1,9 @@
 package com.cps.viewApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsGiftBrandPacket;
-import com.cps.cpsService.packet.CpsGiftProductPacket;
-import com.cps.cpsService.service.CpsGiftService;
+import com.cps.common.packet.CpsGiftBrandPacket;
+import com.cps.common.packet.CpsGiftProductPacket;
+import com.cps.common.service.CpsGiftService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

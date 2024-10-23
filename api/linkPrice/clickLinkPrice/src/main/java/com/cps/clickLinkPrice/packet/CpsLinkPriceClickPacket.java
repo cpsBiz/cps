@@ -1,6 +1,6 @@
 package com.cps.clickLinkPrice.packet;
 
-import com.cps.cpsService.dto.ClickDto;
+import com.cps.common.dto.ClickDto;
 import com.cps.common.model.GenericBaseResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

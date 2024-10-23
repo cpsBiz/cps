@@ -2,8 +2,8 @@ package com.cps.api.controller;
 
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
-import com.cps.cpsService.packet.CpsMemberPacket;
-import com.cps.cpsService.service.CpsMemberService;
+import com.cps.common.packet.CpsMemberPacket;
+import com.cps.common.service.CpsMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

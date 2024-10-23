@@ -1,11 +1,11 @@
 package com.cps.rewardLinkPrice.service;
 
-import com.cps.cpsService.dto.CommissionDto;
-import com.cps.cpsService.dto.RewardDto;
-import com.cps.cpsService.entity.CpsRewardEntity;
+import com.cps.common.dto.CommissionDto;
+import com.cps.common.dto.RewardDto;
+import com.cps.common.entity.CpsRewardEntity;
 import com.cps.rewardLinkPrice.packet.CpsRewardLinkPricePacket;
-import com.cps.cpsService.repository.CpsClickRepository;
-import com.cps.cpsService.repository.CpsRewardRepository;
+import com.cps.common.repository.CpsClickRepository;
+import com.cps.common.repository.CpsRewardRepository;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;

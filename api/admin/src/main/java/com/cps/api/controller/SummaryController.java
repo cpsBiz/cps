@@ -1,10 +1,10 @@
 package com.cps.api.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsViewSchedulePacket;
-import com.cps.cpsService.packet.SummaryPacket;
-import com.cps.cpsService.service.CpsScheduleService;
-import com.cps.cpsService.service.SummaryService;
+import com.cps.common.packet.CpsViewSchedulePacket;
+import com.cps.common.packet.SummaryPacket;
+import com.cps.common.service.CpsScheduleService;
+import com.cps.common.service.SummaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

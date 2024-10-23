@@ -1,10 +1,10 @@
 package com.cps.api.service;
 
-import com.cps.cpsService.entity.CpsGiftEntity;
-import com.cps.cpsService.packet.CpsGiftPacket;
-import com.cps.cpsService.repository.CpsGiftHistoryRepository;
-import com.cps.cpsService.repository.CpsGiftRepository;
-import com.cps.cpsService.service.HttpService;
+import com.cps.common.entity.CpsGiftEntity;
+import com.cps.common.packet.CpsGiftPacket;
+import com.cps.common.repository.CpsGiftHistoryRepository;
+import com.cps.common.repository.CpsGiftRepository;
+import com.cps.common.service.HttpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

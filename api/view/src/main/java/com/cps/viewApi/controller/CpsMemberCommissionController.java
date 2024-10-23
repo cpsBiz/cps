@@ -1,10 +1,10 @@
 package com.cps.viewApi.controller;
 
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CoupangStickPacket;
-import com.cps.cpsService.packet.CpsGiftHistoryPacket;
-import com.cps.cpsService.packet.CpsMemberCommissionPacket;
-import com.cps.cpsService.service.CpsMemberCommissionService;
+import com.cps.common.packet.CoupangStickPacket;
+import com.cps.common.packet.CpsGiftHistoryPacket;
+import com.cps.common.packet.CpsMemberCommissionPacket;
+import com.cps.common.service.CpsMemberCommissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

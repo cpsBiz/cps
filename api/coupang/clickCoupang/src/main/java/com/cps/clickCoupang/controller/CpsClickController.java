@@ -1,6 +1,6 @@
 package com.cps.clickCoupang.controller;
 
-import com.cps.cpsService.packet.CpsClickPacket;
+import com.cps.common.packet.CpsClickPacket;
 import com.cps.clickCoupang.service.CpsClickCoupangService;
 import com.cps.common.constant.Constant;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,10 +1,10 @@
 package com.cps.clickLinkPrice.service;
 
-import com.cps.cpsService.dto.ClickDto;
-import com.cps.cpsService.entity.CpsClickEntity;
-import com.cps.cpsService.packet.CpsClickPacket;
+import com.cps.common.dto.ClickDto;
+import com.cps.common.entity.CpsClickEntity;
+import com.cps.common.packet.CpsClickPacket;
 import com.cps.clickLinkPrice.packet.CpsLinkPriceClickPacket;
-import com.cps.cpsService.repository.CpsClickRepository;
+import com.cps.common.repository.CpsClickRepository;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;

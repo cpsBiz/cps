@@ -3,14 +3,14 @@ package com.cps.api.service;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsService.dto.CommissionDto;
-import com.cps.cpsService.dto.DotPitchRewardDto;
-import com.cps.cpsService.entity.CpsRewardEntity;
-import com.cps.cpsService.entity.CpsRewardFirstEntity;
-import com.cps.cpsService.entity.CpsRewardTempEntity;
-import com.cps.cpsService.packet.CpsRewardPacket;
-import com.cps.cpsService.repository.*;
-import com.cps.cpsService.service.HttpService;
+import com.cps.common.dto.CommissionDto;
+import com.cps.common.dto.DotPitchRewardDto;
+import com.cps.common.entity.CpsRewardEntity;
+import com.cps.common.entity.CpsRewardFirstEntity;
+import com.cps.common.entity.CpsRewardTempEntity;
+import com.cps.common.packet.CpsRewardPacket;
+import com.cps.common.repository.*;
+import com.cps.common.service.HttpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.net.InetAddress;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,102 +62,100 @@ public class CpsRewardLinkPriceService {
 		List<CpsRewardFirstEntity> cpsRewardFirstEntityList = new ArrayList<>();
 
 		String domain = linkPriceDomain + linkPriceReward;
-
 		InetAddress inetAddress = InetAddress.getLocalHost();
 		String ipAddress = inetAddress.getHostAddress();
+
 		try {
-			List<String> siteList = Arrays.asList(linkPriceAuthKey, linkPriceMoneyweatherSiteCode);
-			for (String site : siteList) {
-				for (int i = 1; i <= 20; i++) {
-					request.setPage(i);
-					request.setA_id(site);
-					CpsRewardPacket.RewardInfo.LinkPriceListResponse dotPitchResponseList = httpService.SendLinkPriceReward(domain, request);
-					if (dotPitchResponseList.getOrder_list() != null) {
+			for (int i = 1; i <= 20; i++) {
+				request.setPage(i);
+				request.setAuth_key(linkPriceAuthKey);
 
-						//조회 성공 응답 코드가 아닌 경우
-						if (!dotPitchResponseList.getResult().equals("0")) {
-							//정상 페이지 호출이 아닌 경우
-							if (dotPitchResponseList.getResult().equals("100")) {
-								log.error("linkPriceReward 100 : {}, result : {}", i, "A코드 (사이트코드)(a_id) 없음, page : {}", request.getPage());
-							} else if (dotPitchResponseList.getResult().equals("200")) {
-								log.error("linkPriceReward 200 : {}, result : {}", i, "조회일자(yyyymmdd) 없음, page : {}", request.getPage());
-							} else if (dotPitchResponseList.getResult().equals("210")) {
-								log.error("linkPriceReward 210 : {}, result : {}", i, "조회일자(yyyymmdd) 길이 오류, page : {}", request.getPage());
-							} else if (dotPitchResponseList.getResult().equals("300")) {
-								log.error("linkPriceReward 300 : {}, result : {}", i, "인증키(auth_key)가 맞지 않음, page : {}", request.getPage());
-							} else if (dotPitchResponseList.getResult().equals("400")) {
-								log.error("linkPriceReward 400 : {}, result : {}", i, "통화단위(currency)를 지원하지 않음, page : {}", request.getPage());
-							}
-							break;
-						} else {
-							dotPitchResponseList.getOrder_list().forEach(link -> {
-								CommissionDto commissionDto = cpsClickRepository.findClickCommission(link.getUser_id());
-								CpsRewardEntity cpsRewardEntity = cpsRewardRepository.findByClickNumAndOrderNoAndProductCodeExcludingStatus(link.getUser_id(), link.getO_cd(), link.getP_cd());
-								CpsRewardTempEntity cpsRewardTempEntity = new CpsRewardTempEntity();
+				CpsRewardPacket.RewardInfo.LinkPriceListResponse dotPitchResponseList = httpService.SendLinkPriceReward(domain, request);
+				if (dotPitchResponseList.getOrder_list() != null) {
 
-								if (null != commissionDto) {
-									int productCnt = 0;
-									int productPrice = 0;
-									int commission = 0;
-
-									if (null != cpsRewardEntity) {
-										productCnt = cpsRewardEntity.getProductCnt();
-										productPrice = cpsRewardEntity.getProductPrice();
-										commission = cpsRewardEntity.getCommission();
-
-										if (productCnt > Integer.parseInt(link.getIt_cnt())) {
-											cpsRewardEntityList.add(linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "cancelReward", request.getCancel_flag(), rewardYn));
-											cpsRewardEntity.setProductCnt(productCnt);
-											cpsRewardEntity.setProductPrice(productPrice);
-											cpsRewardEntity.setCommission(commission);
-											cpsRewardEntity = linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "reward", request.getCancel_flag(), rewardYn);
-										} else if (Integer.parseInt(link.getIt_cnt()) >= productCnt) {
-											cpsRewardEntityList.add(linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "cancel", request.getCancel_flag(), rewardYn));
-										}
-									} else {
-										cpsRewardEntity = linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "reward", request.getCancel_flag(), rewardYn);
-									}
-									cpsRewardEntity.setIpAddress(ipAddress);
-
-									//리워드 TEMP 저장
-									cpsRewardTempEntity = cpsRewardService.cpsRewardTempEntity(cpsRewardEntity);
-									cpsRewardTempEntityList.add(cpsRewardTempEntity);
-
-									//리워드 저장
-									cpsRewardEntityList.add(cpsRewardEntity);
-
-									//첫 데이터 등록 시
-									if (productCnt == 0) {
-										cpsRewardFirstEntityList.add(cpsRewardService.cpsRewardEntityList(cpsRewardEntity));
-									}
-
-									//링크프라이스 리워드 TEMP 저장
-									if (cpsRewardTempEntityList.size() == 1000) {
-										cpsRewardTempRepository.saveAll(cpsRewardTempEntityList);
-										cpsRewardTempEntityList.clear();
-									}
-								}
-							});
-
-							if (cpsRewardTempEntityList.size() > 0) {
-								//링크프라이스 리워드 TEMP 저장
-								cpsRewardTempRepository.saveAll(cpsRewardTempEntityList);
-							}
-
-							//저장 완료 되면 CpsRewardTempEntityList 데이터 cpsRewardEntityList로 옮긴 후 1000개씩 저장 공통단
-							//첫 리워드도 1000개씩 저장 공통
-							if (cpsRewardEntityList.size() > 0) {
-								cpsRewardService.cpsRewardEntityListSave(cpsRewardEntityList, cpsRewardFirstEntityList);
-							}
-
-							//CLICK 테이블 상태 업데이트
-							cpsClickRepository.updateRewardYnByClickNumList(rewardYn, cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
-							response.setSuccess();
+					//조회 성공 응답 코드가 아닌 경우
+					if (!dotPitchResponseList.getResult().equals("0")) {
+						//정상 페이지 호출이 아닌 경우
+						if (dotPitchResponseList.getResult().equals("100")) {
+							log.error("linkPriceReward 100 : {}, result : {}", i, "A코드 (사이트코드)(a_id) 없음, page : {}", request.getPage());
+						} else if (dotPitchResponseList.getResult().equals("200")) {
+							log.error("linkPriceReward 200 : {}, result : {}", i, "조회일자(yyyymmdd) 없음, page : {}", request.getPage());
+						} else if (dotPitchResponseList.getResult().equals("210")) {
+							log.error("linkPriceReward 210 : {}, result : {}", i, "조회일자(yyyymmdd) 길이 오류, page : {}", request.getPage());
+						} else if (dotPitchResponseList.getResult().equals("300")) {
+							log.error("linkPriceReward 300 : {}, result : {}", i, "인증키(auth_key)가 맞지 않음, page : {}", request.getPage());
+						} else if (dotPitchResponseList.getResult().equals("400")) {
+							log.error("linkPriceReward 400 : {}, result : {}", i, "통화단위(currency)를 지원하지 않음, page : {}", request.getPage());
 						}
+						break;
 					} else {
-						response.setApiMessage(Constants.LINKPRICE_BLANK.getCode(), Constants.LINKPRICE_BLANK.getValue());
-						return response;
+						dotPitchResponseList.getOrder_list().forEach(link -> {
+							CommissionDto commissionDto = cpsClickRepository.findClickCommission(link.getUser_id());
+							CpsRewardEntity cpsRewardEntity = cpsRewardRepository.findByClickNumAndOrderNoAndProductCodeExcludingStatus(link.getUser_id(), link.getO_cd(), link.getP_cd());
+							CpsRewardTempEntity cpsRewardTempEntity = new CpsRewardTempEntity();
+
+							if (null != commissionDto) {
+								int productCnt = 0;
+								int productPrice = 0;
+								int commission = 0;
+
+								if (null != cpsRewardEntity) {
+									productCnt = cpsRewardEntity.getProductCnt();
+									productPrice = cpsRewardEntity.getProductPrice();
+									commission = cpsRewardEntity.getCommission();
+
+									if (productCnt > Integer.parseInt(link.getIt_cnt())) {
+										cpsRewardEntityList.add(linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "cancelReward", request.getCancel_flag(), rewardYn));
+										cpsRewardEntity.setProductCnt(productCnt);
+										cpsRewardEntity.setProductPrice(productPrice);
+										cpsRewardEntity.setCommission(commission);
+										cpsRewardEntity = linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "reward", request.getCancel_flag(), rewardYn);
+									} else if (Integer.parseInt(link.getIt_cnt()) >= productCnt) {
+										cpsRewardEntityList.add(linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "cancel", request.getCancel_flag(), rewardYn));
+									}
+								} else {
+									cpsRewardEntity = linkPriceRewardEntity(cpsRewardEntity, link, commissionDto, "reward", request.getCancel_flag(), rewardYn);
+								}
+								cpsRewardEntity.setIpAddress(ipAddress);
+
+								//리워드 TEMP 저장
+								cpsRewardTempEntity = cpsRewardService.cpsRewardTempEntity(cpsRewardEntity);
+								cpsRewardTempEntityList.add(cpsRewardTempEntity);
+
+								//리워드 저장
+								cpsRewardEntityList.add(cpsRewardEntity);
+
+								//첫 데이터 등록 시
+								if (productCnt == 0) {
+									cpsRewardFirstEntityList.add(cpsRewardService.cpsRewardEntityList(cpsRewardEntity));
+								}
+
+								//링크프라이스 리워드 TEMP 저장
+								if (cpsRewardTempEntityList.size() == 1000) {
+									cpsRewardTempRepository.saveAll(cpsRewardTempEntityList);
+									cpsRewardTempEntityList.clear();
+								}
+							}
+						});
+
+						if (cpsRewardTempEntityList.size() > 0) {
+							//링크프라이스 리워드 TEMP 저장
+							cpsRewardTempRepository.saveAll(cpsRewardTempEntityList);
+						}
+
+						//저장 완료 되면 CpsRewardTempEntityList 데이터 cpsRewardEntityList로 옮긴 후 1000개씩 저장 공통단
+						//첫 리워드도 1000개씩 저장 공통
+						if (cpsRewardEntityList.size() > 0) {
+							cpsRewardService.cpsRewardEntityListSave(cpsRewardEntityList, cpsRewardFirstEntityList);
+						}
+
+						//CLICK 테이블 상태 업데이트
+						cpsClickRepository.updateRewardYnByClickNumList(rewardYn, cpsRewardEntityList.stream().map(CpsRewardEntity::getClickNum).collect(Collectors.toList()));
+						response.setSuccess();
 					}
+				} else {
+					response.setApiMessage(Constants.LINKPRICE_BLANK.getCode(), Constants.LINKPRICE_BLANK.getValue());
+					return response;
 				}
 			}
 		} catch (Exception e) {
@@ -204,7 +204,7 @@ public class CpsRewardLinkPriceService {
 		cpsRewardEntity.setAdId(commissionDto.getCpsClickEntity().getAdId());
 		cpsRewardEntity.setStatus(100);
 		cpsRewardEntity.setMemberName(commissionDto.getMemberName());
-		cpsRewardEntity.setProductName(link.getP_nm());
+		cpsRewardEntity.setProductName(URLDecoder.decode(link.getP_nm(), StandardCharsets.UTF_8));
 
 		if (reward.equals("cancelReward")) {
 			if(cancelFlag.equals("Y")) {

@@ -5,7 +5,7 @@ import com.cps.api.service.CpsRewardDotPitchService;
 import com.cps.api.service.CpsRewardLinkPriceService;
 import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsRewardPacket;
+import com.cps.common.packet.CpsRewardPacket;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -109,15 +109,19 @@ public class CpsRewardController {
         try {
             List<String> depthList = Arrays.asList("N", "Y");
             for (String depth : depthList) {
-                request.setCancel_flag(depth);
-                var reward = cpsRewardLinkPriceService.linkPriceReward(request, "R");
+                List<String> siteList = Arrays.asList("A100692601", "A100693262");
+                for (String site : siteList) {
+                    request.setA_id(site);
+                    request.setCancel_flag(depth);
+                    var reward = cpsRewardLinkPriceService.linkPriceReward(request, "R");
 
-                if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
-                    result.setSuccess();
-                } else {
-                    result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                    if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                        result.setSuccess();
+                    } else {
+                        result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                    }
+                    result.setData(reward.getData());
                 }
-                result.setData(reward.getData());
             }
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
@@ -146,13 +150,17 @@ public class CpsRewardController {
                 for (String depth : depthList) {
                     request.setCancel_flag(depth);
                     request.setYyyymmdd(date.format(formatter));
-                    var reward = cpsRewardLinkPriceService.linkPriceReward(request,"Y");
-                    if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
-                        result.setSuccess();
-                    } else {
-                        result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                    List<String> siteList = Arrays.asList("A100692601", "A100693262");
+                    for (String site : siteList) {
+                        request.setA_id(site);
+                        var reward = cpsRewardLinkPriceService.linkPriceReward(request, "Y");
+                        if (Constant.RESULT_CODE_SUCCESS.equals(reward.getResultCode())) {
+                            result.setSuccess();
+                        } else {
+                            result.setApiMessage(reward.getResultCode(), reward.getResultMessage());
+                        }
+                        result.setData(reward.getData());
                     }
-                    result.setData(reward.getData());
                 }
             }
             return new ResponseEntity<>(result, HttpStatus.OK);

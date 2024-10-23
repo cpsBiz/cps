@@ -4,11 +4,11 @@ import com.cps.rewardDotPitch.packet.CpsRewardDotPitchPacket;
 import com.cps.common.constant.Constant;
 import com.cps.common.constant.Constants;
 import com.cps.common.model.GenericBaseResponse;
-import com.cps.cpsService.dto.CommissionDto;
-import com.cps.cpsService.dto.RewardDto;
-import com.cps.cpsService.entity.CpsRewardEntity;
-import com.cps.cpsService.repository.CpsClickRepository;
-import com.cps.cpsService.repository.CpsRewardRepository;
+import com.cps.common.dto.CommissionDto;
+import com.cps.common.dto.RewardDto;
+import com.cps.common.entity.CpsRewardEntity;
+import com.cps.common.repository.CpsClickRepository;
+import com.cps.common.repository.CpsRewardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,6 @@ public class CpsRewardDotPitchService {
 
 	private final CpsRewardRepository cpsRewardRepository;
 
-	private final SlackService slackService;
 	/**
 	 * 리워드 정보 실시간 저장
 	 * @date 2024-09-23

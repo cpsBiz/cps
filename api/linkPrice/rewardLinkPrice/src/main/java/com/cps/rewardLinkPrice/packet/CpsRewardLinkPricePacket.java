@@ -1,6 +1,6 @@
 package com.cps.rewardLinkPrice.packet;
 
-import com.cps.cpsService.dto.RewardDto;
+import com.cps.common.dto.RewardDto;
 import com.cps.common.model.GenericBaseResponse;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

@@ -2,7 +2,7 @@ package com.cps.api.schedule;
 
 import com.cps.api.service.CpsRewardCoupangService;
 import com.cps.common.constant.Constant;
-import com.cps.cpsService.packet.CpsRewardPacket;
+import com.cps.common.packet.CpsRewardPacket;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
