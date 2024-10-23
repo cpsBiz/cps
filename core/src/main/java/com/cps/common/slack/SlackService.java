@@ -14,6 +14,9 @@ public class SlackService {
 	@Value("${slack.domain.url}")
 	private String slackWebhookUrl;
 
+	@Value("${slack.domain.endpoint}")
+	private String slackWebhookEndPoint;
+
 	public SlackService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
@@ -21,6 +24,6 @@ public class SlackService {
 	public void sendSlackMessage(String message) {
 		Map<String, String> payload = new HashMap<>();
 		payload.put("text", message);
-		restTemplate.postForEntity(slackWebhookUrl, payload, String.class);
+		restTemplate.postForEntity(slackWebhookUrl+slackWebhookEndPoint, payload, String.class);
 	}
 }
