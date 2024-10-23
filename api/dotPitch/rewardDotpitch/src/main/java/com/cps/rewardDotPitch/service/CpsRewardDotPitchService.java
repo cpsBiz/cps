@@ -124,6 +124,7 @@ public class CpsRewardDotPitchService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.DOTPITCH_EXCEPTION.getCode(), Constants.DOTPITCH_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " dotPitch realTime request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;

@@ -1,12 +1,12 @@
 package com.cps.api.schedule;
 
 import com.cps.api.service.CpsRewardLinkPriceService;
-import com.cps.api.service.CpsRewardService;
 import com.cps.common.constant.Constant;
 import com.cps.common.packet.CpsRewardPacket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,6 +24,10 @@ public class LinkPriceScheduleManager {
     @Autowired
     private final CpsRewardLinkPriceService cpsRewardLinkPriceService;
 
+    @Value("${linkPrice.site.code}") String linkPriceSiteCode;
+
+    @Value("${linkPrice.moneyweather.site.code}") String linkPriceMoneyweatherSiteCode;
+
     /**
      * 링크프라이스 익일 호출 스케줄
      */
@@ -39,7 +43,7 @@ public class LinkPriceScheduleManager {
             List<String> depthList = Arrays.asList("N", "Y");
             for (String depth : depthList) {
                 request.setCancel_flag(depth);
-                List<String> siteList = Arrays.asList("A100692601", "A100693262");
+                List<String> siteList = Arrays.asList(linkPriceSiteCode, linkPriceMoneyweatherSiteCode);
                 for (String site : siteList) {
                     request.setA_id(site);
                     var member = cpsRewardLinkPriceService.linkPriceReward(request, "R");
@@ -77,7 +81,7 @@ public class LinkPriceScheduleManager {
                 for (String depth : depthList) {
                     request.setCancel_flag(depth);
                     request.setYyyymmdd(date.format(formatter));
-                    List<String> siteList = Arrays.asList("A100692601", "A100693262");
+                    List<String> siteList = Arrays.asList(linkPriceSiteCode, linkPriceMoneyweatherSiteCode);
                     for (String site : siteList) {
                         request.setA_id(site);
                         var reward = cpsRewardLinkPriceService.linkPriceReward(request, "Y");

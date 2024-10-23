@@ -183,6 +183,7 @@ public class CpsGiftCoupangService {
 				couponCancel(cpsGiftHistoryEntity);
 				response.setApiMessage(Constants.COUPANG_STICK_SEARCH_EXCEPTION.getCode(), Constants.COUPANG_STICK_SEARCH_EXCEPTION.getValue());
 				log.error(Constant.EXCEPTION_MESSAGE + " coupangGift request : {}, exception : {}", request, e);
+				throw (e);
 			}
 		} else {
 			response.setApiMessage(Constants.GIFT_PRODUCT_BLANK.getCode(), Constants.GIFT_PRODUCT_BLANK.getValue());

@@ -116,6 +116,7 @@ public class CpsRewardLinkPriceService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.LINKPRICE_EXCEPTION.getCode(), Constants.LINKPRICE_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " linkPrice realTime request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;

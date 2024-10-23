@@ -84,6 +84,7 @@ public class CpsClickCoupangService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.CLICK_EXCEPTION.getCode(), Constants.CLICK_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " campaignClick request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;

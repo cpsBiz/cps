@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 @Import(com.cps.common.config.db.DataSourceConfig.class)
-@ComponentScan(basePackages = {"com.cps.clickLinkPrice", "com.cps.common.service", "com.cps.common.repository", "com.cps.common.utils"})
+@ComponentScan(basePackages = {"com.cps.clickLinkPrice", "com.cps.common.service", "com.cps.common.repository", "com.cps.common.utils", "com.cps.common.slack"})
 @EntityScan(basePackages = "com.cps.common.entity")
 public class ClickLinkPriceApiApplication {
     public static void main(String[] args) {

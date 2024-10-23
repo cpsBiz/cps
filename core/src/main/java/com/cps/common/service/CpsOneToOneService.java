@@ -56,6 +56,7 @@ public class CpsOneToOneService {
 			cpsInquiryEntity.setInquiryType(request.getInquiryType());
 			cpsInquiryEntity.setCampaignNum(request.getCampaignNum());
 			cpsInquiryEntity.setMerchantId(request.getMerchantId());
+			cpsInquiryEntity.setAffliateId(request.getAffliateId());
 			cpsInquiryEntity.setPurpose(request.getPurpose());
 			cpsInquiryEntity.setRegDay(request.getRegDay());
 			cpsInquiryEntity.setUserName(request.getUserName());
@@ -71,16 +72,18 @@ public class CpsOneToOneService {
 			cpsInquiryEntity.setAnswerYn("N");
 			cpsInquiryRepository.save(cpsInquiryEntity);
 
-			if (request.getInqueryFileList().size() > 0) {
-				request.getInqueryFileList().forEach(file -> {
-					CpsInquiryFileEntity cpsInquiryFileEntity = new CpsInquiryFileEntity();
-					cpsInquiryFileEntity.setInquiryNum(cpsInquiryEntity.getInquiryNum());
-					cpsInquiryFileEntity.setFileName(file.getFileName());
-					cpsInquiryFileEntityList.add(cpsInquiryFileEntity);
-				});
+			if(null != request.getInqueryFileList() ) {
+				if (request.getInqueryFileList().size() > 0) {
+					request.getInqueryFileList().forEach(file -> {
+						CpsInquiryFileEntity cpsInquiryFileEntity = new CpsInquiryFileEntity();
+						cpsInquiryFileEntity.setInquiryNum(cpsInquiryEntity.getInquiryNum());
+						cpsInquiryFileEntity.setFileName(file.getFileName());
+						cpsInquiryFileEntityList.add(cpsInquiryFileEntity);
+					});
 
-				if (cpsInquiryFileEntityList.size() > 0) {
-					cpsInquiryFileRepository.saveAll(cpsInquiryFileEntityList);
+					if (cpsInquiryFileEntityList.size() > 0) {
+						cpsInquiryFileRepository.saveAll(cpsInquiryFileEntityList);
+					}
 				}
 			}
 
@@ -90,6 +93,7 @@ public class CpsOneToOneService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.INQUIRY_EXCEPTION.getCode(), Constants.INQUIRY_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " inquiry api request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;
@@ -109,6 +113,7 @@ public class CpsOneToOneService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.INQUIRY_EXCEPTION.getCode(), Constants.INQUIRY_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " inquiryMerchantList api exception : {}",  e);
+			throw (e);
 		}
 
 		return response;
@@ -139,12 +144,13 @@ public class CpsOneToOneService {
 
 				response.setSuccess();
 				response.setData(cpsOneToOneDto);
-			}else{
+			} else {
 				response.setApiMessage(Constants.INQUIRY_BLANK.getCode(), Constants.INQUIRY_BLANK.getValue());
 			}
 		} catch (Exception e) {
 			response.setApiMessage(Constants.ANSWER_EXCEPTION.getCode(), Constants.ANSWER_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " answer api request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;
@@ -200,6 +206,7 @@ public class CpsOneToOneService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.INQUIRY_EXCEPTION.getCode(), Constants.INQUIRY_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " inquiryList api request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;
@@ -245,6 +252,7 @@ public class CpsOneToOneService {
 		} catch (Exception e) {
 			response.setApiMessage(Constants.ANSWER_SEARCH_EXCEPTION.getCode(), Constants.ANSWER_SEARCH_EXCEPTION.getValue());
 			log.error(Constant.EXCEPTION_MESSAGE + " inquiryDetail api request : {}, exception : {}", request, e);
+			throw (e);
 		}
 
 		return response;

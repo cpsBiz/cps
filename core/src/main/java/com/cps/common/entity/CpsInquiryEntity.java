@@ -30,6 +30,9 @@ public class CpsInquiryEntity {
     @Column(name = "MERCHANT_ID")
     private String merchantId;
 
+    @Column(name = "AFFLIATE_ID")
+    private String affliateId;
+
     @Column(name = "PURPOSE")
     private String purpose;
 
