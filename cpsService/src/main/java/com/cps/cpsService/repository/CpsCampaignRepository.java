@@ -1,8 +1,6 @@
 package com.cps.cpsService.repository;
 
-import com.cps.cpsService.dto.CommissionDto;
 import com.cps.cpsService.dto.CpsCampaignMerchantDto;
-import com.cps.cpsService.dto.CpsOneToOneDto;
 import com.cps.cpsService.entity.CpsCampaignEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.transaction.Transactional;
@@ -21,7 +19,7 @@ public interface CpsCampaignRepository extends JpaRepository<CpsCampaignEntity, 
     @Query("SELECT new com.cps.cpsService.dto.CpsCampaignMerchantDto(MAX(a.merchantId), b.memberName) " +
             "FROM CpsCampaignEntity a " +
             "JOIN CpsMemberEntity b ON b.memberId = a.merchantId " +
-            " group by b.memberName ")
+            " group by b.memberName order by b.memberName asc")
     List<CpsCampaignMerchantDto> findByMerchant();
 
 

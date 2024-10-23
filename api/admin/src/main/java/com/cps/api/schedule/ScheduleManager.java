@@ -77,10 +77,9 @@ public class ScheduleManager {
                 }
                 result.setDatas(view.getDatas());
             }
-
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            result.setError("summarySchedule Error");
+            result.setError("summaryScheduleMonth Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

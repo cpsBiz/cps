@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CpsCampaignMerchantDto {
-    String merchantName;
     String merchantId;
+    String merchantName;
 }

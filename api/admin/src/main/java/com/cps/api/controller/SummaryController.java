@@ -1,7 +1,9 @@
 package com.cps.api.controller;
 
 import com.cps.common.constant.Constant;
+import com.cps.cpsService.packet.CpsViewSchedulePacket;
 import com.cps.cpsService.packet.SummaryPacket;
+import com.cps.cpsService.service.CpsScheduleService;
 import com.cps.cpsService.service.SummaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -9,9 +11,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @RestController
@@ -19,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SummaryController {
 
     private final SummaryService summaryService;
+
+    private final CpsScheduleService cpsScheduleService;
 
     /**
      * 리포트 조회
@@ -41,6 +49,31 @@ public class SummaryController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
             result.setError("summaryCount Controller Error");
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * 리포트 일별 배치
+     *
+     * @date 2024-10-21
+     */
+    @Operation(summary = "리포트 일별 배치")
+    @PostMapping(value = "/summaryDay")
+    public ResponseEntity<CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse> summaryDay(CpsViewSchedulePacket.ScheduleInfo.ViewScheduleMonthRequest request) throws Exception {
+        var result = new CpsViewSchedulePacket.ScheduleInfo.ViewSchduelResponse();
+
+        try {
+            var view = cpsScheduleService.summaryScheduleMonth(request);
+            if (Constant.RESULT_CODE_SUCCESS.equals(view.getResultCode())) {
+                result.setSuccess();
+            } else {
+                result.setApiMessage(view.getResultCode(), view.getResultMessage());
+            }
+            result.setDatas(view.getDatas());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (Exception e) {
+            result.setError("summaryDay api Error");
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

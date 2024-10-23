@@ -30,7 +30,6 @@ public class CpsViewSchedulePacket {
         @EqualsAndHashCode(callSuper = false)
         public static class ViewScheduleMonthRequest {
             private int searchDay;
-            private int serchHour;
         }
 
         @Data

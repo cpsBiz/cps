@@ -1,9 +1,7 @@
 package com.cps.cpsService.repository;
 
-import com.cps.cpsService.dto.CpsGiftHistoryDto;
 import com.cps.cpsService.dto.CpsGiftProductDto;
 import com.cps.cpsService.entity.CpsGiftEntity;
-import com.cps.cpsService.entity.CpsGiftProductEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

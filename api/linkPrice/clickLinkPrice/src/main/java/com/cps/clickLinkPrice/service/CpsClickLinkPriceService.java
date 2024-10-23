@@ -29,6 +29,10 @@ public class CpsClickLinkPriceService {
 
 	@Value("${linkPrice.click.reco.url}") String linkPriceClickEndPoint;
 
+	@Value("${linkPrice.site.code}") String linkPriceSiteCode;
+
+	@Value("${linkPrice.moneyweather.site.code}") String linkPriceMoneyweatherSiteCode;
+
 	/**
 	 * 클릭정보 저장
 	 * @date 2024-09-04
@@ -67,7 +71,13 @@ public class CpsClickLinkPriceService {
 				CpsLinkPriceClickPacket.LinkPriceClickInfo.LinkPriceClickRequest clickRequest = new CpsLinkPriceClickPacket.LinkPriceClickInfo.LinkPriceClickRequest();
 				clickRequest.setU_id(String.valueOf(cpsClickEntity.getClickNum()));
 				clickRequest.setM(cpsClickEntity.getMerchantId().replace("link_",""));
-				clickRequest.setA("A100692601"); //인라이플 코드
+
+				if (request.getAffliateId().equals("moneyweather")) {
+					clickRequest.setA(linkPriceMoneyweatherSiteCode); //돈씨 코드
+				} else {
+					clickRequest.setA(linkPriceSiteCode); //인라이플 코드
+				}
+
 				clickRequest.setL("0000"); //광고주 매인 화면
 
 				String outputUrl = String.format("?m=%s&a=%s&l=%s&u_id=%s", clickRequest.getM(), clickRequest.getA(), clickRequest.getL(), clickRequest.getU_id());

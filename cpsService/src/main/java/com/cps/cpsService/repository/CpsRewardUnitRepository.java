@@ -2,7 +2,6 @@ package com.cps.cpsService.repository;
 
 import com.cps.cpsService.dto.UnitDto;
 import com.cps.cpsService.dto.UnitListDto;
-import com.cps.cpsService.entity.CpsRewardEntity;
 import com.cps.cpsService.entity.CpsRewardUnitEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import jakarta.transaction.Transactional;

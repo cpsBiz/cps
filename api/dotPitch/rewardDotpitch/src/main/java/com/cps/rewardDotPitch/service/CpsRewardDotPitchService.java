@@ -30,6 +30,7 @@ public class CpsRewardDotPitchService {
 
 	private final CpsRewardRepository cpsRewardRepository;
 
+	private final SlackService slackService;
 	/**
 	 * 리워드 정보 실시간 저장
 	 * @date 2024-09-23

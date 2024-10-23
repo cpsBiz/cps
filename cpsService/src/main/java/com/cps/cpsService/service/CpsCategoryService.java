@@ -49,21 +49,20 @@ public class CpsCategoryService {
 			} else {
 				for (CpsCategoryPacket.CategoryInfo.Category category : request.getCategoryList()) {
 					CpsCategoryEntity cpsCategoryEntity = new CpsCategoryEntity();
+					CpsCategoryEntity categoryNameChk = cpsCategoryRepository.findByCategoryName(category.getCategoryName());
 
-					if (request.getApiType().equals("I")) {
-						cpsCategoryEntity.setCategory(getMaxCategory("category", "CpsCategoryEntity"));
-						CpsCategoryEntity categoryNameChk = cpsCategoryRepository.findByCategoryName(category.getCategoryName());
-						if (null != categoryNameChk) {
-							response.setApiMessage(Constants.CATEGORY_DUPLICATION.getCode(), Constants.CATEGORY_DUPLICATION.getValue());
-							cpsCategoryDto.setCategory(category.getCategory());
-							cpsCategoryDto.setCategoryName(category.getCategoryName());
-							cpsCategoryDto.setCategoryRank(category.getCategoryRank());
-							cpsCategoryDtoList.add(cpsCategoryDto);
-							response.setDatas(cpsCategoryDtoList);
-							return response;
-						}
-					} else {
+					if (null != categoryNameChk && request.getApiType().equals("U") && categoryNameChk.getCategory().equals(category.getCategory())) {
 						cpsCategoryEntity.setCategory(category.getCategory());
+					} else if (null == categoryNameChk && request.getApiType().equals("I")) {
+						cpsCategoryEntity.setCategory(getMaxCategory("category", "CpsCategoryEntity"));
+					} else {
+						response.setApiMessage(Constants.CATEGORY_DUPLICATION.getCode(), Constants.CATEGORY_DUPLICATION.getValue());
+						cpsCategoryDto.setCategory(category.getCategory());
+						cpsCategoryDto.setCategoryName(category.getCategoryName());
+						cpsCategoryDto.setCategoryRank(category.getCategoryRank());
+						cpsCategoryDtoList.add(cpsCategoryDto);
+						response.setDatas(cpsCategoryDtoList);
+						return response;
 					}
 
 					cpsCategoryEntity.setCategoryName(category.getCategoryName());
