@@ -11,7 +11,7 @@ public class SlackService {
 
 	private final RestTemplate restTemplate;
 
-	@Value("${dotpitch.click.domain.url}")
+	@Value("${slack.domain.url}")
 	private String slackWebhookUrl;
 
 	public SlackService(RestTemplate restTemplate) {

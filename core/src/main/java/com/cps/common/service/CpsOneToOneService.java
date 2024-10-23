@@ -128,7 +128,7 @@ public class CpsOneToOneService {
 		CpsAnswerEntity cpsAnswerEntity = new CpsAnswerEntity();
 		CpsOneToOneDto.OneToOne cpsOneToOneDto = new CpsOneToOneDto.OneToOne();
 		try {
-			cpsAnswerEntity.setInquiryNum(Integer.parseInt("asdflsadkjf"));
+			cpsAnswerEntity.setInquiryNum(request.getInquiryNum());
 			cpsAnswerEntity.setNote(request.getNote());
 			cpsAnswerRepository.save(cpsAnswerEntity);
 
